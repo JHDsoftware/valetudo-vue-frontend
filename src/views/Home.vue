@@ -3,10 +3,11 @@
     <v-sheet
         style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;">
       <div class="imgContainer" style="width: 788px;position: relative">
-        <v-img class="partImg" width="100%" :src="require('@/assets/image/structure/model/frontModel.png')"></v-img>
-        <v-img class="partImg" width="100%"
-               :src="require('@/assets/image/images/B-'+currentView+'-'+'2-Ca-Da-Ea.png')"></v-img>
-        <v-img class="partImg" width="100%"
+        <v-img class="partImg model" width="92.97%"
+               :src="require('@/assets/image/structure/model/frontModel.png')"></v-img>
+        <v-img class="partImg top" width="92.97%"
+               :src="require('@/assets/image/images/B-'+currentView+'-'+currentDisplayTopVariant)"></v-img>
+        <v-img class="partImg skirt" width="100%"
                :src="require('@/assets/image/images/S-'+currentView+'-'+'1-Da-Fa-Gabc-Ha-Ia.png')"></v-img>
       </div>
       <div style="position: absolute;right: 46px;bottom: 8px;">
@@ -38,7 +39,7 @@
         <v-expansion-panel
             class="panel"
             active-class="active"
-            v-for="(item) in selections[currentTab]"
+            v-for="(item) in currentSelections"
             :key="currentTab+''+item.id"
         >
           <v-expansion-panel-header>{{ item.id }}.{{ item.name }}</v-expansion-panel-header>
@@ -82,8 +83,8 @@
 </template>
 
 <script>
-import { selections } from '@/api/api'
-import { availableTrees } from '../api/api'
+import {selections} from '@/api/api'
+import {availableTrees} from '../api/api'
 
 const parts = [
   {
@@ -102,6 +103,7 @@ const parts = [
 
 export const defaultLook = {}
 export const views = ["F", "B"]
+export const defaultTop = "2-Ca-Da-Ea"
 export default {
   name: 'Home',
   data: function () {
@@ -110,28 +112,57 @@ export default {
       parts: parts,
       selections: selections,
       currentView: views[0],
-      currentSelectedParts: [[], []]
+      availableTrees: [],
+      currentSelectedParts: [[], []],
+      currentDisplaySkirtVariant: "",
+      currentMask: {}
     }
   },
   watch: {
-    currentTab (val) {
-      console.log(val)
+    currentTab(val) {
       console.log(this.selections[val])
     },
-    currentSelectedParts (val) {
-      availableTrees(val)
-    }
   },
-  methods: {
-    changeView () {
-      this.currentView = views[this.currentView === "Front" ? 1 : 0]
+  computed: {
+    currentDisplayTopVariant() {
+      console.log(((this.availableTrees?.[0]?.join("-")) ?? defaultTop) + ".png", 'currentTop')
+      return ((this.availableTrees?.[0]?.join("-")) ?? defaultTop) + ".png"
     },
-    selectPart (whichPartIndex, partFatherId, partId, toggle) {
+    currentSelections() {
+      const result = []
+      const temp = this.selections[this.currentTab]
+      result.push(temp[0])//主选项不受筛选限制
+      temp.forEach(opt => {
+        const exist = Object.keys(this.currentMask).find(i => i === opt.id)
+        if (exist) {
+          const currentOpt = {...opt, subOptions: []}
+          opt.subOptions.forEach(subOpt => {
+            const mask = this.currentMask[exist]
+            if (mask.some(m => (exist + m) === subOpt.id)) {
+              currentOpt.subOptions.push({...subOpt})
+            }
+          })
+          result.push(currentOpt)
+        }
+      })
+      console.log(temp, this.currentMask)
+      return result
+    }
+  }
+  ,
+  methods: {
+    changeView() {
+      this.currentView = views[this.currentView === "Front" ? 1 : 0]
+    }
+    ,
+    selectPart(whichPartIndex, partFatherId, partId, toggle) {
       console.log(whichPartIndex, partFatherId, partId)
-      this.$set(this.currentSelectedParts[whichPartIndex], partFatherId, partId)
+      this.$set(this.currentSelectedParts[whichPartIndex], partFatherId, partId);
+      [this.availableTrees, this.currentMask] = availableTrees(this.currentSelectedParts)
       toggle()
     }
-  },
+  }
+  ,
   components: {}
 }
 </script>
@@ -186,11 +217,11 @@ export default {
 }
 
 .weddingItem:hover {
-  box-shadow: 0px 0px 4px rgba(204, 198, 187, 0.8);
+  box-shadow: 0 0 4px rgba(204, 198, 187, 0.8);
 }
 
 .weddingItem.active {
-  box-shadow: 0px 0px 4px rgba(204, 198, 187, 0.8);
+  box-shadow: 0 0 4px rgba(204, 198, 187, 0.8);
 }
 
 .weddingItem.active .option-label {
@@ -199,7 +230,9 @@ export default {
 
 .partImg {
   position: absolute;
-  top: 0;
   left: 0;
+  right: 0;
+  top: 0;
+  margin: auto
 }
 </style>
