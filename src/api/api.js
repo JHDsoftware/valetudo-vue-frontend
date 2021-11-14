@@ -114,17 +114,14 @@ export const skirtSelections = require('@/assets/skirt.json')
 export const selections = [bodySelections, skirtSelections]
 export const topSet = require('@/assets/topSet.json') ?? [[]]
 
-export function getAvailableSet (selectedPart = [], incomingPartId = null) {
+export function getAvailableSet (selectedPart = []) {
   const selectedTop = Object.values(selectedPart[0]) ?? []
   selectedTop.sort()
-  console.log(incomingPartId, 'incoming partId')
-  console.log(selectedTop, 'selectedTop')
   return topSet.filter(s => {
     return selectedTop.every(t => {
       return s.includes(t.toString()) && s.every(str => !str.includes('J'))
     })
   })
-
 }
 
 export const weddingItem = {
@@ -139,4 +136,15 @@ export async function customerUserRegister (email, password, firstName, lastName
 
 export async function userLogin (userName, password) {
   return await hillo.post('/customer/login', {userName, password})
+}
+
+
+export async function getDressPartList () {
+  return (await hillo.get('/dressPart/getList')).data
+}
+
+export async function refreshCurrentPartInfo (selectedDressPartIds) {
+  return await hillo.post('/dressPart/refreshCurrentPartInfo', {
+    dressPartIds: selectedDressPartIds
+  })
 }

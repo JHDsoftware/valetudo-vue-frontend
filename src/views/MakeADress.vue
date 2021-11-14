@@ -83,8 +83,7 @@
 </template>
 
 <script>
-import { selections } from '@/api/api'
-import { getAvailableSet } from '../api/api'
+import { getDressPartList } from '../api/api'
 
 const parts = [
   {
@@ -109,44 +108,14 @@ export default {
   data: function () {
     return {
       currentTab: 0,
-      parts: parts,
-      selections: selections,
       currentView: views[0],
-      availableSet: [],
-      currentSelectedParts: [[], []],
-      currentDisplaySkirtVariant: "",
-      currentMask: {}
-    }
-  },
-  watch: {
-    currentTab (val) {
-      console.log(this.selections[val], 'CurrentSelections')
+      remoteSelections: [],
+      parts: parts
     }
   },
   computed: {
     currentDisplayTopVariant () {
-      return ((this.availableSet?.[0]?.join("-")) ?? defaultTop) + ".png"
-    },
-    currentSelections () {
-      const result = []
-      const temp = this.selections[this.currentTab]
-      result.push(temp[0])//主选项不受筛选限制
-      console.log(temp)
-      temp.forEach(opt => {
-        const exist = Object.keys(this.currentMask).find(i => i === opt.id)
-        if (exist) {
-          const currentOpt = {...opt, subOptions: []}
-          opt.subOptions.forEach(subOpt => {
-            const mask = this.currentMask[exist]
-            if (mask.some(m => (exist + m) === subOpt.id)) {
-              currentOpt.subOptions.push({...subOpt})
-            }
-          })
-          result.push(currentOpt)
-        }
-      })
-      console.log(result)
-      return result
+      return (defaultTop) + ".png"
     }
   }
   ,
@@ -156,32 +125,13 @@ export default {
     }
     ,
     selectPart (whichPartIndex, partFatherId, partId, toggle) {
-      if (partFatherId === 'B') {
-        this.currentSelectedParts[whichPartIndex] = []
-      }
-      this.$set(this.currentSelectedParts[whichPartIndex], partFatherId, partId)
-      console.log(partFatherId, partId)
-      this.availableSet = getAvailableSet(this.currentSelectedParts, partFatherId)
-      this.currentMask = this.availableSet.reduce((arr, i) => {
-        const temp = [...i]
-        temp.shift()
-        arr.push(temp)
-        return arr
-      }, []).flat().reduce((arr, i) => {
-        const [mainOption, rest] = i.split("")
-        if (arr[mainOption]) {
-          if (!arr[mainOption].includes(rest)) {
-            arr[mainOption].push(rest)
-          }
-        } else {
-          arr[mainOption] = [rest]
-        }
-        return arr
-      }, {})
       toggle()
     }
-  }
-  ,
+  },
+  async mounted () {
+    this.remoteSelections = await getDressPartList()
+    console.log(this.remoteSelections)
+  },
   components: {}
 }
 </script>

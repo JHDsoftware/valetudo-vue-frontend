@@ -17,14 +17,18 @@ export function refreshHeader () {
   hillo.axios.defaults.headers.common = {
     'Content-Type': 'application/json',
     SaToken: getToken(),
-    techV: 1
   }
   hillo.axios.defaults.headers.post = {
     'Content-Type': 'application/json',
     JWTToken: getToken(),
-    techV: 1
+  }
+  hillo.axios.defaults.headers.get = {
+    'Content-Type': 'application/json',
+    JWTToken: getToken(),
   }
 }
+
+
 
 refreshHeader()
 new Vue({
