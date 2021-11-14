@@ -144,7 +144,7 @@ export async function getDressPartList () {
 }
 
 export async function refreshCurrentPartInfo (selectedDressPartIds) {
-  return await hillo.post('/dressPart/refreshCurrentPartInfo', {
+  return (await hillo.post('/dressPart/refreshCurrentPartInfo', {
     dressPartIds: selectedDressPartIds
-  })
+  })).data
 }
