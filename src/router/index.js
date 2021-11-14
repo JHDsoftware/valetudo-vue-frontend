@@ -1,14 +1,61 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import MakeADress from '../views/MakeADress.vue'
+import LoginPage from '../views/LoginAndRegister/LoginPage'
+import RegisterComplete from '../views/LoginAndRegister/RegisterComplete'
+import ResetPassword from '../views/LoginAndRegister/ResetPassword'
+import ForgetPasswordComplete from '../views/LoginAndRegister/ForgetPasswordComplete'
+import QuestionsPage from '../views/Questions/QuestionsPage'
+import OrderPage from '../views/My/OrderPage'
+import CreateNewDress from '../views/CreateNewOrder/CreateNewDress'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'root',
+    component: LoginPage
+  },
+  {
+    path: '/createNewDress',
+    name: 'createNewDress',
+    component: CreateNewDress
+  },
+  {
+    path: '/order',
+    name: 'order',
+    component: OrderPage
+  },
+  {
+    path: '/questions',
+    name: 'questions',
+    component: QuestionsPage
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginPage
+  },
+  {
+    path: '/resetPassword',
+    name: 'resetPassword',
+    component: ResetPassword
+  },
+  {
+    path: '/forgetPasswordComplete',
+    name: 'forgetPasswordComplete',
+    component: ForgetPasswordComplete
+  },
+  {
+    path: '/registerComplete',
+    name: 'registerComplete',
+    component: RegisterComplete
+  },
+  {
+    path: '/edit',
+    name: 'edit',
+    component: MakeADress
   },
   {
     path: '/about',
