@@ -133,10 +133,28 @@ export const weddingItem = {
   skirt: {}
 }
 
+export const CUSTOMER_STR = '/customer'
+
 export async function customerUserRegister (email, password, firstName, lastName, city, phone) {
   return await hillo.post('/customer/register', {email, password, firstName, lastName, city, phone})
 }
 
+export async function customerCheckEmailRegistered (email) {
+  return await hillo.post(CUSTOMER_STR +'/checkEmailRegistered', {email})
+}
+
+export async function customerConfirmRegister (uuid) {
+  return await hillo.get(CUSTOMER_STR +'/confirmRegister/', {uuid})
+}
+
 export async function userLogin (userName, password) {
   return await hillo.post('/customer/login', {userName, password})
+}
+
+export async  function customerMe () {
+  return await hillo.get(CUSTOMER_STR + '/me')
+}
+
+export async function customerInit (customer, weddingDate, likeAndHate, imgs) {
+  return await hillo.post(CUSTOMER_STR + '/init', {customer, weddingDate, likeAndHate, imgs})
 }
