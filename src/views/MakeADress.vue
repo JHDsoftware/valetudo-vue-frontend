@@ -106,7 +106,7 @@ const parts = [
 export const defaultLook = {}
 export const views = ["F", "B"]
 export const defaultTop = "B2-Ca-Da-Ea"
-
+const filterOutKey = []
 export default {
   name: 'MakeADress',
   data: function () {
@@ -121,7 +121,17 @@ export default {
   },
   computed: {
     currentDisplayTopVariant () {
-      return Object.values(this.realSelection).map(s => s.partCode).join('-') + ".png"
+      console.log(this.selectedTopParts, 'defaultPng')
+      if (this.selectedTopParts.length > 0) {
+        return (this.selectedTopParts.join('-')) + ".png"
+      } else {
+        return defaultTop + '.png'
+      }
+
+    },
+    selectedTopParts () {
+      console.log('i change')
+      return Object.entries(this.selectedPart).map(s => s[0] + s[1].partCode).sort()
     },
     availableSelections () {
       return this.remoteSelections[this.currentTab]?.dressPartCategories.filter(c => {
@@ -130,22 +140,6 @@ export default {
         }) ?? []
         return c.filteredPart.length > 0
       })
-    },
-    defaultSelection () {
-      const result = {}
-      this.availableSelections?.forEach(pc => {
-        if (pc.dressPartCategory.defaultPart) {
-          result[pc.dressPartCategory.code] = {
-            partId: pc.dressPartCategory.defaultPart.id,
-            partCode: pc.dressPartCategory.defaultPart.code
-          }
-        }
-      })
-      console.log(result, 'defaultSelection')
-      return result
-    },
-    realSelection () {
-      return Object.assign({}, this.defaultSelection, this.selectedPart)
     }
   }
   ,
@@ -155,20 +149,34 @@ export default {
     }
     ,
     async selectPart (fatherCode, partCode, partId, toggle) {
-      this.selectedPart[fatherCode] = {
+      this.$set(this.selectedPart,fatherCode, {
         partId, partCode
-      }
+      })
       this.currentMask = await refreshCurrentPartInfo(Object.values(this.selectedPart).map(p => p.partId))
-      console.log(this.selectedPart, 'currentPartsId')
-      console.log(this.realSelection, 'realSelection')
+      await this.refreshDefault()
       if (toggle) {
         toggle()
       }
+    },
+    async refreshDefault (init = false) {
+      if (init) {
+        filterOutKey.length = 0
+      }
+      console.log(filterOutKey)
+      const next = this.availableSelections.find(pc => !filterOutKey.includes(pc.dressPartCategory.code) && pc.dressPartCategory.defaultPart)
+      if (next) {
+        console.log('try next', next.dressPartCategory.code)
+        filterOutKey.push(next.dressPartCategory.code)
+        await this.selectPart(next.dressPartCategory.code, next.dressPartCategory.defaultPart.code, next.dressPartCategory.defaultPart.id)
+        await this.refreshDefault()
+      }
+
     }
   },
   async mounted () {
-    this.selectPart('B', '1', 1)
     this.remoteSelections = await getDressPartList()
+    console.log(this.availableSelections, 'defaultSelection')
+    this.refreshDefault(true)
   },
   components: {}
 }
