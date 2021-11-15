@@ -135,12 +135,10 @@ export const bodySelections = [{
 ]
 export const skirtSelections = require('@/assets/skirt.json')
 export const selections = [bodySelections, skirtSelections]
-export const topSet = require('@/assets/topSet.json') ? ? [
-    []
-]
+export const topSet = require('@/assets/topSet.json') ?? [[]]
 
 export function getAvailableSet(selectedPart = []) {
-    const selectedTop = Object.values(selectedPart[0]) ? ? []
+    const selectedTop = Object.values(selectedPart[0]) ?? []
     selectedTop.sort()
     return topSet.filter(s => {
         return selectedTop.every(t => {
