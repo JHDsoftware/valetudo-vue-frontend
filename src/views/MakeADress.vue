@@ -8,7 +8,7 @@
         <v-img class="partImg top" width="92.97%"
                :src="require('@/assets/image/images/B-'+currentView+'-'+currentDisplayTopVariant)"></v-img>
         <v-img class="partImg skirt" width="100%"
-               :src="require('@/assets/image/images/S-'+currentView+'-'+'1-Da-Fa-Gabc-Ha-Ia.png')"></v-img>
+               :src="require('@/assets/image/images/S-'+currentView+'-'+'B1-Da-Fa-Gabc-Ha-Ia.png')"></v-img>
       </div>
       <div style="position: absolute;right: 46px;bottom: 8px;">
         <div class="roundFab">
@@ -24,13 +24,12 @@
         <div style="width: 100%">
           <v-item-group v-model="currentTab">
             <div style="display: grid;grid-template-columns: repeat(3,1fr);width: 100%">
-              <v-item v-for="part in parts" v-slot="{ active, toggle }" :key="part.name">
+              <v-item v-for="part in remoteSelections" v-slot="{ active, toggle }" :key="part.dressPartType.name">
                 <div style="height: 60px" @click="toggle" class="tabItem" :class="active?'active':''">
-                  {{ part.name }}
+                  {{ part.dressPartType.name }}
                 </div>
               </v-item>
             </div>
-
           </v-item-group>
         </div>
       </v-card>
@@ -39,20 +38,24 @@
         <v-expansion-panel
             class="panel"
             active-class="active"
-            v-for="(item) in currentSelections"
-            :key="currentTab+''+item.id"
+            v-for="(item) in availableSelections"
+            :key="currentTab+''+item.dressPartCategory.code"
         >
-          <v-expansion-panel-header>{{ item.id }}.{{ item.name }}</v-expansion-panel-header>
+          <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
+              item.dressPartCategory.name
+            }}
+          </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-item-group mandatory>
               <div style="display: grid;grid-template-columns: repeat(7,1fr)">
-                <template v-for="option in item.subOptions">
-                  <v-item :key="option.id" v-slot="{active,toggle}">
-                    <div class="weddingItem" @click="selectPart(currentTab,item.id,option.id,toggle)"
+                <template v-for="option in item.filteredPart">
+                  <v-item :key="option.code" v-slot="{active,toggle}">
+                    <div class="weddingItem"
+                         @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle)"
                          :class="active?' active':''">
                       <div style="text-align: center">
                         <img style="height: 116px"
-                             :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.id+'/'+option.id+'.png')"
+                             :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
                              alt=""/>
                         <div class="option-label" style="width: 100%">{{ option.name }}</div>
                       </div>
@@ -83,8 +86,7 @@
 </template>
 
 <script>
-import { selections } from '@/api/api'
-import { getAvailableSet } from '../api/api'
+import { getDressPartList, refreshCurrentPartInfo } from '../api/api'
 
 const parts = [
   {
@@ -103,85 +105,71 @@ const parts = [
 
 export const defaultLook = {}
 export const views = ["F", "B"]
-export const defaultTop = "2-Ca-Da-Ea"
+export const defaultTop = "B2-Ca-Da-Ea"
+
 export default {
   name: 'MakeADress',
   data: function () {
     return {
       currentTab: 0,
-      parts: parts,
-      selections: selections,
       currentView: views[0],
-      availableSet: [],
-      currentSelectedParts: [[], []],
-      currentDisplaySkirtVariant: "",
-      currentMask: {}
-    }
-  },
-  watch: {
-    currentTab (val) {
-      console.log(this.selections[val], 'CurrentSelections')
+      remoteSelections: [],
+      parts: parts,
+      selectedPart: {},
+      currentMask: []
     }
   },
   computed: {
     currentDisplayTopVariant () {
-      return ((this.availableSet?.[0]?.join("-")) ?? defaultTop) + ".png"
+      return Object.values(this.realSelection).map(s => s.partCode).join('-') + ".png"
     },
-    currentSelections () {
-      const result = []
-      const temp = this.selections[this.currentTab]
-      result.push(temp[0])//主选项不受筛选限制
-      console.log(temp)
-      temp.forEach(opt => {
-        const exist = Object.keys(this.currentMask).find(i => i === opt.id)
-        if (exist) {
-          const currentOpt = {...opt, subOptions: []}
-          opt.subOptions.forEach(subOpt => {
-            const mask = this.currentMask[exist]
-            if (mask.some(m => (exist + m) === subOpt.id)) {
-              currentOpt.subOptions.push({...subOpt})
-            }
-          })
-          result.push(currentOpt)
+    availableSelections () {
+      return this.remoteSelections[this.currentTab]?.dressPartCategories.filter(c => {
+        c.filteredPart = c.dressParts.filter(d => {
+          return this.currentMask.find(m => m.dressPartId === d.id)?.display ?? true
+        }) ?? []
+        return c.filteredPart.length > 0
+      })
+    },
+    defaultSelection () {
+      const result = {}
+      this.availableSelections?.forEach(pc => {
+        if (pc.dressPartCategory.defaultPart) {
+          result[pc.dressPartCategory.code] = {
+            partId: pc.dressPartCategory.defaultPart.id,
+            partCode: pc.dressPartCategory.defaultPart.code
+          }
         }
       })
-      console.log(result)
+      console.log(result, 'defaultSelection')
       return result
+    },
+    realSelection () {
+      return Object.assign({}, this.defaultSelection, this.selectedPart)
     }
   }
   ,
   methods: {
     changeView () {
-      this.currentView = views[this.currentView === "Front" ? 1 : 0]
+      this.currentView = views[this.currentView === "F" ? 1 : 0]
     }
     ,
-    selectPart (whichPartIndex, partFatherId, partId, toggle) {
-      if (partFatherId === 'B') {
-        this.currentSelectedParts[whichPartIndex] = []
+    async selectPart (fatherCode, partCode, partId, toggle) {
+      this.selectedPart[fatherCode] = {
+        partId, partCode
       }
-      this.$set(this.currentSelectedParts[whichPartIndex], partFatherId, partId)
-      console.log(partFatherId, partId)
-      this.availableSet = getAvailableSet(this.currentSelectedParts, partFatherId)
-      this.currentMask = this.availableSet.reduce((arr, i) => {
-        const temp = [...i]
-        temp.shift()
-        arr.push(temp)
-        return arr
-      }, []).flat().reduce((arr, i) => {
-        const [mainOption, rest] = i.split("")
-        if (arr[mainOption]) {
-          if (!arr[mainOption].includes(rest)) {
-            arr[mainOption].push(rest)
-          }
-        } else {
-          arr[mainOption] = [rest]
-        }
-        return arr
-      }, {})
-      toggle()
+      this.currentMask = await refreshCurrentPartInfo(Object.values(this.selectedPart).map(p => p.partId))
+      console.log(this.selectedPart, 'currentPartsId')
+      console.log(this.realSelection, 'realSelection')
+      if (toggle) {
+        toggle()
+      }
     }
-  }
-  ,
+  },
+  async mounted () {
+    this.selectPart('B', '1', 1)
+    this.remoteSelections = await getDressPartList()
+  },
   components: {}
 }
 </script>
