@@ -9,6 +9,8 @@ import QuestionsPage from '../views/Questions/QuestionsPage'
 import OrderPage from '../views/My/OrderPage'
 import CreateNewDress from '../views/CreateNewOrder/CreateNewDress'
 import ForgetPasswordConfirmEmail from "../views/LoginAndRegister/ForgetPasswordConfirmEmail";
+import SetPassword from "@/views/LoginAndRegister/SetPassword";
+import SetPasswordComplete from "@/views/LoginAndRegister/SetPasswordComplete";
 
 Vue.use(VueRouter)
 
@@ -52,6 +54,16 @@ const routes = [
     path: '/forgetPasswordComplete',
     name: 'forgetPasswordComplete',
     component: ForgetPasswordComplete
+  },
+  {
+    path: '/setPassword',
+    name: 'setPassword',
+    component: SetPassword
+  },
+  {
+    path: '/setPasswordComplete',
+    name: 'setPasswordComplete',
+    component: SetPasswordComplete
   },
   {
     path: '/registerComplete',

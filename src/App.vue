@@ -82,7 +82,9 @@
 .inputRow.long {
   width: 409px;
 }
-
+.inputRow.longX {
+  width: 562px;
+}
 .textInput {
   border-radius: 0;
   height: 60px;
@@ -101,6 +103,24 @@
   letter-spacing: -0.011em;
   color: #4C4C4C;
 }
+.positionCenter{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
 
+.buttonText{
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 34px;
+  text-align: center;
+  color: white;
+  height: 60px;
+  background-color: #817163;
+  margin-top: 22px;
+
+}
 </style>
 
