@@ -187,15 +187,6 @@ export async function customerInit (customer, weddingDate, likeAndHate, imgs) {
   return await hillo.post(CUSTOMER_STR + '/init', {customer, weddingDate, likeAndHate, imgs})
 }
 
-export async function getDressPartList () {
-  return (await hillo.get('/dressPart/getList')).data
-}
-
-export async function refreshCurrentPartInfo (selectedDressPartIds) {
-  return (await hillo.post('/dressPart/refreshCurrentPartInfo', {
-    dressPartIds: selectedDressPartIds
-  })).data
-}
 //DressDesignController
 export async function updateMyDesignParts(designId, dressPartIds) {
     return (await hillo.post(DRESSDESIGN_STR + '/' + `${designId}`+'/updateParts', {dressPartIds})).data
