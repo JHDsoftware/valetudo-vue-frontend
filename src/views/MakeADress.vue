@@ -8,7 +8,7 @@
         <v-img class="partImg top" width="92.97%"
                :src="require('@/assets/image/images/B-'+currentView+'-'+currentDisplayTopVariant)"></v-img>
         <v-img class="partImg skirt" width="100%"
-               :src="require('@/assets/image/images/S-'+currentView+'-'+'B1-Da-Fa-Gabc-Ha-Ia.png')"></v-img>
+               :src="require('@/assets/image/images/S-'+currentView+'-'+'B1-Da-Ga-Ha-Ia.png')"></v-img>
       </div>
       <div style="position: absolute;right: 46px;bottom: 8px;">
         <div class="roundFab">
@@ -105,8 +105,9 @@ const parts = [
 
 export const defaultLook = {}
 export const views = ["F", "B"]
+const excludeOptions = ['Fa']
 export const defaultTop = "B2-Ca-Da-Ea"
-const filterOutKey = []
+const avaliablePicSet = require('@/assets/topSet.json')
 export default {
   name: 'MakeADress',
   data: function () {
@@ -121,16 +122,18 @@ export default {
   },
   computed: {
     currentDisplayTopVariant () {
-      console.log(this.selectedTopParts, 'defaultPng')
+      console.log(this.selectedTopParts, 'new top')
       if (this.selectedTopParts.length > 0) {
-        return (this.selectedTopParts.join('-')) + ".png"
+        //console.log(avaliablePicSet, 'all set')
+        const def = avaliablePicSet.find(s => this.selectedTopParts.every(p => s.includes(p)))
+        console.log(def, 'founded')
+        return (this.selectedTopParts.filter(s => !excludeOptions.includes(s)).join('-')) + ".png"
       } else {
         return defaultTop + '.png'
       }
 
     },
     selectedTopParts () {
-      console.log('i change')
       return Object.entries(this.selectedPart).map(s => s[0] + s[1].partCode).sort()
     },
     availableSelections () {
@@ -146,37 +149,25 @@ export default {
   methods: {
     changeView () {
       this.currentView = views[this.currentView === "F" ? 1 : 0]
-    }
-    ,
+    },
     async selectPart (fatherCode, partCode, partId, toggle) {
-      this.$set(this.selectedPart,fatherCode, {
+      console.log(Object.keys(this.selectedPart).filter(k => k > fatherCode), 'need to be reset')
+      for (const key of Object.keys(this.selectedPart).filter(k => k > fatherCode)) {
+        delete this.selectedPart[key]
+      }
+      this.$set(this.selectedPart, fatherCode, {
         partId, partCode
       })
       this.currentMask = await refreshCurrentPartInfo(Object.values(this.selectedPart).map(p => p.partId))
-      await this.refreshDefault()
       if (toggle) {
         toggle()
       }
-    },
-    async refreshDefault (init = false) {
-      if (init) {
-        filterOutKey.length = 0
-      }
-      console.log(filterOutKey)
-      const next = this.availableSelections.find(pc => !filterOutKey.includes(pc.dressPartCategory.code) && pc.dressPartCategory.defaultPart)
-      if (next) {
-        console.log('try next', next.dressPartCategory.code)
-        filterOutKey.push(next.dressPartCategory.code)
-        await this.selectPart(next.dressPartCategory.code, next.dressPartCategory.defaultPart.code, next.dressPartCategory.defaultPart.id)
-        await this.refreshDefault()
-      }
-
     }
   },
   async mounted () {
     this.remoteSelections = await getDressPartList()
+    await this.selectPart('B', '1', 1)
     console.log(this.availableSelections, 'defaultSelection')
-    this.refreshDefault(true)
   },
   components: {}
 }
