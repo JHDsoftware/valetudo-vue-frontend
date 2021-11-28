@@ -154,20 +154,12 @@ export const weddingItem = {
 }
 
 export const CUSTOMER_STR = '/customer'
+export const DRESSDESIGN_STR = '/dressDesign'
+export const DRESSPART_STR = '/dressPart'
 
-
-/**
- *
- * @param email
- * @param password
- * @param firstName
- * @param lastName
- * @param city
- * @param phone
- * @return {Promise<AxiosResponse<any>>}
- */
-export async function customerUserRegister (email, password, firstName, lastName, city, phone) {
-  return await hillo.post('/customer/register', {email, password, firstName, lastName, city, phone})
+//CustomerController
+export async function customerRegister(email, password, firstName, lastName, city, phone) {
+    return await hillo.post(CUSTOMER_STR + '/register', { email, password, firstName, lastName, city, phone })
 }
 
 /**
@@ -183,8 +175,8 @@ export async function customerConfirmRegister (uuid) {
   return await hillo.get(CUSTOMER_STR + '/confirmRegister/', {uuid})
 }
 
-export async function userLogin (userName, password) {
-  return await hillo.post('/customer/login', {userName, password})
+export async function customerLogin(userName, password) {
+    return await hillo.post(CUSTOMER_STR+'/login', { userName, password })
 }
 
 export async function customerMe () {
@@ -204,3 +196,34 @@ export async function refreshCurrentPartInfo (selectedDressPartIds) {
     dressPartIds: selectedDressPartIds
   })).data
 }
+//DressDesignController
+export async function updateMyDesignParts(designId, dressPartIds) {
+    return (await hillo.post(DRESSDESIGN_STR + '/' + `${designId}`+'/updateParts', {dressPartIds})).data
+}
+
+export async function completeDesign(id){
+    return (await hillo.post(DRESSDESIGN_STR + '/setComplete/'+`${id}`)).data
+}
+
+export async function placeSampleOrder(id, quantity, deliveryAddress, billingAddress){
+    return (await hillo.post(DRESSDESIGN_STR + '/placeSampleOrder/'+`${id}`, {
+        quantity, deliveryAddress, billingAddress
+    })).data
+}
+
+export async function createNewDesign(name){
+    return (await hillo.post(DRESSDESIGN_STR + '/createNew', {name})).data
+}
+
+//DressPartController
+export async function getDressPartList() {
+    return (await hillo.get(DRESSPART_STR +'/getList')).data
+}
+
+export async function refreshCurrentPartInfo(selectedDressPartIds) {
+    return (await hillo.post(DRESSPART_STR + '/refreshCurrentPartInfo', {
+        dressPartIds: selectedDressPartIds
+    })).data
+}
+
+

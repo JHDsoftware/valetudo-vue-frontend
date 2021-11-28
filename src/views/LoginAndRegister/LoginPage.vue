@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { customerUserRegister, userLogin } from '../../api/api'
+import { customerRegister, customerLogin } from '../../api/api'
 
 export default {
   name: "LoginPage",
@@ -123,16 +123,16 @@ export default {
   },
   methods: {
     async login () {
-      const res = await userLogin(this.loginEmail, this.loginPassword)
+      const res = await customerLogin(this.loginEmail, this.loginPassword)
       console.log(res)
     },
     async register () {
-      const res = await customerUserRegister(
+      const res = await customerRegister(
           this.email, this.password,
           this.firstName, this.lastName,
           this.city, this.phone)
       if (res.code === 200) {
-        this.$router.push('/registerComplete')
+        await this.$router.push('/registerComplete')
       }
       console.log(res)
     }
