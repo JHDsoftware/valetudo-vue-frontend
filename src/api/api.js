@@ -184,7 +184,7 @@ export async function customerInit(customer, weddingDate, likeAndHate, imgs) {
 
 //DressDesignController
 export async function updateMyDesignParts(designId, dressPartIds) {
-    return (await hillo.post(DRESSDESIGN_STR + '/' + `${designId}`+'/updateParts'), {dressPartIds}).data
+    return (await hillo.post(DRESSDESIGN_STR + '/' + `${designId}`+'/updateParts', {dressPartIds})).data
 }
 
 export async function completeDesign(id){
@@ -192,13 +192,13 @@ export async function completeDesign(id){
 }
 
 export async function placeSampleOrder(id, quantity, deliveryAddress, billingAddress){
-    return (await hillo.post(DRESSDESIGN_STR + '/placeSampleOrder/'+`${id}`), {
+    return (await hillo.post(DRESSDESIGN_STR + '/placeSampleOrder/'+`${id}`, {
         quantity, deliveryAddress, billingAddress
-    }).data
+    })).data
 }
 
 export async function createNewDesign(name){
-    return (await hillo.post(DRESSDESIGN_STR + '/createNew'), {name}).data
+    return (await hillo.post(DRESSDESIGN_STR + '/createNew', {name})).data
 }
 
 //DressPartController
