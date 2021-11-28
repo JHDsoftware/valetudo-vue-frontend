@@ -105,7 +105,11 @@ const parts = [
 
 export const defaultLook = {}
 export const views = ["F", "B"]
-const excludeOptions = ['Fa']
+export const excludeImage = ["Fa", "Fc"]
+export const topSelection = ["B", "C", "D", "E", "F"]
+export const sleevesSelection = ["G", "H", "I"]
+export const stripSelection = ["J"]
+export const backSelection = ["K", "L"]
 export const defaultTop = "B2-Ca-Da-Ea"
 const avaliablePicSet = require('@/assets/topSet.json')
 export default {
@@ -125,16 +129,17 @@ export default {
       console.log(this.selectedTopParts, 'new top')
       if (this.selectedTopParts.length > 0) {
         //console.log(avaliablePicSet, 'all set')
-        const def = avaliablePicSet.find(s => this.selectedTopParts.every(p => s.includes(p)))
+        const def = avaliablePicSet.find(s => this.selectedTopParts.filter(s => !excludeImage.includes(s)).every(p => s.includes(p)))
         console.log(def, 'founded')
-        return (this.selectedTopParts.filter(s => !excludeOptions.includes(s)).join('-')) + ".png"
+
+        return (def?.join('-') ?? defaultTop) + ".png"
       } else {
         return defaultTop + '.png'
       }
 
     },
     selectedTopParts () {
-      return Object.entries(this.selectedPart).map(s => s[0] + s[1].partCode).sort()
+      return Object.entries(this.selectedPart).filter(s=>topSelection.includes(s[0])).map(s => s[0] + s[1].partCode).sort()
     },
     availableSelections () {
       return this.remoteSelections[this.currentTab]?.dressPartCategories.filter(c => {
