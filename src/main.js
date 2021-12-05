@@ -16,18 +16,17 @@ hillo.initial('http://localhost:8080')
 export function refreshHeader () {
   hillo.axios.defaults.headers.common = {
     'Content-Type': 'application/json',
-    SaToken: getToken(),
+    'satoken': getToken()
   }
   hillo.axios.defaults.headers.post = {
     'Content-Type': 'application/json',
-    JWTToken: getToken(),
+    'satoken': getToken()
   }
   hillo.axios.defaults.headers.get = {
     'Content-Type': 'application/json',
-    JWTToken: getToken(),
+    'satoken': getToken()
   }
 }
-
 
 
 refreshHeader()

@@ -6,8 +6,8 @@
         Valetudo my Dress
       </v-app-bar-title>
       <div style="position: fixed;right: 43px;top:22px" class="d-flex">
-        <div class="flatButton">Login/Register</div>
-        <div class="flatButton" style="margin-left: 32px">Konto</div>
+        <router-link class="flatButton" to="/">Login/Register</router-link>
+        <router-link class="flatButton" to="/order" style="margin-left: 32px">Konto</router-link>
       </div>
     </v-app-bar>
     <v-main style="">
@@ -79,6 +79,7 @@
 .inputRow {
   width: 348px;
 }
+
 .inputRow.long {
   width: 409px;
 }
@@ -89,7 +90,7 @@
   line-height: 60px;
 }
 
-.tinyHint{
+.tinyHint {
   font-family: Inter;
   font-style: normal;
   font-weight: 500;

@@ -23,7 +23,7 @@
               <div style="margin-top: 18px" class="dressCreateTime">Created by 05. Marz. 2021</div>
             </div>
           </div>
-          <div>
+          <div @click="$router.push('/createNewDress')">
             <div class="dressContainer d-flex justify-center align-center">
               <div class="noContent">
                 <div class="bigHint">Design your dream dress for free!</div>

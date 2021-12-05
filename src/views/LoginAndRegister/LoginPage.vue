@@ -97,7 +97,8 @@
 </template>
 
 <script>
-import { customerRegister, customerLogin } from '../../api/api'
+import { customerLogin, customerRegister } from '../../api/api'
+import { refreshHeader } from '../../main'
 
 export default {
   name: "LoginPage",
@@ -125,6 +126,9 @@ export default {
     async login () {
       const res = await customerLogin(this.loginEmail, this.loginPassword)
       console.log(res)
+      localStorage.setItem('token', res.tokenValue)
+      refreshHeader()
+      await this.$router.push('/order')
     },
     async register () {
       const res = await customerRegister(

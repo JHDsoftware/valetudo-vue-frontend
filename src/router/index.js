@@ -53,9 +53,10 @@ const routes = [
     component: RegisterComplete
   },
   {
-    path: '/edit',
+    path: '/edit/:dressId',
     name: 'edit',
-    component: MakeADress
+    component: MakeADress,
+    props:true,
   },
   {
     path: '/about',
