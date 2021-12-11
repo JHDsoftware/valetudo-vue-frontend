@@ -9,8 +9,11 @@ import QuestionsPage from '../views/Questions/QuestionsPage'
 import OrderPage from '../views/My/OrderPage'
 import CreateNewDress from '../views/CreateNewOrder/CreateNewDress'
 import ForgetPasswordConfirmEmail from "../views/LoginAndRegister/ForgetPasswordConfirmEmail";
-import SetPassword from "@/views/LoginAndRegister/SetPassword";
-import SetPasswordComplete from "@/views/LoginAndRegister/SetPasswordComplete";
+import SetPassword from '../views/LoginAndRegister/SetPassword';
+import SetPasswordComplete from '../views/LoginAndRegister/SetPasswordComplete';
+import QuestionsPage2 from "../views/Questions/QuestionsPage2";
+import QuestionsPage3 from "../views/Questions/QuestionsPage3";
+import FAQ from "../views/LoginAndRegister/FAQ";
 
 Vue.use(VueRouter)
 
@@ -31,9 +34,24 @@ const routes = [
     component: OrderPage
   },
   {
+    paht: '/FAQ',
+    name: 'FAQ',
+    component: FAQ
+  },
+  {
     path: '/questions',
     name: 'questions',
     component: QuestionsPage
+  },
+  {
+    path: '/questions2',
+    name: 'questions2',
+    component: QuestionsPage2
+  },
+  {
+    path: '/questions3',
+    name: 'questions3',
+    component: QuestionsPage3
   },
   {
     path: '/login',
