@@ -5,12 +5,12 @@ import LoginPage from '../views/LoginAndRegister/LoginPage'
 import RegisterComplete from '../views/LoginAndRegister/RegisterComplete'
 import ResetPassword from '../views/LoginAndRegister/ResetPassword'
 import ForgetPasswordComplete from '../views/LoginAndRegister/ForgetPasswordComplete'
-import QuestionsPage from '../views/Questions/QuestionsPage'
 import OrderPage from '../views/My/OrderPage'
 import CreateNewDress from '../views/CreateNewOrder/CreateNewDress'
 import ForgetPasswordConfirmEmail from "../views/LoginAndRegister/ForgetPasswordConfirmEmail";
 import SetPassword from '../views/LoginAndRegister/SetPassword';
 import SetPasswordComplete from '../views/LoginAndRegister/SetPasswordComplete';
+import QuestionsPage from '../views/Questions/QuestionsPage'
 import QuestionsPage2 from "../views/Questions/QuestionsPage2";
 import QuestionsPage3 from "../views/Questions/QuestionsPage3";
 import FAQ from "../views/LoginAndRegister/FAQ";
@@ -34,7 +34,7 @@ const routes = [
     component: OrderPage
   },
   {
-    paht: '/FAQ',
+    path: '/FAQ',
     name: 'FAQ',
     component: FAQ
   },
