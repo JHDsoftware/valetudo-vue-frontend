@@ -1,7 +1,7 @@
 <template>
   <div style="display: grid;grid-template-columns: repeat(2,50%);height: calc(100vh - 64px)" >
     <div>
-      <v-img height="100%" :src="require('@/assets/image/frameUI/questionImg1.png')"></v-img>
+      <v-img height="100%" :src="require('@/assets/image/frameUI/questionImg3.png')"></v-img>
     </div>
     <div class="d-flex flex-column justify-center pt-12 flex-wrap align-center">
       <div v-if="e1<2" style="text-align: center" class="question">Hi, before starting to design the wedding dress.<br> We need to
