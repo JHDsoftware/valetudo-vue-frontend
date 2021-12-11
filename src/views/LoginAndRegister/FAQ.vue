@@ -1,6 +1,9 @@
 <template>
-<div>
-  
+<div class="d-flex flex-wrap justify-center">
+  <div>FAQ</div>
+  <div>
+    <v-text-field label="xxxxxx"></v-text-field>
+  </div>
 </div>
 </template>
 
