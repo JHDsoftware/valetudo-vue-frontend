@@ -14,6 +14,7 @@ import QuestionsPage from '../views/Questions/QuestionsPage'
 import QuestionsPage2 from "../views/Questions/QuestionsPage2";
 import QuestionsPage3 from "../views/Questions/QuestionsPage3";
 import FAQ from "../views/LoginAndRegister/FAQ";
+import QuestionsPage1 from "../views/Questions/QuestionsPage1";
 
 Vue.use(VueRouter)
 
@@ -39,18 +40,23 @@ const routes = [
     component: FAQ
   },
   {
-    path: '/questions',
-    name: 'questions',
+    path: '/questionspage',
+    name: 'questionspage',
     component: QuestionsPage
   },
   {
-    path: '/questions2',
-    name: 'questions2',
+    path: '/questionspage1',
+    name: 'questionspage1',
+    component: QuestionsPage1
+  },
+  {
+    path: '/questionspage2',
+    name: 'questionspage2',
     component: QuestionsPage2
   },
   {
-    path: '/questions3',
-    name: 'questions3',
+    path: '/questionspage3',
+    name: 'questionspage3',
     component: QuestionsPage3
   },
   {
