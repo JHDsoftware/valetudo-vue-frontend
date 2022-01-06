@@ -27,7 +27,8 @@
     <div class="registerForm">
       <v-form v-model="registerFormValid" lazy-validation>
         <div class="formTitle">Register</div>
-        <div class="inputRow long mt-4 pr-3" style="display: grid;grid-template-columns: repeat(2,50%);grid-gap: 10px">
+        <div class="inputRow long mt-4 pr-3"
+             style="display: grid;grid-template-columns: repeat(2,50%);grid-gap: 10px">
           <div>
             <div class="label">First name*</div>
             <v-text-field :rules="[rules.required]"

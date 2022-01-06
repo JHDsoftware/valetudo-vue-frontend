@@ -1,14 +1,10 @@
 <template>
-  <div style="display: grid;grid-template-columns: repeat(2,50%);height: calc(100vh - 64px)">
-
+  <div style="display: grid;grid-template-columns: repeat(2,50%);height: calc(100vh - 64px)" >
     <div>
-      <v-img height="100%" :src="selectImg(e1)"></v-img>
+      <v-img height="100%" :src="require('@/assets/image/frameUI/questionImg3.png')"></v-img>
     </div>
-
-
     <div class="d-flex flex-column justify-center pt-12 flex-wrap align-center">
-      <div v-if="e1<2" style="text-align: center" class="question">Hi, before starting to design the wedding dress.<br>
-        We need to
+      <div v-if="e1<2" style="text-align: center" class="question">Hi, before starting to design the wedding dress.<br> We need to
         get to know you a little bit,<br>
         which helps us provide better service.
       </div>
@@ -135,8 +131,7 @@
                 </v-tooltip>
               </div>
               <div style="width: 568px;margin-top: 58px">
-                <v-textarea placeholder="I love Clean, classic, and timeless style" class="buttonText mt-4"
-                            outlined></v-textarea>
+                <v-textarea placeholder="I love Clean, classic, and timeless style" class="buttonText mt-4" outlined></v-textarea>
 
               </div>
               <div class="" style="width: 568px;">
@@ -179,25 +174,13 @@ export default {
     }
   },
   watch: {
-    menu(val) {
+    menu (val) {
       val && setTimeout(() => (this.activePicker = 'YEAR'))
     }
   },
   methods: {
-    save(date) {
+    save (date) {
       this.$refs.menu.save(date)
-    },
-    selectImg(item) {
-      let img = require('@/assets/image/frameUI/questionImg1.png')
-      switch (item) {
-        case 2:
-          img = require('@/assets/image/frameUI/questionImg2.png')
-          break
-        case 3:
-          img = require('@/assets/image/frameUI/questionImg3.png')
-          break
-      }
-      return img
     }
   }
 }
