@@ -1,7 +1,7 @@
 <template>
-  <div style="display: grid;grid-template-columns: 50% 50%">
+  <div style="display: grid;grid-template-columns: 50% 50%;overflow: hidden">
     <v-sheet
-        style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;">
+        style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9">
       <div class="imgContainer" style="width: 788px;position: relative">
         <v-img class="partImg model" width="92.97%"
                :src="require('@/assets/image/structure/model/frontModel.png')"></v-img>
@@ -54,44 +54,43 @@
           </v-item-group>
         </div>
       </v-card>
+      <div style="height: calc(100vh - 60px - 64px - 60px);overflow-y: scroll">
+        <v-expansion-panels style="margin-top: 2px" accordion mandatory>
+          <v-expansion-panel
+              class="panel"
+              active-class="active"
+              v-for="(item) in availableSelections"
+              :key="currentTab+''+item.dressPartCategory.code"
+          >
+            <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
+                item.dressPartCategory.name
+              }}
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-item-group mandatory>
+                <div style="display: grid;grid-template-columns: repeat(7,1fr)">
+                  <template v-for="option in item.filteredPart">
+                    <v-item :key="option.code" v-slot="{active,toggle}">
+                      <div class="weddingItem"
+                           @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
+                           :class="active?' active':''">
+                        <div style="text-align: center">
+                          <img style="height: 116px"
+                               :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
+                               alt=""/>
+                          <div class="option-label" style="width: 100%">{{ option.name }}</div>
+                        </div>
 
-      <v-expansion-panels style="margin-top: 2px" accordion mandatory>
-        <v-expansion-panel
-            class="panel"
-            active-class="active"
-            v-for="(item) in availableSelections"
-            :key="currentTab+''+item.dressPartCategory.code"
-        >
-          <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
-              item.dressPartCategory.name
-            }}
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-item-group mandatory>
-              <div style="display: grid;grid-template-columns: repeat(7,1fr)">
-                <template v-for="option in item.filteredPart">
-                  <v-item :key="option.code" v-slot="{active,toggle}">
-                    <div class="weddingItem"
-                         @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
-                         :class="active?' active':''">
-                      <div style="text-align: center">
-                        <img style="height: 116px"
-                             :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
-                             alt=""/>
-                        <div class="option-label" style="width: 100%">{{ option.name }}</div>
                       </div>
-
-                    </div>
-                  </v-item>
-                </template>
-              </div>
-            </v-item-group>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-
-      <v-spacer></v-spacer>
-      <v-sheet style="display: grid;grid-template-columns: 50% 50%">
+                    </v-item>
+                  </template>
+                </div>
+              </v-item-group>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
+      <v-sheet style="position: absolute;width:100%;bottom:0;z-index:1;display: grid;grid-template-columns: 50% 50%">
         <v-btn height="60px" block elevation="0" tile color="#817163" dark>
           <v-icon left>mdi-arrow-left-top-bold</v-icon>
           Revoke
@@ -134,7 +133,7 @@ export const stripSelection = ["J"]
 export const backSelection = ["K", "L"]
 export const defaultTop = "Bodice-Front-B2-Ca-Da-Ea"
 export const defaultSkirt = "Skirt-Front-B1-Da-Ga-Ha-Ia"
-const avaliablePicSet = require('@/assets/topSet.json')
+const availablePicSet = require('@/assets/topSet.json')
 export default {
   name: 'MakeADress',
   props: {
@@ -216,7 +215,7 @@ export default {
   methods: {
     findDefaultPartInImageSet (partName, selectedParts, excludeFilter = () => true) {
       const targetSet = [partName, this.currentView, ...selectedParts]
-      const res = avaliablePicSet.filter(excludeFilter).find(s => targetSet.every(p => s.includes(p))) ?? null
+      const res = availablePicSet.filter(excludeFilter).find(s => targetSet.every(p => s.includes(p))) ?? null
       return res
     },
     filterPartsWithMask (mask = [], pageFilter = 0) {
