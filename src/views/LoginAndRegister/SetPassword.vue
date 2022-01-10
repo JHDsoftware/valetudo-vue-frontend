@@ -26,7 +26,8 @@
                         margin-top: 23px;
                         width: 581px;
                             "
-                >Save</v-btn>
+                 @click="handle"
+                >Bestätigen</v-btn>
       </div>
     </div>
 
@@ -43,6 +44,11 @@ export default {
     return {
       password: null,
       confirmPassword: null
+    }
+  },
+  methods:{
+    handle(){
+
     }
   }
 }
