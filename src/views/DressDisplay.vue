@@ -1,0 +1,140 @@
+<template>
+  <div class="imgContainer" style="width: 100%;position: relative">
+    <v-img class="partImg model" width="92.97%"
+           :src="require('@/assets/image/structure/model/frontModel.png')"></v-img>
+
+    <v-img class="partImg top" width="92.97%"
+           :src="require('@/assets/image/images/'+currentDisplayTopVariant)">
+      <template v-slot:placeholder>
+        <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+        >
+          <v-progress-circular
+              indeterminate
+              color="grey lighten-5"
+          ></v-progress-circular>
+        </v-row>
+      </template>
+    </v-img>
+    <v-img class="partImg skirt" width="100%"
+           :src="require('@/assets/image/images/'+displaySkirtPart)"></v-img>
+    <v-img class="partImg sleeve" width="92.97%" v-if="displaySleevePart"
+           :src="require('@/assets/image/images/'+displaySleevePart)"></v-img>
+    <v-img class="partImg strip" width="92.97%" v-if="displayStripPart"
+           :src="require('@/assets/image/images/'+displayStripPart)"></v-img>
+
+
+  </div>
+</template>
+
+<script>
+import {
+  defaultSkirt,
+  defaultTop,
+  excludeImage,
+  skirtSelection,
+  sleevesSelection,
+  stripSelection,
+  topSelection
+} from "@/views/MakeADress";
+import {loadDesign} from "@/api/api";
+import availablePicSet from "@/assets/topSet.json";
+
+export default {
+  name: "DressDisplay",
+  props: {
+    dressId: {
+      default: -1
+    },
+    refreshCounter: {}
+  },
+  watch: {
+    refreshCounter() {
+      this.loadPart()
+    }
+  },
+  computed: {
+    selectedTopParts() {
+      return this.filterPartsWithMask(topSelection)
+    },
+    currentDisplayTopVariant() {
+      if (this.selectedTopParts.length > 0) {
+        const def = this.findDefaultPartInImageSet('Bodice', this.selectedTopParts)
+        return (def?.join('-') ?? defaultTop) + ".png"
+      } else {
+        return defaultTop + '.png'
+      }
+    },
+    displaySkirtPart() {
+      const skirtParts = this.filterPartsWithMask(skirtSelection, 1)
+      if (skirtParts.length > 0) {
+        const def = this.findDefaultPartInImageSet('Skirt', skirtParts)
+        return (def?.join('-') ?? defaultSkirt) + ".png"
+      } else {
+        return defaultSkirt + ".png"
+      }
+    },
+    displayStripPart() {
+      const stripPart = this.filterPartsWithMask(stripSelection)
+      if (stripPart.length > 0) {
+        const def = this.findDefaultPartInImageSet('Strip', [this.selectedTopParts[0], ...stripPart])
+        return def ? (def?.join('-') + ".png") : null
+      } else {
+        return null
+      }
+    },
+    displaySleevePart() {
+      const sleeveParts = this.filterPartsWithMask(sleevesSelection)
+      if (sleeveParts.length > 0) {
+        const shouldFilterB9 = this.selectedTopParts.includes('B9')
+        const def = this.findDefaultPartInImageSet('Sleeves', sleeveParts, (p) => p.includes('B9') === shouldFilterB9)
+        return def ? (def?.join('-') + ".png") : null
+      } else {
+        return null
+      }
+    },
+  },
+  data: function () {
+    return {
+      loading: true,
+      selectedPart: {},
+      currentView: "Front",
+    };
+  },
+  mounted() {
+    loadDesign(this.dressId)
+  },
+  methods: {
+    findDefaultPartInImageSet(partName, selectedParts, excludeFilter = () => true) {
+      const targetSet = [partName, this.currentView, ...selectedParts]
+      return availablePicSet.filter(excludeFilter).find(s => targetSet.every(p => s.includes(p))) ?? null
+    },
+    filterPartsWithMask(mask = [], pageFilter = 0) {
+      return Object.entries(this.selectedPart).filter(s => {
+        const [tab, fatherCode] = s[0].split('/')
+        return mask.includes(fatherCode) && parseInt(tab) === pageFilter
+      }).map(s => s[0].split('/')[1] + s[1].partCode).sort().filter(s => !excludeImage.includes(s))
+    },
+    async loadPart() {
+      const info = await loadDesign(this.dressId)
+      console.log(info, "i have info")
+      if (info?.dressParts?.length > 0) {
+        const parts = info.dressParts
+        for (const p of parts) {
+          const typeCode = p.dressPartCategory.dressPartType.code
+          const tab = typeCode === "B" ? 0 : typeCode === "S" ? 1 : 2
+          this.$set(this.selectedPart, tab + '/' + p.dressPartCategory.code, {
+            partId:p.id, partCode:p.code
+          })
+        }
+      }
+    },
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

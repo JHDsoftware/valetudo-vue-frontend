@@ -11,7 +11,7 @@ export function getToken () {
 }
 
 Vue.config.productionTip = false
-hillo.initial('http://localhost:8080')
+hillo.initial('http://192.168.31.245:8080')
 
 export function refreshHeader () {
   hillo.axios.defaults.headers.common = {
