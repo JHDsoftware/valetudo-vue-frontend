@@ -123,5 +123,27 @@
   margin-top: 22px;
 
 }
+
+.text{
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: normal;
+  color: #4C4C4C;
+}
+.text24{
+  font-size: 24px;
+  line-height: 34px;
+}
+
+.text36{
+  font-size: 36px;
+  line-height: 52px;
+  /* identical to box height */
+
+  color: #4C4C4C;
+
+}
+
+
 </style>
 
