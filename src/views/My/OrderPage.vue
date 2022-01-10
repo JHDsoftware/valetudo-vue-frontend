@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex" style="height: 100%">
-    <div class="flex-shrink-0" style="width: 296px;height: 100%;border-right: 1px solid #817163;padding-top: 23px;padding-left: 27px">
+    <div class="flex-shrink-0"
+         style="width: 296px;height: 100%;border-right: 1px solid #817163;padding-top: 23px;padding-left: 27px">
       <div class="navHeader">Liqiong's Dress</div>
       <div style="margin-top: 29px" class="menuItemPanel">
         <div class="navItem active">Your Drawing</div>
@@ -13,13 +14,13 @@
     </div>
     <div class="flex-grow-1" style="padding:38px 100px;">
       <div class="pageContent d-flex justify-center" style="width: 100%">
-        <div style="display: grid;grid-template-columns: repeat(3,422px);grid-gap: 38px">
-          <div class="d-flex justify-center flex-wrap">
-            <div class="dressContainer hasContent">
-              <v-img width="354px"  :src="require('@/assets/image/frameUI/example1.png')"></v-img>
+        <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
+          <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList">
+            <div class="dressContainer hasContent d-flex align-center">
+              <dress-display style="height: 290px" :refresh-counter="item.id" :dress-id="item.id"></dress-display>
             </div>
             <div class="d-flex flex-column align-center">
-              <div style="margin-top: 38px;" class="dressName">Joan & D</div>
+              <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>
               <div style="margin-top: 18px" class="dressCreateTime">Created by 05. Marz. 2021</div>
             </div>
           </div>
@@ -48,8 +49,26 @@
 </template>
 
 <script>
+import {getMyDesign} from "@/api/api";
+import DressDisplay from "@/views/DressDisplay";
+
 export default {
-  name: "OrderPage"
+  name: "OrderPage",
+  components: {DressDisplay},
+  data: function () {
+    return {
+      myDressList: []
+    };
+  },
+  methods: {
+    async loadDressList() {
+      this.myDressList = await getMyDesign()
+      console.log(this.myDressList)
+    }
+  },
+  mounted() {
+    this.loadDressList()
+  }
 }
 </script>
 
@@ -101,8 +120,8 @@ export default {
 }
 
 .dressContainer {
-  width: 422px;
-  height: 575px;
+  width: 340px;
+  height: 500px;
   border: 2px solid #817163;
   box-sizing: border-box;
   box-shadow: 0px 6px 6px 2px #CCC6BB;

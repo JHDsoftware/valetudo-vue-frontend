@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { createNewDesign } from '../../api/api'
+import { createNewDesign } from '@/api/api'
 
 export default {
   name: "CreateNewDress",
@@ -26,10 +26,14 @@ export default {
   methods: {
     async createNewDesign () {
       const res = await createNewDesign(this.name)
-      console.log(res)
-      await this.$router.push({
-        path: 'edit/' + res.id
-      })
+      if(res.id){
+        await this.$router.push({
+          path: 'edit/' + res.id
+        })
+      }else{
+        alert(res)
+      }
+
     }
   }
 }
