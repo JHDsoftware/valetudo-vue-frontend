@@ -174,7 +174,7 @@ export async function customerCheckEmailRegistered (email) {
 export async function customerConfirmRegister (uuid) {
   return await hillo.get(CUSTOMER_STR + '/confirmRegister/', {uuid})
 }
-
+  
 export async function customerLogin (userName, password) {
   return (await hillo.post(CUSTOMER_STR + '/login', {userName, password})).data
 }

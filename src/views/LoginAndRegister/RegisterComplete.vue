@@ -1,20 +1,31 @@
 <template>
-  <message-display title="Thanks for your registration!" message="        We have sent you an Email,<br>
-        please confirm it in your email address,<br>
-        klick the link!<br>
-        <br>
-        After you confirm it,<br>
-        this page will atomaticly refresh!<br>
-        If it didn’t, please use the Refresh button!" hint="Have Problem in registration?" button-text="Register"
-                   :show-button="true"></message-display>
+  <message-display
+      title="Vielen Dank für Ihre Anmeldung"
+      :message="message"
+      hint="Ich habe Probleme bei der Registrierung"
+      button-text="Aktualisieren"
+      :show-button="true"
+      v-on:clickButton="$router.replace('/login')"
+      v-on:clickHint="$router.replace('/FAQ')"
+  ></message-display>
 </template>
+
 
 <script>
 import MessageDisplay from '../../components/MessageDisplay'
 
 export default {
   name: "RegisterComplete",
-  components: {MessageDisplay}
+  components: {MessageDisplay},
+  data() {
+    return {
+      message: "Wir haben Ihnen eine E-Mail geschickt. Bitte klicken Sie auf den Link, um Ihre Anmeldung zu bestätigen.\n" +
+          "Klicken Sie nach Ihrer Bestätigung auf den Button \"Aktualisieren\"."
+    }
+  },
+  methods: {
+
+  }
 }
 </script>
 

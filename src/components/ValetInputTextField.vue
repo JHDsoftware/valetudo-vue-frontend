@@ -1,7 +1,7 @@
 <template>
-  <div class="inputRow mt-3">
+  <div class="inputRow mt-3" style="width: 100%">
     <div class="label">{{ title}}</div>
-    <div style="margin-top: 5px">
+    <div style="margin-top: 8px">
       <v-text-field outlined flat hide-details
                     height="60px"
                     style="border-radius: 0"
@@ -33,5 +33,11 @@ export default {
 </script>
 
 <style scoped>
-
+.label{
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 26px;
+}
 </style>

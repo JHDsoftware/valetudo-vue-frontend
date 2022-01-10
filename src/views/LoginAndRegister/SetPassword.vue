@@ -1,14 +1,15 @@
 <template>
   <div style="margin-top: 15%">
     <div class="positionCenter">
-      <div class="text"> Set your new password</div>
+      <div class="text" style="width: 650px; margin-top: 251px">
+        Bitte geben Sie hier Ihre Registrierungs-E-Mail-Adresse ein, damit wir Ihnen ein temporäres Passwort zum Einloggen schicken können.</div>
     </div>
 
     <div class="positionCenter" style="margin-top: 61px">
       <div>
           <valet-input-text-field
               style="width: 581px"
-              title="New password:"
+              title="E-Mail*"
               v-model="password"
           />
 
@@ -78,4 +79,6 @@ export default {
   margin-top: 22px;
 
 }
+
+
 </style>
