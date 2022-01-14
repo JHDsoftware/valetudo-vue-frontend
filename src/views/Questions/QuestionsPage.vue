@@ -1,5 +1,5 @@
 <template>
-  <div style="display: grid;grid-template-columns: repeat(2,50%);height: calc(100vh - 64px)">
+  <div style="display: grid;grid-template-columns: repeat(2,50%); height: calc(100vh - 60px)">
 
     <div>
       <v-img height="100%" :src="selectImg(e1)"></v-img>
@@ -7,10 +7,8 @@
 
 
     <div class="d-flex flex-column justify-center pt-12 flex-wrap align-center">
-      <div v-if="e1<2" style="text-align: center" class="question">Hi, before starting to design the wedding dress.<br>
-        We need to
-        get to know you a little bit,<br>
-        which helps us provide better service.
+      <div v-if="e1<2" style="text-align: center; width: 650px" class="question">
+        Hallo, bevor Sie mit dem Entwurf Ihres wunderschönen Hochzeitskleides beginnen, stellen wir Ihnen 3 Fragen, um Sie und Ihre Wünsche besser kennenzulernen.
       </div>
       <v-stepper v-model="e1" flat>
         <div style="width: 100%;" class="d-flex justify-center">
@@ -36,7 +34,7 @@
         <v-stepper-items>
           <v-stepper-content step="1">
             <div style="width: 633px;padding: 20px" class="d-flex justify-center flex-wrap">
-              <div class="questionText"> When is your wedding date?
+              <div class="questionText"> Wann ist Ihr Hochzeitsdatum und Ihr Datum der standesamtlichen Trauung?
                 <v-tooltip max-width="396px" bottom color="#f6f6f6">
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
@@ -45,6 +43,7 @@
                         v-on="on"
                         large
                         color="#CCC6BB"
+                        @click="showInfo=true"
                     >
                       mdi-help-circle-outline
                     </v-icon>
@@ -162,8 +161,20 @@
         </v-stepper-items>
       </v-stepper>
       <v-spacer></v-spacer>
-      <v-btn height="80px" width="100%" @click="e1++" elevation="0" color="#c4c4c4" dark>Next</v-btn>
+      <v-btn height="80px" width="100%" @click="e1++" elevation="0" color="#c4c4c4" dark>Weiter</v-btn>
     </div>
+    <v-dialog v-model="showInfo" width="50%" >
+      <v-card >
+        <div style="display: flex; justify-content: end"><v-icon>mdi-plus</v-icon></div>
+        <v-card-subtitle>
+          Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.
+        </v-card-subtitle>
+        <v-card-actions style="display: flex; justify-content: center">
+          <v-btn x-large>Okey</v-btn>
+        </v-card-actions>
+      </v-card>
+
+    </v-dialog>
   </div>
 </template>
 
@@ -175,7 +186,8 @@ export default {
       e1: 1,
       activePicker: null,
       date: null,
-      menu: false
+      menu: false,
+      showInfo: false
     }
   },
   watch: {
@@ -217,6 +229,8 @@ export default {
   color: #4C4C4C;
 
 }
+
+
 
 .question {
   font-family: Inter;
