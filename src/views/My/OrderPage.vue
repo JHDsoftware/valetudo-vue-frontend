@@ -9,15 +9,16 @@
         <div class="navItem">Q&A</div>
         <div class="navItem">Contact us</div>
       </div>
-
-
     </div>
     <div class="flex-grow-1" style="padding:38px 100px;">
       <div class="pageContent d-flex justify-center" style="width: 100%">
         <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
           <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList">
             <div class="dressContainer hasContent d-flex align-center">
-              <dress-display style="height: 290px" :refresh-counter="item.id" :dress-id="item.id"></dress-display>
+              <dress-display style="height: 290px"
+                             :refresh-counter="item.id"
+                             :dress-id="item.id"
+              ></dress-display>
             </div>
             <div class="d-flex flex-column align-center">
               <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>

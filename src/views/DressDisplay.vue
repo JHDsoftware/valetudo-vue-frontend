@@ -1,8 +1,9 @@
 <template>
   <div class="imgContainer" style="width: 100%;position: relative">
-    <v-img class="partImg model"  width="92.97%"
-           :src="require('@/assets/image/structure/model/frontModel.png')"></v-img>
 
+    <v-img class="partImg model"  width="92.97%"
+           :src="require('@/assets/image/structure/model/frontModel.png')">
+    </v-img>
 
     <v-img style="z-index: 2" class="partImg top" width="92.97%"
            :src="require('@/assets/image/images/'+currentDisplayTopVariant)">
