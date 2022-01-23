@@ -143,8 +143,9 @@ color: #817163;">You dress will be saved...</p>
 </template>
 
 <script>
-import {getDressPartList, loadDesign, refreshCurrentPartInfo, setDressComplete, updateMyDesignParts} from '../api/api'
-import DressDisplay from "@/views/DressDisplay";
+import { getDressPartList, loadDesign, refreshCurrentPartInfo, setDressComplete, updateMyDesignParts } from '../api/api'
+import DressDisplay from "@/views/DressDisplay"
+import { views } from '../api/dressDisplayRule'
 
 const parts = [
   {
@@ -162,16 +163,7 @@ const parts = [
 ]
 
 export const defaultLook = {}
-export const views = ["Front", "Back"]
-export const excludeImage = ["Fa", "Fc", "Dc"]
-export const topSelection = ["B", "C", "D", "E", "F"]
-export const skirtSelection = ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
-export const sleevesSelection = ["G", "H", "I"]
-export const stripSelection = ["J"]
-export const backSelection = ["K", "L"]
-export const defaultTop = "Bodice-Front-B2-Ca-Da-Ea"
-export const defaultSkirt = "Skirt-Front-B1-Da-Ga-Ha-Ia"
-const availablePicSet = require('@/assets/topSet.json')
+
 export default {
   name: 'MakeADress',
   props: {
@@ -190,52 +182,12 @@ export default {
       currentMask: [],
       loading: true,
       showDressFinishConfirm: null,
-      showLoading:null,
-      refreshCounter:0
+      showLoading: null,
+      refreshCounter: 0
     }
   },
   computed: {
-
-    currentDisplayTopVariant() {
-      if (this.selectedTopParts.length > 0) {
-        const def = this.findDefaultPartInImageSet('Bodice', this.selectedTopParts)
-        return (def?.join('-') ?? defaultTop) + ".png"
-      } else {
-        return defaultTop + '.png'
-      }
-    },
-    selectedTopParts() {
-      return this.filterPartsWithMask(topSelection)
-    },
-    displaySkirtPart() {
-      const skirtParts = this.filterPartsWithMask(skirtSelection, 1)
-      if (skirtParts.length > 0) {
-        const def = this.findDefaultPartInImageSet('Skirt', skirtParts)
-        return (def?.join('-') ?? defaultSkirt) + ".png"
-      } else {
-        return defaultSkirt + ".png"
-      }
-    },
-    displayStripPart() {
-      const stripPart = this.filterPartsWithMask(stripSelection)
-      if (stripPart.length > 0) {
-        const def = this.findDefaultPartInImageSet('Strip', [this.selectedTopParts[0], ...stripPart])
-        return def ? (def?.join('-') + ".png") : null
-      } else {
-        return null
-      }
-    },
-    displaySleevePart() {
-      const sleeveParts = this.filterPartsWithMask(sleevesSelection)
-      if (sleeveParts.length > 0) {
-        const shouldFilterB9 = this.selectedTopParts.includes('B9')
-        const def = this.findDefaultPartInImageSet('Sleeves', sleeveParts, (p) => p.includes('B9') === shouldFilterB9)
-        return def ? (def?.join('-') + ".png") : null
-      } else {
-        return null
-      }
-    },
-    availableSelections() {
+    availableSelections () {
       return this.remoteSelections[this.currentTab]?.dressPartCategories.filter(c => {
         c.filteredPart = c.dressParts.filter(d => {
           return this.currentMask.find(m => m.dressPartId === d.id)?.display ?? true
@@ -246,36 +198,34 @@ export default {
   }
   ,
   methods: {
-    async finishDesign() {
-      this.showLoading=true
+    async finishDesign () {
+      this.showLoading = true
       try {
         const res = await setDressComplete(this.dressId)
         console.log(res)
-      }catch (e) {
+      } catch (e) {
         console.log(e)
-      }finally {
-        this.showLoading=false
+      } finally {
+        this.showLoading = false
       }
-
-
     },
-    findDefaultPartInImageSet(partName, selectedParts, excludeFilter = () => true) {
-      const targetSet = [partName, this.currentView, ...selectedParts]
-      const res = availablePicSet.filter(excludeFilter).find(s => targetSet.every(p => s.includes(p))) ?? null
-      return res
+    logSelectedParts () {
+      console.log("------>")
+      for (const key of Object.keys(this.selectedPart)) {
+        console.log(key + this.selectedPart[key].partCode)
+      }
+      console.log("------>")
     },
-    filterPartsWithMask(mask = [], pageFilter = 0) {
-      return Object.entries(this.selectedPart).filter(s => {
-        const [tab, fatherCode] = s[0].split('/')
-        return mask.includes(fatherCode) && parseInt(tab) === pageFilter
-      }).map(s => s[0].split('/')[1] + s[1].partCode).sort().filter(s => !excludeImage.includes(s))
-    },
-    changeView() {
+    changeView () {
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
     },
-    async selectPart(fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
+    async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
+      this.logSelectedParts()
       if (removeFatherKey) {
-        for (const key of Object.keys(this.selectedPart).filter(k => k.split('/')[1] > fatherCode)) {
+        for (const key of Object.keys(this.selectedPart).filter(k => {
+          const [t, fCode] = k.split('/')
+          return parseInt(t) === tab && fCode > fatherCode
+        })) {
           delete this.selectedPart[key]
         }
       }
@@ -284,22 +234,21 @@ export default {
       })
       const currentPart = Object.values(this.selectedPart).map(p => p.partId)
       this.currentMask = await refreshCurrentPartInfo(currentPart)
-      const res = await updateMyDesignParts(this.dressId, currentPart)
+      console.log(currentPart)
+      await updateMyDesignParts(this.dressId, currentPart)
       this.refreshCounter++
-      console.log(res)
       if (toggle) {
         toggle()
       }
     }
   },
-  async mounted() {
+  async mounted () {
     console.log('loading dressId', this.dressId)
-    if (!this.dressId||parseInt(this.dressId) === -1 ) {
+    if (!this.dressId || parseInt(this.dressId) === -1) {
       await this.$router.push('/createNewDress')
       return
     }
     this.currentInfo = await loadDesign(this.dressId)
-    console.log(this.currentInfo)
     this.remoteSelections = await getDressPartList()
     if (this.currentInfo?.dressParts?.length > 0) {
       const parts = this.currentInfo.dressParts
