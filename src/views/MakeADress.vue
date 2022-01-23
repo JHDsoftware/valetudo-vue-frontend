@@ -143,9 +143,10 @@ color: #817163;">You dress will be saved...</p>
 </template>
 
 <script>
-import { getDressPartList, loadDesign, refreshCurrentPartInfo, setDressComplete, updateMyDesignParts } from '../api/api'
 import DressDisplay from "@/views/DressDisplay"
 import { views } from '../api/dressDisplayRule'
+import { getDressPartList, refreshCurrentPartInfo } from '../api/dressPartService'
+import { loadDesign, setDressComplete, updateMyDesignParts } from '../api/dressDesginService'
 
 const parts = [
   {

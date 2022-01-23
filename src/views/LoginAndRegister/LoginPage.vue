@@ -98,8 +98,8 @@
 </template>
 
 <script>
-import { customerLogin, customerRegister } from '../../api/api'
 import { refreshHeader } from '../../main'
+import { customerLogin, customerRegister } from '../../api/customerService'
 
 export default {
   name: "LoginPage",
