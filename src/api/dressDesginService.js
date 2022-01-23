@@ -28,3 +28,7 @@ export async function createNewDesign (name) {
 export async function setDressComplete (id) {
   return (await hillo.post(DressDesignEndPoint + '/setComplete/' + id))
 }
+
+export async function getMyDesign() {
+  return (await hillo.post(DressDesignEndPoint + '/myList')).data
+}

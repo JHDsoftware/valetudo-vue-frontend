@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { createNewDesign } from '@/api/api'
+
+import { createNewDesign } from '../../api/dressDesginService'
 
 export default {
   name: "CreateNewDress",

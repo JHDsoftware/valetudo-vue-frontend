@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { loadDesign } from "@/api/api"
+
 import availablePicSet from "@/assets/topSet.json"
 import {
   defaultSkirt,
@@ -41,6 +41,7 @@ import {
   stripSelection,
   topSelection
 } from '../api/dressDisplayRule'
+import { loadDesign } from '../api/dressDesginService'
 
 export default {
   name: "DressDisplay",

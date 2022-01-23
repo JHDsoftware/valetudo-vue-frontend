@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import {getMyDesign} from "@/api/api";
 import DressDisplay from "@/views/DressDisplay";
+import { getMyDesign } from '../../api/dressDesginService'
 
 export default {
   name: "OrderPage",
