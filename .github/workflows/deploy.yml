@@ -1,9 +1,10 @@
+# .github/workflows/deploy-to-admin_beta.yml
+
 on:
   push:
     branches:
       - master
-
-name: 🚎 Deploy on valetudo.aaden.online
+name: 🚀 Deploy on valetudo.aaden.online
 
 jobs:
   web-deploy:
@@ -15,7 +16,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Use Node.js
-          uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
 
       - name: Build Project
         run: |
