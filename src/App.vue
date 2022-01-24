@@ -2,15 +2,16 @@
   <v-app>
     <v-app-bar height="60px" app class="d-flex justify-center" flat
                style="border-bottom: 1px solid #817163;background-color: white">
-      <v-app-bar-title style="flex-grow: 1">
-        Valetudo my Dress
-      </v-app-bar-title>
+      <div >
+        <span class="appHeaderValetudo">VALETUDO</span> <span class="appHeaderMyDress" style="width: available">My Dress</span>
+      </div>
       <div style="position: fixed;right: 43px;top:22px" class="d-flex">
         <router-link class="flatButton" to="/">Login/Register</router-link>
         <router-link class="flatButton" to="/order" style="margin-left: 32px">Konto</router-link>
       </div>
     </v-app-bar>
-    <v-main style="">
+
+    <v-main>
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -18,7 +19,20 @@
 </template>
 <style>
 
+.appHeaderValetudo{
+  color: #CCC6BB
+}
 
+.appHeaderMyDress{
+  font-family: Oranienbaum;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 25px;
+  width: 120px;
+
+  color: #4C4C4C;
+}
 
 .flatButton {
   font-family: Palanquin;
@@ -71,11 +85,13 @@
 }
 
 .formTitle {
-  font-family: Palanquin;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
-  font-weight: 300;
+  font-weight: 600;
   font-size: 48px;
-  text-align: center;
+  line-height: 125%;
+  /* identical to box height, or 60px */
+
   color: #817163;
 }
 
@@ -124,15 +140,8 @@
   height: 60px;
   background-color: #817163;
   margin-top: 22px;
-
 }
 
-.text{
-  font-family: Gill Sans Nova;
-  font-style: normal;
-  font-weight: normal;
-  color: #4C4C4C;
-}
 .text24{
   font-size: 24px;
   line-height: 34px;

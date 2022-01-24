@@ -1,32 +1,28 @@
 <template>
   <!--  <div style="margin-top: 341px">-->
-  <div style="margin-top: 241px">
 
-    <div class="text-center">
-      <div class="content " v-html="message"></div>
-    </div>
+  <div class="d-flex justify-center ">
 
-    <div class="positionCenter">
+    <div style="margin-top: 241px">
+      <div class="content text-center" style="width: 650px;"> {{ message }}</div>
 
-      <div class="inputRow longX mt-3 " style="margin-top: 48px">
+      <div class="d-flex justify-center">
+        <div class="" style="margin-top: 58px; width: 540px">
 
-        <valet-input-text-field title="Email*"
-                                v-model="email" style="width: 562px"></valet-input-text-field>
+          <valet-input-text-field
+              title="Email*"
+              v-model="email" style="width: 100%"/>
 
-        <v-btn block style="color: white;
-                            height: 60px;
-                            background-color: #817163;
-                            margin-top: 22px;"
-               class="buttonText">Confirm
-        </v-btn>
-
-        <div style="margin-top: 41px" class="positionCenter">
-          Please contact us, if you forget your Email adress.
+          <ValetButton
+              buttonText="Bestätigen"
+              @clickButton="confirm"/>
         </div>
+
+      </div>
+      <div style="margin-top: 24px; width: 650px" class="hint">
+        {{hintMessage}}
       </div>
     </div>
-
-
   </div>
 
 
@@ -35,17 +31,25 @@
 <script>
 
 import ValetInputTextField from "@/components/ValetInputTextField";
+import ValetButton from "@/components/ValetButton";
 
 export default {
   name: "ForgetPasswordConfirmEmail",
-  components: {ValetInputTextField},
+  components: {ValetInputTextField, ValetButton},
   data() {
     return {
       email: null,
-      message: `Please give us your registered email adress. <br> We will send an new password to you, <br> please use this password to login.`,
+      message: `Bitte geben Sie hier Ihre Registrierungs-E-Mail-Adresse ein, damit wir Ihnen ein temporäres Passwort zum Einloggen schicken können.`,
+      hintMessage: `Bitte schreiben Sie uns eine E-Mail mit Ihrem vollständigen Namen an support@valetudo.co, wenn Sie zufällig
+        Ihre E-Mail Adresse vergessen haben.`,
       rules: {
         required: (value) => (value && Boolean(value)) || 'Required'
       }
+    }
+  },
+  methods: {
+    confirm() {
+
     }
   }
 }
@@ -65,4 +69,16 @@ export default {
   margin-top: 22px;
 }
 
+.hint {
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 26px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #4C4C4C;
+}
 </style>

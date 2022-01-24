@@ -30,6 +30,7 @@ export function refreshHeader () {
 
 
 refreshHeader()
+
 new Vue({
   vuetify,
   router,

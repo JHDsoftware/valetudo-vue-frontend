@@ -1,11 +1,11 @@
 <template>
   <div style="margin-top: 15%">
     <div class="positionCenter">
-      <div class="text" style="width: 650px; margin-top: 251px">
-        Bitte geben Sie hier Ihre Registrierungs-E-Mail-Adresse ein, damit wir Ihnen ein temporäres Passwort zum Einloggen schicken können.</div>
+      <div class="text">
+        Ihr neues Passwort einrichten</div>
     </div>
 
-    <div class="positionCenter" style="margin-top: 61px">
+    <div class="positionCenter" style="margin-top: 40px">
       <div>
           <valet-input-text-field
               style="width: 581px"
@@ -19,15 +19,18 @@
               v-model="confirmPassword"
               type="password"></valet-input-text-field>
 
-          <v-btn class="buttonText"
-                 style="color: white;
-                        height: 60px;
-                        background-color: #817163;
-                        margin-top: 23px;
-                        width: 581px;
-                            "
-                 @click="handle"
-                >Bestätigen</v-btn>
+        <div style="margin-top: 8px">
+        <ValetButton buttonText="Bestätigen" @clickButton="handle"/>
+        </div>
+<!--          <v-btn class="buttonText"-->
+<!--                 style="color: white;-->
+<!--                        height: 60px;-->
+<!--                        background-color: #817163;-->
+<!--                        margin-top: 23px;-->
+<!--                        width: 581px;-->
+<!--                            "-->
+<!--                 @click="handle"-->
+<!--                >Bestätigen</v-btn>-->
       </div>
     </div>
 
@@ -36,10 +39,11 @@
 
 <script>
 import ValetInputTextField from "@/components/ValetInputTextField";
+import ValetButton from "@/components/ValetButton";
 
 export default {
   name: "SetPassword",
-  components: {ValetInputTextField},
+  components: {ValetInputTextField,ValetButton},
   data() {
     return {
       password: null,

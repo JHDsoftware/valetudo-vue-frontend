@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MakeADress from '../views/MakeADress.vue'
-import LoginPage from '../views/LoginAndRegister/LoginPage'
+import LoginRegisterPage from '../views/LoginAndRegister/LoginRegisterPage'
+import Login from '../views/LoginAndRegister/Login'
+
 import RegisterComplete from '../views/LoginAndRegister/RegisterComplete'
 import ResetPassword from '../views/LoginAndRegister/ResetPassword'
 import ForgetPasswordComplete from '../views/LoginAndRegister/ForgetPasswordComplete'
@@ -13,7 +15,7 @@ import SetPasswordComplete from '../views/LoginAndRegister/SetPasswordComplete';
 import QuestionsPage from '../views/Questions/QuestionsPage'
 import QuestionsPage2 from "../views/Questions/QuestionsPage2";
 import QuestionsPage3 from "../views/Questions/QuestionsPage3";
-import FAQ from "../views/LoginAndRegister/FAQ";
+import FAQPage from "../views/LoginAndRegister/FAQPage";
 import QuestionsPage1 from "../views/Questions/QuestionsPage1";
 
 Vue.use(VueRouter)
@@ -22,7 +24,22 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    component: LoginPage
+    component: LoginRegisterPage
+  },
+  {
+    path: '/registerComplete',
+    name: 'registerComplete',
+    component: RegisterComplete
+  },
+  {
+    path: '/loginRegister',
+    name: 'loginRegister',
+    component: LoginRegisterPage
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
     path: '/createNewDress',
@@ -35,9 +52,19 @@ const routes = [
     component: OrderPage
   },
   {
-    path: '/FAQ',
-    name: 'FAQ',
-    component: FAQ
+    path: '/bestellung',
+    name: 'bestellung',
+    component: () => import('@/views/My/items/Bestellung')
+  },
+  {
+    path: '/persondaten',
+    name: 'persondaten',
+    component: () => import('@/views/My/items/PersonDaten')
+  },
+  {
+    path: '/FAQPage',
+    name: 'FAQPage',
+    component: FAQPage
   },
   {
     path: '/questionspage',
@@ -59,11 +86,7 @@ const routes = [
     name: 'questionspage3',
     component: QuestionsPage3
   },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginPage
-  },
+
   {
     path: '/resetPassword',
     name: 'resetPassword',
@@ -89,11 +112,7 @@ const routes = [
     name: 'setPasswordComplete',
     component: SetPasswordComplete
   },
-  {
-    path: '/registerComplete',
-    name: 'registerComplete',
-    component: RegisterComplete
-  },
+
   {
     path: '/edit/:dressId',
     name: 'edit',

@@ -48,6 +48,12 @@ export default {
   font-weight: 600;
   font-size: 48px;
   line-height: 125%;
+  /* identical to box height, or 60px */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #817163;
 }
 .titleText{
   margin-top: 40px;

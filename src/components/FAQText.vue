@@ -2,7 +2,7 @@
   <div style="display: flex; justify-content: start; align-self: center; width: 950px;background-color: #E0DDD6"
        class="textFamily"
        @click="show=!show">
-    <div class="my-2" style="padding-right: 40px; padding-left: 40px; width: 100%">
+    <div style="padding-right: 40px; padding-left: 40px; width: 100%">
       <!--      <div style="padding-bottom: 8px" class="text36">{{ title }}</div>-->
 
       <div class="d-flex justify-space-between" style="height: 60px;">
