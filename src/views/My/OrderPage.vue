@@ -2,14 +2,18 @@
   <div class="d-flex" style="height: 100%">
     <div class="flex-shrink-0"
          style="width: 296px;height: 100%;border-right: 1px solid #817163;padding-top: 23px;padding-left: 27px">
-      <div class="navHeader">Liqiong's Dress</div>
+<!--      <div class="navHeader" style="">Dein Entwurf</div>-->
+
       <div style="margin-top: 29px" class="menuItemPanel">
-        <div class="navItem active">Your Drawing</div>
-        <div class="navItem">Your Data</div>
-        <div class="navItem">Q&A</div>
-        <div class="navItem">Contact us</div>
+        <div class="navItem" >Dein Entwurf</div>
+        <div class="navItem ">Deine Bestellung</div>
+        <div class="navItem">Persönliche Daten</div>
+        <div class="navItem">FAQ</div>
+        <div class="navItem">Kontakt</div>
       </div>
     </div>
+
+
     <div class="flex-grow-1" style="padding:38px 100px;">
       <div class="pageContent d-flex justify-center" style="width: 100%">
         <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
@@ -45,6 +49,9 @@
         </div>
       </div>
     </div>
+
+
+
   </div>
 
 </template>
@@ -84,18 +91,19 @@ export default {
 }
 
 .navItem {
-  cursor: pointer;
-  font-family: Palanquin;
+  font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
-  line-height: 43px;
-  margin-top: 16px;
-  color: #817163;
+  line-height: 125%;
+  /* identical to box height, or 30px */
 
+  color: #CCC6BB;
+  border-bottom: 1px solid #CCC6BB;
 }
 
 .navItem:hover {
+  color: #817163;
   border-bottom: 3px solid #817163;
 }
 
@@ -161,5 +169,9 @@ export default {
 .dressContainer.hasContent {
   padding: 27px 37px;
   background: rgba(204, 198, 187, 0.85);
+}
+
+.dressContainer.hasContent:hover {
+
 }
 </style>
