@@ -16,7 +16,7 @@
     <v-card color="#e0ddd6" class="d-flex flex-column">
       <v-card elevation="8" height="60px">
         <div style="width: 100%">
-          <v-item-group v-model="currentTab">
+          <v-item-group mandatory v-model="currentTab">
             <div style="display: grid;grid-template-columns: repeat(3,1fr);width: 100%">
               <v-item v-for="part in remoteSelections" v-slot="{ active, toggle }" :key="part.dressPartType.name">
                 <div style="height: 60px" @click="toggle" class="tabItem" :class="active?'active':''">
