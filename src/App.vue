@@ -14,9 +14,28 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+
+
+
+<!--    <valet-input-text-field v-model="testValue"></valet-input-text-field>-->
+<!--        <div>{{testValue}}</div>-->
+<!--    <div>:::::::::</div>-->
   </v-app>
 
 </template>
+
+<script>
+// import ValetInputTextField from "./components/ValetInputTextField";
+
+export default {
+  // components: {ValetInputTextField},
+  data () {
+    return {
+      testValue: null
+    }
+  }
+}
+</script>
 <style>
 
 .appHeaderValetudo{

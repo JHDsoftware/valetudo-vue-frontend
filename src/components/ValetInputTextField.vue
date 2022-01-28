@@ -5,29 +5,17 @@
     </template>
 
     <div style="margin-bottom: 16px">
-      <v-text-field
-          v-if="useStyle"
-          outlined flat hide-details
-          height="60px"
-          style="border-radius : 0; border: 2px solid #4C4C4C"
+
+      <input
+          style="borderRadius : 0; width: 100%; height: 60px"
+          :style="useStyle ? {border: '2px solid #4C4C4C'} : {border: '1px solid #4C4C4C'}"
           :rules="useRule? [rules.required] : []"
           v-bind:value="value"
-          v-on:input="$emit('input', $event.target.value)"
+          v-on:input="$emit('input',$event.target.value)"
           :type="type"
-          solo
       />
 
-      <v-text-field
-          v-else
-          outlined flat hide-details
-          height="60px"
-          style="border-radius : 0"
-          :rules="useRule? [rules.required] : []"
-          v-bind:value="value"
-          v-on:input="$emit('input', $event.target.value)"
-          :type="type"
-          solo
-      />
+
     </div>
 
   </div>
@@ -70,9 +58,9 @@ export default {
     }
   },
   methods:{
-    handleInput(e){
-      this.$emit('input', e.target.value)
-    }
+    // handleInput(e){
+    //   this.$emit('input', e.target.value)
+    // }
   }
 }
 </script>

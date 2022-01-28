@@ -9,7 +9,7 @@
 
         <ValetInputTextField
             title="Email*"
-            :value="loginEmail"
+            v-model="loginEmail"
             width-input="540px"
         >
         </ValetInputTextField>
@@ -17,15 +17,15 @@
 
         <ValetInputTextField
             title="Password*"
-            :value="loginPassword"
+            v-model="loginPassword"
             width-input="540px"></ValetInputTextField>
 
         <ValetButton
             text-before="Passwort vergessen?"
             button-text="Anmelden"
-            v-on:clickButton="login"
-        ></ValetButton>
 
+        ></ValetButton>
+        <!--            v-on:clickButton="login"-->
 
 
       </div>
@@ -162,6 +162,7 @@ export default {
           this.email, this.password,
           this.firstName, this.lastName,
           this.city, this.phone)
+
       if (res.code === 200) {
         await this.$router.push('/registerComplete')
       }

@@ -6,7 +6,7 @@
 
       <ValetInputTextField
           title="Email*"
-          :value="loginEmail"
+          v-model="loginEmail"
           width-input="540px"
       >
       </ValetInputTextField>
@@ -14,7 +14,7 @@
 
       <ValetInputTextField
           title="Password*"
-          :value="loginPassword"
+          v-model="loginPassword"
           width-input="540px"></ValetInputTextField>
 
       <ValetButton
