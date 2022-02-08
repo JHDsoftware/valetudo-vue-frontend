@@ -1,18 +1,19 @@
 <template>
   <div :style="{width: widthInput}">
     <template v-if="useTitle" style="margin-bottom: 8px">
-      <div class="label">{{ title }}</div>
+      <div class="label align-end" v-html="title"></div>
     </template>
 
     <div style="margin-bottom: 16px">
 
       <input
-          style="borderRadius : 0; width: 100%; height: 60px"
+          style="borderRadius : 0; width: 100%; height: 60px;"
           :style="useStyle ? {border: '2px solid #4C4C4C'} : {border: '1px solid #4C4C4C'}"
           :rules="useRule? [rules.required] : []"
           v-bind:value="value"
           v-on:input="$emit('input',$event.target.value)"
           :type="type"
+
       />
 
 
