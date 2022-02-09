@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer width="240px" permanent app>
+    <v-navigation-drawer width="240px" app>
       <order-navigation-drawer/>
     </v-navigation-drawer>
     <v-content class="pa-0">

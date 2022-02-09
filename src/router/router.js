@@ -30,6 +30,11 @@ const routes = [
     component: () => import('../views/CreateNewOrder/CreateNewDress')
   },
   {
+    path: '/SampleOrder',
+    name: 'SampleOrder',
+    component: () => import('../views/Order/items/SampleOrder.vue')
+  },
+  {
     path: '/OrderIndex',
     // name: 'OrderIndex',
     component: () => import('../views/Order/OrderIndex'),

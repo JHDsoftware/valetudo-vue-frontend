@@ -7,7 +7,9 @@
       <div style="margin-top: 29px" class="menuItemPanel">
 
         <template v-for="(item,i) in menuRouter">
-          <div class="navItem" :key="'item' + i" :to="item.to">{{ item.title }}</div>
+<!--          <div class="navItem" :key="'item' + i" :to="item.to">{{ item.title }}</div>-->
+          <div class="navItem" :key="'item' + i" @click="$router.push(item.to)">{{ item.title }} </div>
+
         </template>
 
       </div>
@@ -238,8 +240,8 @@ export default {
           to: '/OrderIndex/FAQ'
         },
         {
-          title: 'Kontakt',
-          to: '/OrderIndex/Kontakt'
+          title: 'KontaktUns',
+          to: '/OrderIndex/KontaktUns'
         }
       ]
     };

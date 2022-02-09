@@ -26,10 +26,9 @@
           </div>
         </v-card>
       </template>
-
-
     </v-card>
-    <v-dialog v-model="dialogBearbeit" width="40vw" persistent>
+
+    <v-dialog v-model="dialogBearbeit" width="45vw" persistent>
       <v-card tile flat>
         <v-icon large style="position: absolute; right: 34px; top: 34px" @click="dialogClose">mdi-close
         </v-icon>
@@ -121,6 +120,8 @@
 
       </v-card>
     </v-dialog>
+
+
   </div>
 </template>
 
@@ -128,9 +129,10 @@
 
 import ValetButton from '@/components/ValetButton'
 import ValetInputTextField from "@/components/ValetInputTextField";
+// import {personData} from "../../../model/personDataExp";
 
 export default {
-  name: "PersonDaten",
+  name: "OrderPersonData",
   components: {ValetInputTextField, ValetButton},
   data() {
     return {
@@ -194,7 +196,7 @@ export default {
           },
           editTitle: 'Rechnungsadresse ändern'
         }
-      ]
+      ],
     }
   },
   methods: {
