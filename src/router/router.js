@@ -10,6 +10,11 @@ const routes = [
     component: () => import('../views/LoginAndRegister/LoginRegisterPage')
   },
   {
+    path: '/temporaryGuid',
+    name: 'temporaryGuid',
+    component: () => import('../views/temporaryGuid')
+  },
+  {
     path: '/registerComplete',
     name: 'registerComplete',
     component: () => import('../views/LoginAndRegister/RegisterComplete')
@@ -39,7 +44,11 @@ const routes = [
     // name: 'OrderIndex',
     component: () => import('../views/Order/OrderIndex'),
     children: [
-
+      {
+        path: 'Entwurf',
+        name: 'Entwurf',
+        component: () => import('../views/Order/items/Entwurf')
+      },
       {
         path: 'OrderBestellung',
         name: 'OrderBestellung',
@@ -58,56 +67,42 @@ const routes = [
       {
         path: 'FAQ',
         name: 'FAQ',
-        component: () => import("../views/LoginAndRegister/FAQPage")
+        // component: () => import("../views/LoginAndRegister/FAQPage")
+        component: () => import("../fragments/FAQ")
       },
 
     ]
   },
-  // {
-  //   path: '/bestellung',
-  //   name: 'bestellung',
-  //   component: () => import('@/views/Order/items/Bestellung')
-  // },
-  // {
-  //   path: '/persondaten',
-  //   name: 'persondaten',
-  //   component: () => import('@/views/Order/items/PersonDaten')
-  // },
   {
-    path: '/FAQPage',
-    name: 'FAQPage',
-    component: () => import("../views/LoginAndRegister/FAQPage")
+    path: '/DressDisplay',
+    name: 'DressDisplay',
+    component: () => import('@/views/DressDisplay')
+  },
+  {
+    path: '/MakeADress',
+    name: 'MakeADress',
+    component: () => import('@/views/MakeADress')
+  },
+  {
+    path: '/FAQ',
+    name: 'FAQ',
+    component: () => import("../fragments/FAQ")
   },
   {
     path: '/questionspage',
     name: 'questionspage',
     component: () => import('../views/Questions/QuestionsPage')
   },
-  // {
-  //   path: '/questionspage1',
-  //   name: 'questionspage1',
-  //   component: QuestionsPage1
-  // },
-  // {
-  //   path: '/questionspage2',
-  //   name: 'questionspage2',
-  //   component: QuestionsPage2
-  // },
-  // {
-  //   path: '/questionspage3',
-  //   name: 'questionspage3',
-  //   component: QuestionsPage3
-  // },
 
-  {
-    path: '/resetPassword',
-    name: 'resetPassword',
-    component: () => import('../views/LoginAndRegister/ResetPassword')
-  },
   {
     path: '/forgetPasswordConfirmEmail',
     name: 'forgetPasswordConfirmEmail',
     component: () => import("../views/LoginAndRegister/ForgetPasswordConfirmEmail")
+  },
+  {
+    path: '/resetPassword',
+    name: 'resetPassword',
+    component: () => import('../views/LoginAndRegister/ResetPassword')
   },
   {
     path: '/forgetPasswordComplete',

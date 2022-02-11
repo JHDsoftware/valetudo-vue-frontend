@@ -1,13 +1,11 @@
 import hillo from 'hillo'
 
-const DressPartEndPoint = '/dressPart'
-
 export async function refreshCurrentPartInfo (selectedDressPartIds) {
-  return (await hillo.post(DressPartEndPoint + '/refreshCurrentPartInfo', {
+  return (await hillo.post('/dressPart/refreshCurrentPartInfo', {
     dressPartIds: selectedDressPartIds
   })).data
 }
 
 export async function getDressPartList () {
-  return (await hillo.get(DressPartEndPoint + '/getList')).data
+  return (await hillo.get('/dressPart/getList')).data
 }

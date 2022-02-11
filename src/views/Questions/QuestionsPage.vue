@@ -48,9 +48,10 @@
                       mdi-help-circle-outline
                     </v-icon>
                   </template>
-                  <span class="tooltip px-4 py-2">This information helps us better predict the production cycle of your wedding dress.</span>
+                  <span class="tooltip px-4 py-2">Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.</span>
                 </v-tooltip>
               </div>
+
               <div class="" style="width: 290px;text-align: center">
                 <v-menu
                     ref="menu"
@@ -60,7 +61,10 @@
                     offset-y
                     min-width="auto"
                 >
-                  <template v-slot:activator="{ on, attrs }">
+<!--                  <template v-slot:activator="{ on }">-->
+<!--                    <v-text-field v-on="on"></v-text-field>-->
+<!--                  </template>-->
+                  <template v-slot:activator="{ on }">
                     <v-text-field
                         class="buttonText mt-4"
                         v-model="date"
@@ -68,17 +72,25 @@
                         full-width
                         append-outer-icon="mdi-calendar"
                         readonly
-                        v-bind="attrs"
+
                         hide-details
                         v-on="on"
                     ></v-text-field>
+
                   </template>
                   <v-date-picker
+                      color="#E0DDD6"
+                      no-title
                       v-model="date"
                       :active-picker.sync="activePicker"
                       :min="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
                       @change="save"
-                  ></v-date-picker>
+                  >
+                    <v-btn text @click="menu=false">Clear</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn text @click="menu=false">Confirm</v-btn>
+
+                  </v-date-picker>
                 </v-menu>
               </div>
             </div>
@@ -86,7 +98,7 @@
 
           <v-stepper-content step="2">
             <div style="width: 633px;padding: 20px" class="d-flex justify-center flex-wrap">
-              <div class="questionText"> How High is your Budget?
+              <div class="questionText"> Wie hoch ist Ihr Budget für Ihr Hochzeitskleid und Ihr Standesamtkleid?
                 <v-tooltip max-width="396px" bottom color="#f6f6f6">
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
@@ -99,7 +111,7 @@
                       mdi-help-circle-outline
                     </v-icon>
                   </template>
-                  <span class="tooltip px-4 py-2">This information helps us better predict the production cycle of your wedding dress.</span>
+                  <span class="tooltip px-4 py-2">Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.</span>
                 </v-tooltip>
               </div>
               <div class="" style="width: 290px;text-align: center">
@@ -130,7 +142,7 @@
                       mdi-help-circle-outline
                     </v-icon>
                   </template>
-                  <span class="tooltip px-4 py-2">This information helps us better predict the production cycle of your wedding dress.</span>
+                  <span class="tooltip px-4 py-2">Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.</span>
                 </v-tooltip>
               </div>
               <div style="width: 568px;margin-top: 58px">
@@ -226,8 +238,6 @@ export default {
   letter-spacing: -0.011em;
   width: fit-content;
 
-  color: #4C4C4C;
-
 }
 
 
@@ -257,8 +267,7 @@ export default {
   line-height: 25px;
   /* or 104% */
 
-
-  color: #817163;
+  color: white !important;
 }
 
 .buttonText {

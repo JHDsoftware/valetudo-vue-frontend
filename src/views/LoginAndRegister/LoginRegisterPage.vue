@@ -23,11 +23,12 @@
         <ValetButton
             text-before="Passwort vergessen?"
             button-text="Anmelden"
-
+            @click="login"
         ></ValetButton>
-        <!--            v-on:clickButton="login"-->
 
 
+        <div style="color: red; border-bottom: 1px solid grey; margin-top: 60px;" @click="$router.push('temporaryGuid')">
+          *内部开发测试页面总览</div>
       </div>
 
     </div>
@@ -104,7 +105,7 @@
 
           <ValetButton
               button-text="Register"
-              v-on:clickButton="register"
+              @click="register"
           ></ValetButton>
         </div>
 
@@ -154,14 +155,23 @@ export default {
       const res = await customerLogin(this.loginEmail, this.loginPassword)
       console.log(res)
       localStorage.setItem('token', res.tokenValue)
-      refreshHeader()
-      await this.$router.push('/order')
+      if (res.code === 200) {
+        refreshHeader()
+        await this.$router.push('/order')
+      }
+
     },
     async register() {
-      const res = await customerRegister(
-          this.email, this.password,
-          this.firstName, this.lastName,
-          this.city, this.phone)
+
+      const data = {
+        email: this.email,
+        password: this.password,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        city: this.city,
+        phone: this.phone
+      }
+      const res = await customerRegister(data)
 
       if (res.code === 200) {
         await this.$router.push('/registerComplete')

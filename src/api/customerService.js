@@ -2,10 +2,8 @@
 import hillo from 'hillo'
 
 
-const CUSTOMER_STR = '/customer'
-
-export async function customerRegister (email, password, firstName, lastName, city, phone) {
-  return await hillo.post(CUSTOMER_STR + '/register', {email, password, firstName, lastName, city, phone})
+export async function customerRegister (registerData) {
+  return await hillo.post('/customer/register', registerData)
 }
 
 /**
@@ -14,22 +12,22 @@ export async function customerRegister (email, password, firstName, lastName, ci
  * @return {Promise<number>}
  */
 export async function customerCheckEmailRegistered (email) {
-  return await hillo.post(CUSTOMER_STR + '/checkEmailRegistered', {email})
+  return await hillo.post('/customer/checkEmailRegistered', {email})
 }
 
 export async function customerConfirmRegister (uuid) {
-  return await hillo.get(CUSTOMER_STR + '/confirmRegister/', {uuid})
+  return await hillo.get('/customer/confirmRegister/', {uuid})
 }
 
 export async function customerLogin (userName, password) {
-  return (await hillo.post(CUSTOMER_STR + '/login', {userName, password})).data
+  return (await hillo.post('/customer/login', {userName, password})).data
 }
 
 export async function customerMe () {
-  return await hillo.get(CUSTOMER_STR + '/me')
+  return await hillo.get('/customer/me')
 }
 
 export async function customerInit (customer, weddingDate, likeAndHate, imgs) {
-  return await hillo.post(CUSTOMER_STR + '/init', {customer, weddingDate, likeAndHate, imgs})
+  return await hillo.post('/customer/init', {customer, weddingDate, likeAndHate, imgs})
 }
 

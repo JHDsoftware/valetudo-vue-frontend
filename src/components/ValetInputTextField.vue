@@ -7,15 +7,15 @@
     <div style="margin-bottom: 16px">
 
       <input
-          style="borderRadius : 0; width: 100%; height: 60px;"
+          style="borderRadius : 0; width: 100%; height: 60px; "
           :style="useStyle ? {border: '2px solid #4C4C4C'} : {border: '1px solid #4C4C4C'}"
           :rules="useRule? [rules.required] : []"
           v-bind:value="value"
           v-on:input="$emit('input',$event.target.value)"
           :type="type"
-
       />
 
+<!--      {border: '2px solid #4C4C4C'}-->
 
     </div>
 
@@ -29,6 +29,10 @@ export default {
     useStyle: {
       type: Boolean,
       default: false,
+    },
+    typeInput: {
+      type: String,
+      default: ''
     },
     useTitle: {
       type: Boolean,
