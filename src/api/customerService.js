@@ -20,7 +20,7 @@ export async function customerConfirmRegister (uuid) {
 }
 
 export async function customerLogin (userName, password) {
-  return (await hillo.post('/customer/login', {userName, password})).data
+  return (await hillo.post('/customer/login', {userName, password}))
 }
 
 export async function customerMe () {

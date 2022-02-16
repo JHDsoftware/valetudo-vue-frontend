@@ -12,7 +12,7 @@
 
 
 <script>
-import MessageDisplay from '../../components/MessageDisplay'
+import MessageDisplay from '../../../components/MessageDisplay'
 
 export default {
   name: "RegisterComplete",

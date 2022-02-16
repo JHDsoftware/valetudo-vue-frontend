@@ -2,7 +2,7 @@
   <div class="loginForm"
        style="border-right: 1px solid #817163;width: 100%;display: flex;justify-content: center;align-items: center;height: 100%">
     <div>
-      <div class="formTitle mt-n16 d-flex justify-center" style="margin-bottom: 40px; font-weight: 600;" >Login</div>
+      <div class="formTitle mt-n16 d-flex justify-center" style="margin-bottom: 40px; font-weight: 600;">Login</div>
 
       <ValetInputTextField
           title="Email*"
@@ -16,16 +16,24 @@
           type-input="password"
           title="Password*"
           v-model="loginPassword"
+          type="password"
           width-input="540px"></ValetInputTextField>
 
+      <div class="content18"
+           style="padding-bottom: 24px;"
+      ><span @click="$router.push('/forgetPasswordConfirmEmail')">Passwort vergessen?</span></div>
+
       <ValetButton
-          text-before="Passwort vergessen?"
           button-text="Anmelden"
           @click="login"
       ></ValetButton>
 
     </div>
 
+    <ValetSnackBar
+        v-model="snackbar"
+        :snackbar-text="snackbarText"
+    ></ValetSnackBar>
   </div>
 </template>
 
@@ -34,13 +42,16 @@ import {refreshHeader} from '../../main'
 import {customerLogin} from '../../api/customerService'
 import ValetInputTextField from "../../components/ValetInputTextField";
 import ValetButton from "../../components/ValetButton";
+import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
   name: "LoginPage",
-  components: {ValetInputTextField, ValetButton},
+  components: {ValetInputTextField, ValetButton,ValetSnackBar},
   data: function () {
     return {
 
+      snackbar: false,
+      snackbarText: '',
       loginEmail: "",
       loginPassword: "",
 
@@ -53,14 +64,20 @@ export default {
   },
   methods: {
     async login() {
-      const res = await customerLogin(this.loginEmail, this.loginPassword)
-      console.log(res)
-      localStorage.setItem('token', res.tokenValue)
-      if(res.code===200)
-      {
-        await this.$router.push('/order')
-        refreshHeader()
+
+      if (this.loginEmail && this.loginPassword) {
+        const res = await customerLogin(this.loginEmail, this.loginPassword)
+        console.log(res)
+        localStorage.setItem('token', res.tokenValue)
+        if (res.code === 200) {
+          refreshHeader()
+          this.$router.replace('/OrderIndex')
+        } else {
+          this.snackbar = true
+          this.snackbarText = "Konto oder Passwort ist falsch"
+        }
       }
+
 
     },
 
@@ -70,7 +87,7 @@ export default {
 
 <style scoped>
 
-.label12{
+.label12 {
   font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: normal;

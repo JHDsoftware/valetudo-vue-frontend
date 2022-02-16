@@ -11,16 +11,19 @@
 
           <valet-input-text-field
               title="Email*"
-              v-model="email" style="width: 100%"/>
+              v-model="email"
+              :use-rule="true"
+              style="width: 100%"/>
 
           <ValetButton
               buttonText="Bestätigen"
-              @clickButton="confirm"/>
+              @click="confirm"/>
+
         </div>
 
       </div>
       <div style="margin-top: 24px; width: 650px" class="hint">
-        {{hintMessage}}
+        {{ hintMessage }}
       </div>
     </div>
   </div>
@@ -32,6 +35,7 @@
 
 import ValetInputTextField from "@/components/ValetInputTextField";
 import ValetButton from "@/components/ValetButton";
+import {customerCheckEmailRegistered} from '@/api/customerService'
 
 export default {
   name: "ForgetPasswordConfirmEmail",
@@ -43,12 +47,21 @@ export default {
       hintMessage: `Bitte schreiben Sie uns eine E-Mail mit Ihrem vollständigen Namen an support@valetudo.co, wenn Sie zufällig
         Ihre E-Mail Adresse vergessen haben.`,
       rules: {
-        required: (value) => (value && Boolean(value)) || 'Required'
+        required: v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Required'
+        // required: (value) => (value && Boolean(value)) || 'Required'
       }
     }
   },
   methods: {
-    confirm() {
+    customerCheckEmailRegistered,
+    async confirm() {
+
+      if (this.email) {
+        const res = await customerCheckEmailRegistered(this.email)
+        console.log(res)
+        if (res.code == 200)
+          this.$router.push('/forgetPasswordComplete')
+      }
 
     }
   }

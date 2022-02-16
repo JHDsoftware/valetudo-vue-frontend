@@ -9,18 +9,18 @@
       <div>
           <valet-input-text-field
               style="width: 581px"
-              title="E-Mail*"
+              title="Neues Passwort*:"
               v-model="password"
           />
 
           <valet-input-text-field
               style="width: 581px"
-              title="Confirm new password:"
+              title="Neues Passwort bestätigen*:"
               v-model="confirmPassword"
               type="password"></valet-input-text-field>
 
         <div style="margin-top: 8px">
-        <ValetButton buttonText="Bestätigen" @clickButton="handle"/>
+        <ValetButton buttonText="Bestätigen" @click="handle"/>
         </div>
 <!--          <v-btn class="buttonText"-->
 <!--                 style="color: white;-->
@@ -33,25 +33,35 @@
 <!--                >Bestätigen</v-btn>-->
       </div>
     </div>
-
+    <ValetSnackBar
+        v-model="snackbar"
+        :snackbar-text="snackbarText"
+    ></ValetSnackBar>
   </div>
 </template>
 
 <script>
 import ValetInputTextField from "@/components/ValetInputTextField";
 import ValetButton from "@/components/ValetButton";
+import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
   name: "SetPassword",
-  components: {ValetInputTextField,ValetButton},
+  components: {ValetInputTextField,ValetButton,ValetSnackBar},
   data() {
     return {
+      snackbar: false,
+      snackbarText: '',
       password: null,
       confirmPassword: null
     }
   },
   methods:{
     handle(){
+      if(this.password !=this.confirmPassword){
+        this.snackbar=true
+        this.snackbarText="Die beide Password sind nicht gleich"
+      }
 
     }
   }

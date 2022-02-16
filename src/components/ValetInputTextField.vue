@@ -6,16 +6,14 @@
 
     <div style="margin-bottom: 16px">
 
-      <input
-          style="borderRadius : 0; width: 100%; height: 60px; "
-          :style="useStyle ? {border: '2px solid #4C4C4C'} : {border: '1px solid #4C4C4C'}"
+      <v-text-field
+          outlined
+          style="borderRadius : 0; width: 100%; height: 60px;"
           :rules="useRule? [rules.required] : []"
-          v-bind:value="value"
-          v-on:input="$emit('input',$event.target.value)"
+          v-model="localValue"
           :type="type"
       />
-
-<!--      {border: '2px solid #4C4C4C'}-->
+<!--      :style="useStyle ? {border: '2px solid #4C4C4C'} : {}"-->
 
     </div>
 
@@ -45,19 +43,29 @@ export default {
     title: {},
     type: {},
 
-    value: {},
+    value: {
+      type: String,
+      default: ''
+    },
     widthInput: {},
     rulesInput: {}
   },
-  // model:{
-  //   prop: "valueInput",
-  //   event: "input"
-  // },
+  watch:{
+    localValue(val){
+      this.$emit('input', val)
+    },
+    value:{
+      immediate:true,
+      handler(val){
+        this.localValue = val
+      }
+    }
+  },
   data() {
     return {
-      // localValue: this.value,
+      localValue: this.value,
       rules: {
-        required: (value) => (value && Boolean(value)) || 'Required'
+        required: (value) => (value && Boolean(value)) || 'Erforderlich'
       }
       // localType: this.type
     }

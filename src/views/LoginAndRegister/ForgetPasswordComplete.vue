@@ -14,6 +14,7 @@
         <div style="width: 266px">
           <ValetButton
               button-text="Anmelden"
+              @click="next"
           />
         </div>
       </div>
@@ -32,6 +33,11 @@ export default {
   data() {
     return {
       // message: `Wir haben Ihnen das neue Passwort an Ihre E-Mail geschickt. Bitte überprüfen Sie Ihren "Trash" oder “Spam”, wenn Sie die E-Mail in Ihrem E-Mail-Eingang nicht finden können.`
+    }
+  },
+  methods:{
+    next(){
+      this.$router.replace('/login')
     }
   }
 }

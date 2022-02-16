@@ -7,7 +7,10 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    component: () => import('../views/LoginAndRegister/LoginRegisterPage')
+    component: () => import('../views/LoginAndRegister/LoginRegisterPage'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/temporaryGuid',
@@ -17,7 +20,7 @@ const routes = [
   {
     path: '/registerComplete',
     name: 'registerComplete',
-    component: () => import('../views/LoginAndRegister/RegisterComplete')
+    component: () => import('../views/LoginAndRegister/backup/RegisterComplete')
   },
   {
     path: '/loginRegister',
@@ -100,15 +103,16 @@ const routes = [
     component: () => import("../views/LoginAndRegister/ForgetPasswordConfirmEmail")
   },
   {
-    path: '/resetPassword',
-    name: 'resetPassword',
-    component: () => import('../views/LoginAndRegister/ResetPassword')
-  },
-  {
     path: '/forgetPasswordComplete',
     name: 'forgetPasswordComplete',
     component: () => import('../views/LoginAndRegister/ForgetPasswordComplete')
   },
+  {
+    path: '/resetPassword',
+    name: 'resetPassword',
+    component: () => import('../views/LoginAndRegister/backup/ResetPassword')
+  },
+
   {
     path: '/setPassword',
     name: 'setPassword',

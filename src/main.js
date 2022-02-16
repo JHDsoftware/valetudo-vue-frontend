@@ -11,6 +11,7 @@ export function getToken () {
 }
 
 Vue.config.productionTip = false
+
 hillo.initial('http://3.124.147.27:8080')
 
 export function refreshHeader () {

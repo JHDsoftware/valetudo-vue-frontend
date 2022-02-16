@@ -14,39 +14,31 @@
 <!--      ></message-display>-->
 
       <valet-input-text-field title="Email*"
-                              v-model="email"
+                              v-model="loginEmail"
                               style="width: 100%"
                               ></valet-input-text-field>
 
       <valet-input-text-field title="Password*"
-                              v-model="passowrd"
+                              v-model="loginPassword"
                               style="width: 100%"
                               type="password"></valet-input-text-field>
 
-      <div style="margin-top: 10px">
-      <valet-button
-          textBefore="Passwort vergessen?"
-          buttonText="Anmelden"></valet-button>
-      </div>
+
+      <div class="content18"
+           style="padding-bottom: 24px;"
+      ><span @click="$router.push('/forgetPasswordConfirmEmail')">Passwort vergessen?</span></div>
+
+        <ValetButton
+            button-text="Anmelden"
+            @click="login"
+        ></ValetButton>
+
     </div>
 
-<!--    <div class="positionCenter">-->
-<!--      <div>-->
-
-
-<!--        <div class="text">Forget Password?</div>-->
-
-<!--        <v-btn-->
-<!--               style="  background-color: #817163;-->
-<!--                        color: white;-->
-<!--                        height: 60px;-->
-<!--                        width: 372px;-->
-<!--                        margin-top: 26px;-->
-<!--                            ">Login</v-btn>-->
-<!--      </div>-->
-
-
-<!--    </div>-->
+    <ValetSnackBar
+        v-model="snackbar"
+        :snackbar-text="snackbarText"
+    ></ValetSnackBar>
 
   </div>
 </template>
@@ -55,14 +47,35 @@
 
 import ValetInputTextField from "@/components/ValetInputTextField";
 import ValetButton from "@/components/ValetButton";
+import {customerLogin} from "@/api/customerService";
+import {refreshHeader} from "@/main";
+import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
   name: "SetPasswordComplete",
-  components: {ValetInputTextField,ValetButton},
+  components: {ValetInputTextField,ValetButton,ValetSnackBar},
   data() {
     return {
-      email: null,
-      passowrd: null
+      snackbar: false,
+      snackbarText: '',
+      loginEmail: null,
+      loginPassword: null
+    }
+  },
+  methods:{
+    async login() {
+      if (this.loginEmail && this.loginPassword) {
+        const res = await customerLogin(this.loginEmail, this.loginPassword)
+        console.log(res)
+        localStorage.setItem('token', res.tokenValue)
+        if (res.code === 200) {
+          refreshHeader()
+          this.$router.replace('/OrderIndex')
+        } else {
+          this.snackbar = true
+          this.snackbarText = "Konto oder Passwort ist falsch"
+        }
+      }
     }
   }
 }

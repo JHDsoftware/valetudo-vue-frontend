@@ -18,17 +18,23 @@
         <ValetInputTextField
             title="Password*"
             v-model="loginPassword"
+            type="password"
             width-input="540px"></ValetInputTextField>
 
+        <div class="content18"
+             style="padding-bottom: 24px;"
+        ><span @click="$router.push('/forgetPasswordConfirmEmail')">Passwort vergessen?</span></div>
+
         <ValetButton
-            text-before="Passwort vergessen?"
             button-text="Anmelden"
             @click="login"
         ></ValetButton>
 
 
-        <div style="color: red; border-bottom: 1px solid grey; margin-top: 60px;" @click="$router.push('temporaryGuid')">
-          *内部开发测试页面总览</div>
+        <div style="color: red; border-bottom: 1px solid grey; margin-top: 60px;"
+             @click="$router.push('temporaryGuid')">
+          *内部开发测试页面总览
+        </div>
       </div>
 
     </div>
@@ -117,6 +123,12 @@
       </v-form>
 
     </div>
+
+    <ValetSnackBar
+        v-model="snackbar"
+        :snackbar-text="snackbarText"
+    ></ValetSnackBar>
+
   </div>
 </template>
 
@@ -125,13 +137,20 @@ import {refreshHeader} from '../../main'
 import {customerLogin, customerRegister} from '../../api/customerService'
 import ValetInputTextField from "../../components/ValetInputTextField";
 import ValetButton from "../../components/ValetButton";
+import ValetSnackBar from "../../components/ValetSnackBar";
 
 export default {
   name: "LoginPage",
-  components: {ValetInputTextField, ValetButton},
+  components: {ValetInputTextField, ValetButton, ValetSnackBar},
+  computed:{
+    // valetSnackBar(){
+    //   return this.snackbar
+    // }
+  },
   data: function () {
     return {
-
+      snackbarText: "",
+      snackbar: false,
       loginEmail: "",
       loginPassword: "",
 
@@ -152,12 +171,19 @@ export default {
   },
   methods: {
     async login() {
-      const res = await customerLogin(this.loginEmail, this.loginPassword)
-      console.log(res)
-      localStorage.setItem('token', res.tokenValue)
-      if (res.code === 200) {
-        refreshHeader()
-        await this.$router.push('/order')
+
+      if (this.loginEmail && this.loginPassword) {
+        const res = await customerLogin(this.loginEmail, this.loginPassword)
+        console.log(res)
+        localStorage.setItem('token', res.tokenValue)
+        if (res.code === 200) {
+          refreshHeader()
+          this.$router.push('/OrderIndex')
+        } else {
+          this.snackbar = true
+          this.snackbarText = "Konto oder Passwort ist falsch"
+        }
+
       }
 
     },
@@ -169,14 +195,32 @@ export default {
         firstName: this.firstName,
         lastName: this.lastName,
         city: this.city,
-        phone: this.phone
+        // phone: this.phone
       }
-      const res = await customerRegister(data)
 
-      if (res.code === 200) {
-        await this.$router.push('/registerComplete')
+      if(this.passwordRepeat != this.password){
+        this.snackbar=true
+        this.snackbarText="Die beide Password sind nicht gleich"
       }
-      console.log(res)
+      else{
+        if (Object.values(data).every((i)=> i ? true : false)) {
+          data.phone=this.phone
+          const res = await customerRegister(data)
+
+          if (res.code === 200) {
+            await this.$router.push('/registerComplete')
+          }else {
+            this.snackbar=true
+            this.snackbarText="Registrierung erscheit Fehler"
+          }
+        }
+      }
+
+
+
+    },
+    filter(value, index, arr){
+      return arr[value] ? true : false
     }
   }
 }
@@ -184,7 +228,7 @@ export default {
 
 <style scoped>
 
-.label12{
+.label12 {
   font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: normal;
@@ -196,6 +240,15 @@ export default {
   align-items: center;
 
   color: #4C4C4C;
+}
+
+.content18 {
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 26px;
+  color: #817163;
 }
 
 </style>
