@@ -11,12 +11,15 @@
                                :refresh-counter="item.id"
                                :dress-id="item.id"
                 ></dress-display>
-                <v-img @click.stop="confirmDeleteDialog=true;targetDeleteId=item.id" style="position:absolute;top: 20px;right: 23px;z-index: 2" width="30px"
+                <v-img @click.stop="confirmDeleteDialog=true;targetDeleteId=item.id"
+                       style="position:absolute;top: 20px;right: 23px;z-index: 2" width="30px"
                        :src="require('@/assets/image/frameUI/delete.png')"></v-img>
               </div>
               <div class="d-flex flex-column align-center">
                 <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>
-                <div v-if="item.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by {{ dayjs(item.completedAt).format('DD. MMM. YYYY') }}</div>
+                <div v-if="item.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by
+                  {{ dayjs(item.completedAt).format('DD. MMM. YYYY') }}
+                </div>
               </div>
             </div>
             <div @click="$router.push('/createNewDress')">
@@ -40,9 +43,11 @@
         </div>
       </div>
 
-      <div v-else style="display: grid; grid-template-columns: repeat(2,1fr);height: calc(100vh - 60px);overflow: hidden">
-        <div  style="background: rgba(204, 198, 187, 0.85);padding-top: 40px;position: relative">
-          <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id" :refreshCounter="dress.id"></dress-display>
+      <div v-else
+           style="display: grid; grid-template-columns: repeat(2,1fr);height: calc(100vh - 60px);overflow: hidden">
+        <div style="background: rgba(204, 198, 187, 0.85);padding-top: 40px;position: relative">
+          <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id"
+                         :refreshCounter="dress.id"></dress-display>
           <div style="height: 50px; width: 50px; position: absolute; z-index: 2; top: 30px; left:28px"
                @click="dress=null">
             <v-icon>mdi-arrow-left</v-icon>
@@ -55,9 +60,12 @@
               <v-img height="84px" :src="require('@/assets/image/frameUI/back.png')"></v-img>
             </div>
           </div>
-          <div class="d-flex flex-column align-center" style="position:absolute;bottom: 46px;left: 0;right: 0;margin: auto">
+          <div class="d-flex flex-column align-center"
+               style="position:absolute;bottom: 46px;left: 0;right: 0;margin: auto">
             <div style="margin-top: 38px;" class="dressName">{{ dress.name }}</div>
-            <div v-if="dress.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by {{ dayjs(dress.completedAt).format('DD. MMM. YYYY') }}</div>
+            <div v-if="dress.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by
+              {{ dayjs(dress.completedAt).format('DD. MMM. YYYY') }}
+            </div>
           </div>
         </div>
 
@@ -95,7 +103,8 @@
             <v-card flat>
               <v-card-title>Preis anfragen</v-card-title>
               <v-card-subtitle>
-                MDu bist mit deinem Entwurf zufrieden und möchtest die Skizze in die Realität umsetzen? Dann frag uns nach dem Preis. Wir werden Dich in 1-3 Tagen kontaktieren.
+                MDu bist mit deinem Entwurf zufrieden und möchtest die Skizze in die Realität umsetzen? Dann frag uns
+                nach dem Preis. Wir werden Dich in 1-3 Tagen kontaktieren.
               </v-card-subtitle>
               <v-card-actions>
                 <v-btn block height="60" elevation="0" color="#817163" class="white--text"
@@ -113,7 +122,9 @@
 
             <v-card flat>
               <v-card-title>Termin vereinbaren</v-card-title>
-              <v-card-subtitle>Wenn Du weitere Hilfe von einem Experten benötigst, um Dein endgültiges Kleid zu entwerfen, oder wenn Du Designerkleider in unserem Showroom anprobieren möchtest, dann kannst Du gerne einen Termin vereinbaren.
+              <v-card-subtitle>Wenn Du weitere Hilfe von einem Experten benötigst, um Dein endgültiges Kleid zu
+                entwerfen, oder wenn Du Designerkleider in unserem Showroom anprobieren möchtest, dann kannst Du gerne
+                einen Termin vereinbaren.
 
               </v-card-subtitle>
               <v-card-actions>
@@ -174,7 +185,7 @@
                 <valet-button
                     text-before="Germany"
                     button-text="Anfrage senden"
-                    @clickButton="showKontakt=false; showCompleteTip=true"
+                    @click="showPriceQuestionDialog"
                 >
                 </valet-button>
               </div>
@@ -253,26 +264,33 @@ export default {
       password: "",
       passwordRepeat: "",
       confirmDeleteDialog: false,
-      targetDeleteId:null,
+      targetDeleteId: null,
       dayjs,
       currentView: views[0],
-      dressLoading:false,
+      dressLoading: false
 
     }
   },
   methods: {
+    showPriceQuestionDialog () {
+      this.showKontakt = false
+      this.showCompleteTip = true
+      setTimeout(() => {
+        this.showCompleteTip = false
+      }, 5000)
+    },
     changeView () {
-      this.dressLoading=true
+      this.dressLoading = true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
-      setTimeout(()=>{
-        this.dressLoading=false
-      },400)
+      setTimeout(() => {
+        this.dressLoading = false
+      }, 400)
     },
     async deleteDress () {
-      if(this.targetDeleteId){
+      if (this.targetDeleteId) {
         await deleteDress(this.targetDeleteId)
         await this.loadDressList()
-        this.confirmDeleteDialog=false
+        this.confirmDeleteDialog = false
       }
     },
     async loadDressList () {
