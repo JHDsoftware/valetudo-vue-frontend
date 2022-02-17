@@ -1,8 +1,7 @@
 <template>
-  <div class="imgContainer" style="width: 100%;position: relative">
-
+  <div class="imgContainer" style="width: 100%;position: relative;">
     <v-img class="partImg model"  width="92.97%"
-           :src="require('@/assets/image/structure/model/frontModel.png')">
+           :src="require('@/assets/image/structure/model/'+(isFrontView?'frontModel.png':'backModel.png'))">
     </v-img>
 
     <v-img style="z-index: 2" class="partImg top" width="92.97%"
@@ -34,13 +33,14 @@
 
 import availablePicSet from "@/assets/topSet.json"
 import {
+  backSelection,
   defaultSkirt,
   defaultTop,
   excludeImage,
   skirtSelection,
   sleevesSelection,
   stripSelection,
-  topSelection
+  topSelection, views
 } from '../api/dressDisplayRule'
 import { loadDesign } from '../api/dressDesginService'
 
@@ -50,7 +50,8 @@ export default {
     dressId: {
       default: -1
     },
-    refreshCounter: {}
+    refreshCounter: {},
+    currentView: {default:views[0]}
   },
   watch: {
     refreshCounter: {
@@ -61,8 +62,12 @@ export default {
     }
   },
   computed: {
+    isFrontView(){
+      return this.currentView===views[0]
+    },
     selectedTopParts () {
-      return this.filterPartsWithMask(topSelection)
+      const topMask=this.isFrontView?topSelection:backSelection
+      return this.filterPartsWithMask(topMask)
     },
     currentDisplayTopVariant () {
       if (this.selectedTopParts.length > 0) {
@@ -105,7 +110,7 @@ export default {
     return {
       loading: true,
       selectedPart: {},
-      currentView: "Front"
+
     }
   },
   async mounted () {
@@ -114,6 +119,7 @@ export default {
   methods: {
     findDefaultPartInImageSet (partName, selectedParts, excludeFilter = () => true) {
       const targetSet = [partName, this.currentView, ...selectedParts]
+      console.log(targetSet)
       return availablePicSet.filter(excludeFilter).find(s => targetSet.every(p => s.includes(p))) ?? null
     },
     filterPartsWithMask (mask = [], pageFilter = 0) {
@@ -141,5 +147,11 @@ export default {
 </script>
 
 <style scoped>
-
+.partImg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: auto
+}
 </style>

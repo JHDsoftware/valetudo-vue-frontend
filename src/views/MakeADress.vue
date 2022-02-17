@@ -1,86 +1,146 @@
 <template>
   <div style="display: grid;grid-template-columns: 50% 50%;overflow: hidden">
-    <v-sheet
-        style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9">
-      <dress-display :refresh-counter="refreshCounter" :dress-id="dressId"/>
-      <div style="position: absolute;right: 46px;bottom: 8px;">
-        <div class="roundFab">
-          <v-img :src="require('@/assets/image/frameUI/zoom-in.png')"></v-img>
-        </div>
-        <div @click="changeView" class="roundFab" style="height: 84px;margin-top: 26px">
-          <v-img height="84px" :src="require('@/assets/image/frameUI/back.png')"></v-img>
-        </div>
-      </div>
+    <template v-if="finished">
+      <div style="position:absolute;top: 0;left: 0;width: 100vw;height: calc(100vh - 60px);background: center / cover" :style="{
+backgroundImage:'url('+require('@/assets/image/frameUI/completeBackground.png')+')'}"
+      >
+        <div style="width: 100%;height: 100%;position: relative">
+          <div style="width: 833px;height: 933px;position: absolute;top: 55px;left: 249px">
+            <dress-display :dress-id="dressId" :refreshCount="refreshCounter"></dress-display>
+          </div>
+          <div style="width: 450px;position: absolute;top:251px;text-align: right;right: 436px">
+            <div style="font-family: Gill Sans Nova;
+font-style: normal;
+font-weight: normal;
+font-size: 48px;
+/* identical to box height, or 50% */
 
-    </v-sheet>
-    <v-card color="#e0ddd6" class="d-flex flex-column">
-      <v-card elevation="8" height="60px">
-        <div style="width: 100%">
-          <v-item-group mandatory v-model="currentTab">
-            <div style="display: grid;grid-template-columns: repeat(3,1fr);width: 100%">
-              <v-item v-for="part in remoteSelections" v-slot="{ active, toggle }" :key="part.dressPartType.name">
-                <div style="height: 60px" @click="toggle" class="tabItem" :class="active?'active':''">
-                  {{ part.dressPartType.name }}
-                </div>
-              </v-item>
+display: flex;
+align-items: center;
+letter-spacing: -0.011em;
+
+color: #817163;">
+              Joan & D
             </div>
-          </v-item-group>
-        </div>
-      </v-card>
-      <div style="height: calc(100vh - 60px - 64px - 60px);overflow-y: scroll">
-        <v-expansion-panels style="margin-top: 2px" accordion mandatory>
-          <v-expansion-panel
-              class="panel"
-              active-class="active"
-              v-for="(item) in availableSelections"
-              :key="currentTab+''+item.dressPartCategory.code"
-          >
-            <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
-                item.dressPartCategory.name
-              }}
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-item-group mandatory>
-                <div style="display: grid;grid-template-columns: repeat(7,1fr)">
-                  <template v-for="option in item.filteredPart">
-                    <v-item :key="option.code" v-slot="{active,toggle}">
-                      <div class="weddingItem"
-                           @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
-                           :class="active?' active':''">
-                        <div style="text-align: center">
-                          <img style="height: 116px"
-                               :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
-                               alt=""/>
-                          <div class="option-label" style="width: 100%">{{ option.name }}</div>
-                        </div>
+            <div style="font-family: Gill Sans Nova;
+font-style: normal;
+font-weight: normal;
+font-size: 24px;
+/* identical to box height, or 42% */
 
-                      </div>
-                    </v-item>
-                  </template>
-                </div>
-              </v-item-group>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </div>
-      <v-sheet style="position: absolute;width:100%;bottom:0;z-index:1;display: grid;grid-template-columns: 50% 50%">
-        <v-btn height="60px" block elevation="0" tile color="#817163" dark>
-          <v-icon left>mdi-arrow-left-top-bold</v-icon>
-          Revoke
-        </v-btn>
-        <v-btn @click="showDressFinishConfirm=true" height="60px" block elevation="0" tile color="#817163" dark>
-          <v-icon left>mdi-check-circle-outline</v-icon>
-          Finish Design
-        </v-btn>
-      </v-sheet>
-    </v-card>
-    <v-dialog width="748px" v-model="showDressFinishConfirm">
-      <v-card height="405px" style="padding:31px 42px">
-        <div class="d-flex justify-end">
-          <v-icon @click="showDressFinishConfirm=false" style="width: 29px">mdi-close</v-icon>
+display: flex;
+align-items: center;
+text-align: right;
+letter-spacing: -0.011em;
+
+color: #817163;">
+              Created at 05. Marz. 2021
+            </div>
+            <div style="font-family: Gill Sans Nova;
+font-style: normal;
+font-weight: normal;
+font-size: 24px;
+line-height: 30px;
+text-align: left;
+letter-spacing: 0.04em;
+word-wrap: break-word;
+margin-top: 51px;
+
+color: #817163;">
+              Nice piece! Do you want to make it ture? In Valetudo, you can find personal consultant (free of charge for the first appoinement), you can also order samples of lace and fabrics online. That would be our pleasuere to realize your dream dress with you!
+            </div>
+            <valet-button to="/OrderIndex/Entwurf" style="margin-top: 51px" button-text="Check your dress in your account">
+            </valet-button>
+          </div>
         </div>
-        <div class="mt-2">
-          <p style="font-family: Gill Sans Nova;
+
+
+      </div>
+
+    </template>
+    <template v-else>
+      <v-sheet
+          class="px-8"
+          style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9;">
+        <dress-display v-if="!dressLoading" :refresh-counter="refreshCounter" :dress-id="dressId" :current-view="currentView" style="height: 100%"/>
+        <div style="position: absolute;right: 46px;bottom: 8px; z-index: 100">
+          <div class="roundFab">
+            <v-img :src="require('@/assets/image/frameUI/zoom-in.png')"></v-img>
+          </div>
+          <div @click="changeView" class="roundFab" style="height: 84px;margin-top: 26px">
+            <v-img height="84px" :src="require('@/assets/image/frameUI/back.png')"></v-img>
+          </div>
+        </div>
+
+      </v-sheet>
+      <v-card color="#e0ddd6" class="d-flex flex-column">
+        <v-card elevation="8" height="60px">
+          <div style="width: 100%">
+            <v-item-group mandatory v-model="currentTab">
+              <div style="display: grid;grid-template-columns: repeat(3,1fr);width: 100%">
+                <v-item v-for="part in remoteSelections" v-slot="{ active, toggle }" :key="part.dressPartType.name">
+                  <div style="height: 60px" @click="toggle" class="tabItem" :class="active?'active':''">
+                    {{ part.dressPartType.name }}
+                  </div>
+                </v-item>
+              </div>
+            </v-item-group>
+          </div>
+        </v-card>
+        <div style="height: calc(100vh - 60px - 64px - 60px);overflow-y: scroll">
+          <v-expansion-panels style="margin-top: 2px" accordion mandatory>
+            <v-expansion-panel
+                class="panel"
+                active-class="active"
+                v-for="(item) in availableSelections"
+                :key="currentTab+''+item.dressPartCategory.code"
+            >
+              <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
+                  item.dressPartCategory.name
+                }}
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-item-group mandatory>
+                  <div style="display: grid;grid-template-columns: repeat(7,1fr)">
+                    <template v-for="option in item.filteredPart">
+                      <v-item :key="option.code+option.id" v-slot="{active,toggle}">
+                        <div class="weddingItem"
+                             @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
+                             :class="active?' active':''">
+                          <div style="text-align: center">
+                            <img style="height: 116px"
+                                 :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
+                                 alt=""/>
+                            <div class="option-label" style="width: 100%">{{ option.name }}</div>
+                          </div>
+
+                        </div>
+                      </v-item>
+                    </template>
+                  </div>
+                </v-item-group>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </div>
+        <v-sheet style="position: absolute;width:100%;bottom:0;z-index:1;display: grid;grid-template-columns: 50% 50%">
+          <v-btn height="60px" block elevation="0" tile color="#817163" dark>
+            <v-icon left>mdi-arrow-left-top-bold</v-icon>
+            Revoke
+          </v-btn>
+          <v-btn @click="showDressFinishConfirm=true" height="60px" block elevation="0" tile color="#817163" dark>
+            <v-icon left>mdi-check-circle-outline</v-icon>
+            Finish Design
+          </v-btn>
+        </v-sheet>
+      </v-card>
+      <v-dialog width="748px" v-model="showDressFinishConfirm">
+        <v-card height="405px" style="padding:31px 42px">
+          <div class="d-flex justify-end">
+            <v-icon @click="showDressFinishConfirm=false" style="width: 29px">mdi-close</v-icon>
+          </div>
+          <div class="mt-2">
+            <p style="font-family: Gill Sans Nova;
 font-style: normal;
 font-weight: normal;
 font-size: 24px;
@@ -93,9 +153,9 @@ text-align: center;
 letter-spacing: -0.011em;
 
 color: #817163;">We offer two drawings for free,<br>
-            and the third one costs 19,99 €</p>
-        </div>
-        <p style="font-family: Gill Sans Nova;
+              and the third one costs 19,99 €</p>
+          </div>
+          <p style="font-family: Gill Sans Nova;
 font-style: normal;
 font-weight: normal;
 font-size: 36px;
@@ -108,22 +168,22 @@ text-align: center;
 letter-spacing: -0.011em;
 
 color: #817163;" class="mt-6">
-          Are you sure to finish your drawing?
-        </p>
-        <div class="d-flex mt-16">
-          <v-btn @click="showDressFinishConfirm=false" elevation="0" tile style="width: 327px;
+            Are you sure to finish your drawing?
+          </p>
+          <div class="d-flex mt-16">
+            <v-btn @click="showDressFinishConfirm=false" elevation="0" tile style="width: 327px;
 height: 81px;color:#817163" color="#e0ddd6">No, not yet
-          </v-btn>
-          <v-spacer style="width: 14px"></v-spacer>
-          <v-btn @click="finishDesign" elevation="0" tile style="width: 327px;
+            </v-btn>
+            <v-spacer style="width: 14px"></v-spacer>
+            <v-btn @click="finishDesign" elevation="0" tile style="width: 327px;
 height: 81px;color:#817163" color="#e0ddd6">Yes, I am done!
-          </v-btn>
-        </div>
-      </v-card>
-    </v-dialog>
-    <v-dialog width="738px" v-model="showLoading">
-      <v-card height="405px" class="d-flex align-center justify-center">
-        <p style="font-family: Gill Sans Nova;
+            </v-btn>
+          </div>
+        </v-card>
+      </v-dialog>
+      <v-dialog width="738px" v-model="showLoading">
+        <v-card height="405px" class="d-flex align-center justify-center">
+          <p style="font-family: Gill Sans Nova;
 font-style: normal;
 font-weight: normal;
 font-size: 36px;
@@ -136,8 +196,10 @@ text-align: center;
 letter-spacing: -0.011em;
 
 color: #817163;">You dress will be saved...</p>
-      </v-card>
-    </v-dialog>
+        </v-card>
+      </v-dialog>
+    </template>
+
 
   </div>
 </template>
@@ -147,6 +209,7 @@ import DressDisplay from "@/views/DressDisplay"
 import { views } from '../api/dressDisplayRule'
 import { getDressPartList, refreshCurrentPartInfo } from '../api/dressPartService'
 import { loadDesign, setDressComplete, updateMyDesignParts } from '../api/dressDesginService'
+import ValetButton from '../components/ValetButton'
 
 const parts = [
   {
@@ -182,9 +245,11 @@ export default {
       selectedPart: {},
       currentMask: [],
       loading: true,
+      dressLoading:false,
       showDressFinishConfirm: null,
       showLoading: null,
-      refreshCounter: 0
+      refreshCounter: 0,
+      finished:true,
     }
   },
   computed: {
@@ -204,6 +269,7 @@ export default {
       try {
         const res = await setDressComplete(this.dressId)
         console.log(res)
+        this.finished=true
       } catch (e) {
         console.log(e)
       } finally {
@@ -218,7 +284,12 @@ export default {
       console.log("------>")
     },
     changeView () {
+      console.log("change")
+      this.dressLoading=true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
+      setTimeout(()=>{
+        this.dressLoading=false
+      },400)
     },
     async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
       this.logSelectedParts()
@@ -265,7 +336,7 @@ export default {
     this.loading = false
 
   },
-  components: {DressDisplay}
+  components: {ValetButton, DressDisplay}
 }
 </script>
 <style>
@@ -330,11 +401,5 @@ export default {
   border-bottom: 1px solid black;
 }
 
-.partImg {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  margin: auto
-}
+
 </style>
