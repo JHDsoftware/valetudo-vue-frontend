@@ -1,56 +1,22 @@
 <template>
   <div class="d-flex" style="height: 100%">
-
-<!--    <div class="flex-grow-1" style="padding:38px 100px;">-->
-<!--      <div class="pageContent d-flex justify-center" style="width: 100%">-->
-<!--        <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">-->
-<!--          <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList">-->
-<!--            <div class="dressContainer hasContent d-flex align-center">-->
-<!--              <dress-display style="height: 290px" :refresh-counter="item.id" :dress-id="item.id"></dress-display>-->
-<!--            </div>-->
-<!--            <div class="d-flex flex-column align-center">-->
-<!--              <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>-->
-<!--              <div style="margin-top: 18px" class="dressCreateTime">Created by 05. Marz. 2021</div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div @click="$router.push('/createNewDress')">-->
-<!--            <div class="dressContainer d-flex justify-center align-center">-->
-<!--              <div class="noContent">-->
-<!--                <div class="bigHint">Design your dream dress for free!</div>-->
-<!--                <v-btn block tile height="52px" color="#e0ddd6" class="mt-4" elevation="0">Start</v-btn>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <div>-->
-<!--            <div class="dressContainer d-flex justify-center align-center">-->
-<!--              <div class="noContent">-->
-<!--                <div class="bigHint">Design more for 19.99 €</div>-->
-<!--                <v-btn block tile height="52px" color="#e0ddd6" class="mt-4" elevation="0">Start</v-btn>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-
     <div>
       <div class="flex-grow-1" style="padding:38px 100px;" v-if="!showdress">
         <div class="pageContent d-flex justify-center" style="width: 100%">
           <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
             <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList"
                  @click="showdress=true">
-              <div class="dressContainer hasContent d-flex align-center">
-                <dress-display style="height: 290px"
+              <div class="dressContainer hasContent d-flex align-center" style="position: relative;">
+                <v-img @click.stop="confirmDeleteDialog=true;targetDeleteId=item.id" style="position:absolute;top: 20px;right: 23px" width="30px"
+                       :src="require('@/assets/image/frameUI/delete.png')"></v-img>
+                <dress-display style="height: 390px;width: 125%;position: absolute;left: -12.5%;top: 24px"
                                :refresh-counter="item.id"
                                :dress-id="item.id"
                 ></dress-display>
               </div>
               <div class="d-flex flex-column align-center">
                 <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>
-                <div style="margin-top: 18px" class="dressCreateTime">Created by 05. Marz. 2021</div>
+                <div v-if="item.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by {{ dayjs(item.completedAt).format('DD. MMM. YYYY') }}</div>
               </div>
             </div>
             <div @click="$router.push('/createNewDress')">
@@ -93,7 +59,8 @@
 
             <v-card flat>
               <v-card-title> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter) sowie
+              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
+                sowie
                 ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
               </v-card-subtitle>
               <v-card-actions>
@@ -117,7 +84,8 @@
 
             <v-card flat>
               <v-card-title> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter) sowie
+              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
+                sowie
                 ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
               </v-card-subtitle>
               <v-card-actions>
@@ -136,7 +104,8 @@
 
             <v-card flat>
               <v-card-title> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter) sowie
+              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
+                sowie
                 ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
               </v-card-subtitle>
               <v-card-actions>
@@ -205,6 +174,28 @@
           </v-card>
         </div>
       </v-dialog>
+      <v-dialog v-model="confirmDeleteDialog" width="660px">
+        <div style="width: 660px;padding: 46px 50px;background: white;text-align: center">
+          <div style="font-family: Gill Sans Nova;
+font-style: normal;
+font-weight: 600;
+font-size: 36px;
+line-height: 125%;
+/* or 45px */
+
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #4C4C4C;">Wollen Sie den Kleid wirklich löschen?
+          </div>
+          <div style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 8px;" class="mt-5">
+            <valet-button @click="confirmDeleteDialog=false" button-text="Abbrechen"></valet-button>
+            <valet-button @click="deleteDress" button-text="Löchen"></valet-button>
+          </div>
+
+        </div>
+      </v-dialog>
 
       <v-dialog v-model="showCompleteTip" max-width="35vw">
         <div class="d-flex justify-center">
@@ -229,14 +220,16 @@
 </template>
 
 <script>
-import DressDisplay from "@/views/DressDisplay";
-import { getMyDesign } from '../../../api/dressDesginService'
-import ValetInputTextField from "../../../components/ValetInputTextField";
-import ValetButton from "../../../components/ValetButton";
+import DressDisplay from "@/views/DressDisplay"
+import { deleteDress, getMyDesign } from '../../../api/dressDesginService'
+import ValetInputTextField from "../../../components/ValetInputTextField"
+import ValetButton from "../../../components/ValetButton"
+import dayjs from 'dayjs'
+
 export default {
   name: "Entwurf",
   // components: {ValetInputTextField, DressDisplay, },
-  components: {DressDisplay,ValetInputTextField,ValetButton},
+  components: {DressDisplay, ValetInputTextField, ValetButton},
   data: function () {
     return {
       myDressList: [],
@@ -250,16 +243,25 @@ export default {
       email: "",
       password: "",
       passwordRepeat: "",
-
-    };
+      confirmDeleteDialog: false,
+      targetDeleteId:null,
+      dayjs
+    }
   },
   methods: {
-    async loadDressList() {
+    async deleteDress () {
+      if(this.targetDeleteId){
+        await deleteDress(this.targetDeleteId)
+        await this.loadDressList()
+        this.confirmDeleteDialog=false
+      }
+    },
+    async loadDressList () {
       this.myDressList = await getMyDesign()
       console.log(this.myDressList)
     }
   },
-  mounted() {
+  mounted () {
     this.loadDressList()
   }
 }
@@ -292,6 +294,11 @@ export default {
   box-shadow: 0px 6px 6px 2px #CCC6BB;
 }
 
+.dressContainer.hasContent {
+  padding: 27px 37px;
+  background: rgba(204, 198, 187, 0.85);
+}
+
 .dressName {
   font-family: Palanquin;
   font-style: normal;
@@ -322,8 +329,5 @@ export default {
   color: #4C4C4C;
 }
 
-.dressContainer.hasContent {
-  padding: 27px 37px;
-  background: rgba(204, 198, 187, 0.85);
-}
+
 </style>

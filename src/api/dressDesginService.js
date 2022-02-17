@@ -6,9 +6,6 @@ export async function updateMyDesignParts (designId, dressPartIds) {
   return (await hillo.post('/dressDesign/' + `${designId}` + '/updateParts', {dressPartIds})).data
 }
 
-export async function completeDesign (id) {
-  return (await hillo.post('/dressDesign/setComplete/' + `${id}`)).data
-}
 
 export async function placeSampleOrder (id, quantity, deliveryAddress, billingAddress) {
   return (await hillo.post('/dressDesign/placeSampleOrder/' + `${id}`, {
@@ -31,3 +28,8 @@ export async function setDressComplete (id) {
 export async function getMyDesign() {
   return (await hillo.post('/dressDesign/myList')).data
 }
+
+export async function deleteDress(id) {
+  return (await hillo.post(`/dressDesign/setHidden/${id}`)).data
+}
+
