@@ -1,18 +1,18 @@
 <template>
   <div class="d-flex" style="height: 100%">
     <div>
-      <div class="flex-grow-1" style="padding:38px 100px;" v-if="!showdress">
+      <div class="flex-grow-1" style="padding:38px 100px;" v-if="!dress">
         <div class="pageContent d-flex justify-center" style="width: 100%">
           <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
             <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList"
-                 @click="showdress=true">
+                 @click="dress=item">
               <div class="dressContainer hasContent d-flex align-center" style="position: relative;">
-                <v-img @click.stop="confirmDeleteDialog=true;targetDeleteId=item.id" style="position:absolute;top: 20px;right: 23px" width="30px"
-                       :src="require('@/assets/image/frameUI/delete.png')"></v-img>
                 <dress-display style="height: 390px;width: 125%;position: absolute;left: -12.5%;top: 24px"
                                :refresh-counter="item.id"
                                :dress-id="item.id"
                 ></dress-display>
+                <v-img @click.stop="confirmDeleteDialog=true;targetDeleteId=item.id" style="position:absolute;top: 20px;right: 23px;z-index: 2" width="30px"
+                       :src="require('@/assets/image/frameUI/delete.png')"></v-img>
               </div>
               <div class="d-flex flex-column align-center">
                 <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>
@@ -40,20 +40,30 @@
         </div>
       </div>
 
-      <div v-else style="display: grid; grid-template-columns: repeat(2,1fr)">
-        <div style="position: static">
-          <v-img :src="require('@/assets/dresss.png')"></v-img>
+      <div v-else style="display: grid; grid-template-columns: repeat(2,1fr);height: calc(100vh - 60px);overflow: hidden">
+        <div  style="background: rgba(204, 198, 187, 0.85);padding-top: 40px;position: relative">
+          <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id" :refreshCounter="dress.id"></dress-display>
           <div style="height: 50px; width: 50px; position: absolute; z-index: 2; top: 30px; left:28px"
-               @click="showdress=false">
+               @click="dress=null">
             <v-icon>mdi-arrow-left</v-icon>
+          </div>
+          <div style="position: absolute;right: 46px;bottom: 8px; z-index: 100">
+            <div class="roundFab">
+              <v-img :src="require('@/assets/image/frameUI/zoom-in.png')"></v-img>
+            </div>
+            <div @click="changeView" class="roundFab" style="height: 84px;margin-top: 26px">
+              <v-img height="84px" :src="require('@/assets/image/frameUI/back.png')"></v-img>
+            </div>
+          </div>
+          <div class="d-flex flex-column align-center" style="position:absolute;bottom: 46px;left: 0;right: 0;margin: auto">
+            <div style="margin-top: 38px;" class="dressName">{{ dress.name }}</div>
+            <div v-if="dress.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by {{ dayjs(dress.completedAt).format('DD. MMM. YYYY') }}</div>
           </div>
         </div>
 
         <div style="margin-top: 70px; margin-left: 98px; margin-right: 30px">
-
           <div class="d-flex justify-space-between justify-center" style="margin-bottom: 110px">
             <div style="margin-right: 85px">
-
               <v-img src="@/assets/picture.png" width="225" height="225"></v-img>
             </div>
 
@@ -83,34 +93,32 @@
             </div>
 
             <v-card flat>
-              <v-card-title> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
-                sowie
-                ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
+              <v-card-title>Preis anfragen</v-card-title>
+              <v-card-subtitle>
+                MDu bist mit deinem Entwurf zufrieden und möchtest die Skizze in die Realität umsetzen? Dann frag uns nach dem Preis. Wir werden Dich in 1-3 Tagen kontaktieren.
               </v-card-subtitle>
               <v-card-actions>
                 <v-btn block height="60" elevation="0" color="#817163" class="white--text"
-                       style="text-transform: none; font-size: 24px">Bestellen
+                       style="text-transform: none; font-size: 24px">Preis anfragen
                 </v-btn>
               </v-card-actions>
             </v-card>
           </div>
 
-          <div class="d-flex justify-space-between justify-center" style="margin-bottom: 110px">
+          <div class="d-flex justify-space-between justify-center">
             <div style="margin-right: 85px">
 
               <v-img src="@/assets/picture.png" width="225" height="225"></v-img>
             </div>
 
             <v-card flat>
-              <v-card-title> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
-                sowie
-                ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
+              <v-card-title>Termin vereinbaren</v-card-title>
+              <v-card-subtitle>Wenn Du weitere Hilfe von einem Experten benötigst, um Dein endgültiges Kleid zu entwerfen, oder wenn Du Designerkleider in unserem Showroom anprobieren möchtest, dann kannst Du gerne einen Termin vereinbaren.
+
               </v-card-subtitle>
               <v-card-actions>
                 <v-btn block height="60" elevation="0" color="#817163" class="white--text"
-                       style="text-transform: none; font-size: 24px">Bestellen
+                       style="text-transform: none; font-size: 24px">Termin vereinbaren
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -220,11 +228,12 @@ color: #4C4C4C;">Wollen Sie den Kleid wirklich löschen?
 </template>
 
 <script>
-import DressDisplay from "@/views/DressDisplay"
+import DressDisplay from "../../../views/DressDisplay"
 import { deleteDress, getMyDesign } from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
+import { views } from '../../../api/dressDisplayRule'
 
 export default {
   name: "Entwurf",
@@ -233,7 +242,7 @@ export default {
   data: function () {
     return {
       myDressList: [],
-      showdress: false,
+      dress: null,
       showKontakt: false,
       showCompleteTip: false,
       firstName: "",
@@ -245,10 +254,20 @@ export default {
       passwordRepeat: "",
       confirmDeleteDialog: false,
       targetDeleteId:null,
-      dayjs
+      dayjs,
+      currentView: views[0],
+      dressLoading:false,
+
     }
   },
   methods: {
+    changeView () {
+      this.dressLoading=true
+      this.currentView = views[this.currentView === views[0] ? 1 : 0]
+      setTimeout(()=>{
+        this.dressLoading=false
+      },400)
+    },
     async deleteDress () {
       if(this.targetDeleteId){
         await deleteDress(this.targetDeleteId)
