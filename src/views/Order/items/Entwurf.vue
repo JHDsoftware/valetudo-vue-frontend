@@ -87,7 +87,8 @@
                        color="#817163"
                        class="white--text"
                        style="text-transform: none; font-size: 24px"
-                       @click="showKontakt=true"
+                     @click="toOrderPage(dress.id)"
+
                 >Bestellen
                 </v-btn>
               </v-card-actions>
@@ -108,6 +109,7 @@
               </v-card-subtitle>
               <v-card-actions>
                 <v-btn block height="60" elevation="0" color="#817163" class="white--text"
+                       @click="showKontakt=true"
                        style="text-transform: none; font-size: 24px">Preis anfragen
                 </v-btn>
               </v-card-actions>
@@ -272,6 +274,9 @@ export default {
     }
   },
   methods: {
+    toOrderPage(id){
+      this.$router.push({path:'/SampleOrder',params:{id}})
+    },
     showPriceQuestionDialog () {
       this.showKontakt = false
       this.showCompleteTip = true
