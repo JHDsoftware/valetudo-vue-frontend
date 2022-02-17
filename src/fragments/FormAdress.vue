@@ -4,8 +4,9 @@
       flat tile>
 
     <template v-if="useClose">
-    <div style="position: absolute; right: 0px; top:24px">
-      <v-icon x-large @click="$emit('closeButton')">mdi-close</v-icon></div>
+      <div style="position: absolute; right: 0px; top:24px">
+        <v-icon x-large @click="$emit('closeButton')">mdi-close</v-icon>
+      </div>
     </template>
     <template v-if="title">
       <div class="contentText" style="grid-column: 1/3" :style="styleInput">
@@ -22,7 +23,8 @@
     <ValetInputTextField title="PLZ*" width-input="266px" v-model="localForm.zipCode"/>
     <ValetInputTextField title="Stadt*" width-input="266px" v-model="localForm.stadt"/>
     <div class="mt-1">{{ localForm.country }}</div>
-    <ValetButton :buttonText="buttonText" style="grid-column: 1/3; margin-top: 24px" @click="$emit('click',true)"></ValetButton>
+    <ValetButton :buttonText="buttonText" style="grid-column: 1/3; margin-top: 24px"
+                 @click="$emit('click',true)"></ValetButton>
 
   </v-card>
 </template>
@@ -31,33 +33,42 @@
 import ValetInputTextField from '../components/ValetInputTextField'
 import ValetButton from '../components/ValetButton'
 
+const defaultForm = {
+  vorname: '',
+  nachname: '',
+  address: '',
+  zusatzAdress: '',
+  zipCode: '',
+  stadt: '',
+  country: ''
+}
 
 export default {
-  components: {ValetInputTextField,ValetButton},
+  components: {ValetInputTextField, ValetButton},
   name: "FormAdress",
   props: {
     title: {
       type: String,
       default: null
     },
-    buttonText:{
+    buttonText: {
       type: String,
       default: 'Speichern'
     },
-    form:{
+    form: {
       // type: Object,
       // default: () => {}
     },
-    styleInput:{},
-    useClose:{
+    styleInput: {},
+    useClose: {
       type: Boolean,
       default: false
     }
 
   },
   data () {
-    return{
-      localForm:{
+    return {
+      localForm: {
         vorname: '',
         nachname: '',
         address: '',
@@ -69,8 +80,8 @@ export default {
     }
   },
 
-  mounted() {
-    this.localForm = this.form
+  mounted () {
+    this.localForm = Object.assign({}, defaultForm, this.form)
   }
 }
 </script>

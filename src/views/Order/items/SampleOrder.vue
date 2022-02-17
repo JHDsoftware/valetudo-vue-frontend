@@ -1,10 +1,10 @@
 <template>
-  <div style="height: 100%;">
-    <div class="d-flex justify-center" style="margin-top: 70px">
-
-      <v-stepper alt-labels style="width: 476px" flat tile v-model="anzahlStep">
-
-        <div class="title" style="margin-bottom: 16px">Musterbox bestellen</div>
+  <div style="height: calc(100vh - 60px);overflow: hidden">
+    <div style="margin-top: 70px;" class="d-flex justify-center flex-wrap">
+      <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">Musterbox bestellen</div>
+      <v-stepper
+          color="#817163"
+          alt-labels style="width: 476px" flat tile v-model="anzahlStep">
         <v-stepper-header>
           <template v-for="(item,i) in stepHeaders">
             <v-stepper-step
@@ -19,67 +19,35 @@
             </template>
 
           </template>
-
-
         </v-stepper-header>
       </v-stepper>
     </div>
 
     <div class="d-flex justify-center">
       <div>
-
         <template v-if="anzahlStep === 1">
-
           <div style="padding-top: 96px">
-            <v-card class="d-flex justify-space-between" width="80vw" flat>
-              <template v-for="(item,i) in headers">
-                <div :key="'header'+i" class="unterTitle24">{{ item }}</div>
-              </template>
-            </v-card>
-
-            <v-card class="d-flex justify-space-between" width="80vw"
-                    style="border-bottom: 1px solid #8F8F8F; padding-bottom: 5px" flat>
+            <div style="display: grid;grid-template-columns: repeat(4,1fr);width: 100% ;border-bottom: 1px solid #8F8F8F; padding-bottom: 8px">
               <div>
-                <div class="unterTitle36">Musterbox</div>
-                <div class="unterTitle18">(Inkl. Versandkosten)</div>
+                <div class="unterTitle24">ARTIKEL</div>
+                <div>
+                  <div class="unterTitle36">Musterbox</div>
+                  <div class="unterTitle18">(Inkl. Versandkosten)</div>
+                </div>
               </div>
-              <div class="unterTitle36">Anni</div>
-              <div class="unterTitle36 d-flex">
-
-                <v-text-field
-                    v-model="anzahl"
-                    style="width: 50px; "
-                    outlined
-                    hide-details
-                    @click="refreshButtonFlag=true"/>
-
-                <template v-if="refreshButtonFlag">
-                  <div style="width: 60px; ">
-                    <ValetButton button-text="Aktualisieren" style="height: 56px"
-                                 @click="refreshButtonFlag=false"></ValetButton>
-                  </div>
-                </template>
-                <!--          <template >-->
-                <v-menu v-model="anzahlMenu" v-if="!refreshButtonFlag">
-                  <template v-slot:activator="{on,attrs}">
-                    <v-card style="border: 1px solid grey;" v-bind="attrs" v-on="on" height="56px" flat>
-                      <v-icon>mdi-chevron-down</v-icon>
-                    </v-card>
-                  </template>
-
-
-                  <v-list>
-                    <v-list-item v-for="(item,i) in selectItems" :key="'select'+i" dense>
-                      <v-list-item-title>{{ item }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-                <!--          </template>-->
-
-
+              <div class="d-flex flex-column align-center">
+                <div class="unterTitle24">BRAUTKLEID</div>
+                <div class="unterTitle36">Anni</div>
               </div>
-              <div class="unterTitle36">29,99 €</div>
-            </v-card>
+              <div class="d-flex flex-column align-center">
+                <div class="unterTitle24">ANZAHL</div>
+                <v-select style="width: 120px" v-model="amount" outlined hide-details :items="selectItems" ></v-select>
+              </div>
+              <div class="d-flex align-end flex-column">
+                <div class="unterTitle24">PREIS</div>
+                <div class="unterTitle36">{{ price.toFixed(2).replace(".",",")+" €" }}</div>
+              </div>
+            </div>
 
             <v-card class="d-flex justify-end" width="80vw" flat>
               <div style="width: 540px; padding-top: 40px">
@@ -126,7 +94,7 @@
                         </div>
                       </template>
                       <div style="height: 60px;padding-top: 24px">
-                        <ValetButton button-text="Bestätigen und weiter" @click="confirm"/>
+                        <ValetButton style="width: 540px" button-text="Bestätigen und weiter" @click="confirm"/>
                       </div>
                     </div>
                     <div style="position: absolute; right: 16px; top: 16px; ">
@@ -145,38 +113,72 @@
         </template>
 
         <template v-if="anzahlStep === 3">
-
-          <div class="d-flex justify-center">
-            <div style="width: 50%; border-right: 1px solid grey">
+          <div style="display: grid;grid-template-columns: 540px 1px 540px;grid-gap: 100px">
+            <div>
               <v-card height="30vh" flat>
-                <div style="font-weight: 600; font-size: 24px;">ZAHLUNGSART</div>
+                <div style="font-family: Gill Sans Nova;
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 125%;
+/* identical to box height, or 30px */
 
-                <div>
-                  <v-radio-group v-model="column" style="font-weight: 600; font-size: 36px;">
-                    <v-radio label="PayPal">
-                      <div>Du wirst an PayPal weitergeleitet, um den Bezahlvorgang abzuschließen.</div>
-                    </v-radio>
-                    <v-radio label="Rechnung">
-                      <div>Der Rechnungsbetrag wird erst innerhalb von 14 Tagen nach der Versandbestätigung per E-Mail
-                        fällig.
+text-transform: uppercase;
+
+color: #4C4C4C;">ZAHLUNGSART</div>
+                <div class="mt-4">
+                  <v-item-group mandatory>
+                    <v-item #default="{active,toggle}">
+                      <div class="d-flex align-baseline" @click="toggle" :class="active?'active':''">
+                        <div class="notion" ></div>
+                        <div class="ml-3 flex-grow-1">
+                          <div class="d-flex justify-space-between">
+                            <div class="name">PayPal</div>
+                            <div class="image" style="width: 170px"><v-img :src="require('@/assets/image/frameUI/paypal.png')"></v-img></div>
+                          </div>
+                          <div v-if="active" class="hint mt-3">Du wirst an PayPal weitergeleitet, um den Bezahlvorgang abzuschließen.</div>
+                        </div>
                       </div>
-                    </v-radio>
-                    <v-radio label="Vorkasse">
-                      <div>Nachdem du deine Bestellung aufgegeben hast, senden wir dir die Informationen zur
-                        Banküberweisung per E-Mail. Wir können deine Artikel nur für 7 Tage reservieren. Bitte halte
-                        dieses Zeitfenster ein. Je eher wir deine Zahlung erhalten, desto schneller wird deine
-                        Bestellung verschickt.
+
+                    </v-item>
+                    <v-item #default="{active,toggle}">
+                      <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
+                        <div class="notion" ></div>
+                        <div class="ml-3 flex-grow-1">
+                          <div class="d-flex justify-space-between">
+                            <div class="name">Rechnung</div>
+                          </div>
+                          <div v-if="active" class="hint mt-3">Der Rechnungsbetrag wird erst innerhalb von 14 Tagen nach der Versandbestätigung per E-Mail
+                            fällig.</div>
+                        </div>
                       </div>
-                    </v-radio>
-                  </v-radio-group>
+
+                    </v-item>
+                    <v-item #default="{active,toggle}">
+                      <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
+                        <div class="notion" ></div>
+                        <div class="ml-3 flex-grow-1">
+                          <div class="d-flex justify-space-between">
+                            <div class="name">Vorkasse</div>
+                          </div>
+                          <div v-if="active" class="hint mt-3">Nachdem du deine Bestellung aufgegeben hast, senden wir dir die Informationen zur
+                            Banküberweisung per E-Mail. Wir können deine Artikel nur für 7 Tage reservieren. Bitte halte
+                            dieses Zeitfenster ein. Je eher wir deine Zahlung erhalten, desto schneller wird deine
+                            Bestellung verschickt.</div>
+                        </div>
+                      </div>
+
+                    </v-item>
+                  </v-item-group>
                 </div>
               </v-card>
             </div>
+            <div style="height: 100%;border-right: 1px solid #000000;"></div>
             <div style="width: 50%">
               <v-card width="40vw" class="d-flex justify-center" flat>
                 <div>
                   <div style="font-weight: 600; font-size: 24px;">BESTELLÜBERSICHT</div>
-                  <div style="width: 270px; padding-top: 40px">
+                  <div style="   padding-top: 40px">
                     <ValetButton button-text="Bestätigen und bezahlen" @click="confirm"/>
                   </div>
                 </div>
@@ -184,6 +186,7 @@
               </v-card>
             </div>
           </div>
+
         </template>
 
         <template v-if="anzahlStep === 4">
@@ -193,16 +196,17 @@
               <div class="d-flex justify-center">
                 <v-card width="645px" class=" text-center" flat>
                   <div style="font-size: 48px;line-height: 125%; padding-top: 30px; padding-bottom: 55px">
-                    Vielen Dank für Deine Bestellung</div>
-                  <div style="font-size: 36px;line-height: 125%;">
+                    Vielen Dank für Deine Bestellung
+                  </div>
+                  <div style=" font-size: 36px;line-height: 125%;">
                     Wir werden Dir eine E-Mail mit all Deinen Bestellinformationen schicken.
                     Du kannst die Bestellung auch in DEINE BESTELLUNG finden.
                   </div>
                 </v-card>
               </div>
-              <div  class="d-flex justify-center" style="padding-top: 24px">
-                <v-card width="540px" class="text-center" flat>
-                    <ValetButton button-text="Bestellung Ansehen"/>
+              <div class="d-flex justify-center" style="padding-top: 24px">
+                <v-card  class="text-center" flat>
+                  <ValetButton style="width: 540px" button-text="Bestellung Ansehen"/>
 
                 </v-card>
               </div>
@@ -220,7 +224,7 @@
       <div class="d-flex justify-center" style="background-color: white; ">
         <div>
           <FormAdress
-              use-close="true"
+              use-close
               @closeButton="handleClose"
               title="Lieferadresse ändern"
               :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
@@ -235,8 +239,8 @@
       <div class="d-flex justify-center" style="background-color: white; ">
         <FormAdress
             @closeButton="handleClose"
-            use-close="true"
-            title="Lieferadresse ändern"
+            use-close
+            title="Rechnungsadresse ändern"
             :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
       </div>
 
@@ -246,26 +250,30 @@
 </template>
 
 <script>
-import ValetButton from "../../../components/ValetButton";
-import FormAdress from "../../../fragments/FormAdress";
+import ValetButton from "../../../components/ValetButton"
+import FormAdress from "../../../fragments/FormAdress"
 
 
 export default {
   name: "SampleOrder",
   components: {FormAdress, ValetButton},
   computed: {
-    items() {
+    items () {
       const res = this.personData[4]
       console.log("items", res)
       return res
+    },
+    price(){
+      return (this.amount??1)*29.99
     }
   },
-  mounted() {
+  props: {id: {}},
+  mounted () {
 
   },
-  data() {
+  data () {
     return {
-
+      amount:1,
       dialogLiferAdress: false,
       dialogRechnungAdress: false,
       // items: personData[4],
@@ -332,17 +340,17 @@ export default {
           },
           editTitle: 'Rechnungsadresse ändern'
         }
-      ],
+      ]
     }
   },
   methods: {
-    confirm() {
+    confirm () {
       this.anzahlStep = this.anzahlStep + 1
     },
-    adressConfirm() {
+    adressConfirm () {
       this.showEditAdress = false
     },
-    handleClose() {
+    handleClose () {
       this.dialogLiferAdress = false
       this.dialogRechnungAdress = false
     }
@@ -351,7 +359,37 @@ export default {
 </script>
 
 <style scoped>
-.title {
+.active .notion {
+  background: #817163;
+
+}
+
+.notion{
+  width: 30px;
+  border-radius: 15px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid #817163;
+  box-sizing: border-box;
+}
+
+.name{
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 125%;
+  /* identical to box height, or 45px */
+
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+
+  color: #4C4C4C;
+}
+
+
+.va-title {
   font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: 600;

@@ -38,8 +38,9 @@ const routes = [
     component: () => import('../views/CreateNewOrder/CreateNewDress')
   },
   {
-    path: '/SampleOrder',
+    path: '/SampleOrder/:id',
     name: 'SampleOrder',
+    props: true,
     component: () => import('../views/Order/items/SampleOrder.vue')
   },
   {
@@ -73,7 +74,7 @@ const routes = [
         name: 'FAQ',
         // component: () => import("../views/LoginAndRegister/FAQPage")
         component: () => import("../fragments/FAQ")
-      },
+      }
 
     ]
   },
@@ -129,7 +130,7 @@ const routes = [
     path: '/edit/:dressId',
     name: 'edit',
     component: () => import('../views/MakeADress.vue'),
-    props:true,
+    props: true
   },
   {
     path: '/about',
