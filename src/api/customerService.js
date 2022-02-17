@@ -31,3 +31,6 @@ export async function customerInit (customer, weddingDate, likeAndHate, imgs) {
   return await hillo.post('/customer/init', {customer, weddingDate, likeAndHate, imgs})
 }
 
+export async  function resetPassword (token, newPassword) {
+  return await hillo.post('/customer/resetPassword', token, newPassword)
+}

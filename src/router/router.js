@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/registerComplete',
     name: 'registerComplete',
-    component: () => import('../views/LoginAndRegister/backup/RegisterComplete')
+    component: () => import('../views/LoginAndRegister/RegisterComplete')
   },
   {
     path: '/loginRegister',
