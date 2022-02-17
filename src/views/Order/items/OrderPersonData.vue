@@ -12,7 +12,7 @@
             </div>
 
             <div class="contentText">
-              <div>{{ items.title }}</div>
+              <div class="mb-2 v-caption">{{ items.title }}</div>
               <template v-for="(item,j) in items.data">
                 <div :key="'item'+j">
                   {{ item }}
@@ -187,11 +187,9 @@ export default {
           title: 'Rechnungsadresse',
           icon: 'mdi-home',
           data: {
-            vorname: 'Liqiong',
-            nachname: 'Wang',
-            stadt: 'Berlin',
+            vorname: 'Liqiong Wang',
             address: 'Teltower Damm 227B',
-            zipCode: '14177',
+            stadt: '14177 Berlin',
             country: 'Germany'
           },
           editTitle: 'Rechnungsadresse ändern'
@@ -201,13 +199,13 @@ export default {
   },
   methods: {
     handleButtonClick(items) {
-      console.log("dText", items)
+
       this.dialogBearbeit = true
       this.dText = items
       // this.items = items
     },
     dialogClose() {
-      this.dText = {},
+      this.dText = {}
       this.dialogBearbeit = false
     }
   }
@@ -215,6 +213,19 @@ export default {
 </script>
 
 <style scoped>
+.v-caption{
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 125%;
+  /* identical to box height, or 22px */
+
+  display: flex;
+  align-items: center;
+
+  color: #4C4C4C;
+}
 .contentText {
   font-family: Gill Sans Nova;
   font-style: normal;
