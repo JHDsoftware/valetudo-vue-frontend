@@ -6,27 +6,30 @@
     </div>
 
 
-    <div class="d-flex flex-column justify-center pt-12 flex-wrap align-center">
-      <div v-if="e1<2" style="text-align: center; width: 650px" class="question">
-        Hallo, bevor Sie mit dem Entwurf Ihres wunderschönen Hochzeitskleides beginnen, stellen wir Ihnen 3 Fragen, um Sie und Ihre Wünsche besser kennenzulernen.
+    <div class="d-flex flex-column justify-center flex-wrap align-center" style="top: 240px">
+
+      <div v-if="e1<2" style="text-align: center; width: 650px; " class="question">
+        Hallo, bevor Sie mit dem Entwurf Ihres wunderschönen Hochzeitskleides beginnen, stellen wir Ihnen 3 Fragen, um
+        Sie und Ihre Wünsche besser kennenzulernen.
       </div>
+
       <v-stepper v-model="e1" flat>
         <div style="width: 100%;" class="d-flex justify-center">
           <div class="d-flex align-center" style="width: 300px">
-            <v-stepper-step
-                :complete="e1 > 1"
-                step="1"
-            >
-            </v-stepper-step>
+
+            <div :style=" e1===1  ? {color: '#817163'} : {color: '#CCC6BB'}">
+              <span class="stepText">1</span>
+            </div>
+
             <v-divider></v-divider>
-            <v-stepper-step
-                :complete="e1 > 2"
-                step="2"
-            >
-            </v-stepper-step>
+
+            <div :style=" e1===2  ? {color: '#817163'} : {color: '#CCC6BB'}">
+              <span class="stepText">2</span>
+            </div>
             <v-divider></v-divider>
-            <v-stepper-step step="3">
-            </v-stepper-step>
+            <div :style=" e1===3  ? {color: '#817163'} : {color: '#CCC6BB'}">
+              <span class="stepText">3</span>
+            </div>
           </div>
         </div>
 
@@ -34,23 +37,43 @@
         <v-stepper-items>
           <v-stepper-content step="1">
             <div style="width: 633px;padding: 20px" class="d-flex justify-center flex-wrap">
-              <div class="questionText"> Wann ist Ihr Hochzeitsdatum und Ihr Datum der standesamtlichen Trauung?
-                <v-tooltip max-width="396px" bottom color="#f6f6f6">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                        class="ml-2"
-                        v-bind="attrs"
-                        v-on="on"
-                        large
-                        color="#CCC6BB"
-                        @click="showInfo=true"
-                    >
-                      mdi-help-circle-outline
-                    </v-icon>
-                  </template>
-                  <span class="tooltip px-4 py-2">Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.</span>
-                </v-tooltip>
+              <div class="d-flex">
+                <div class="questionText" style="width: 560px">
+                  Wann ist Ihr Hochzeitsdatum und Ihr Datum der standesamtlichen Trauung?
+                </div>
+
+                <div class="align-end">
+                  <v-icon
+                      class="ml-2"
+                      large
+                      color="#CCC6BB"
+                      @click="showInfo=true"
+                  >
+                    mdi-help-circle-outline
+                  </v-icon>
+                </div>
+
+                <v-dialog v-model="showInfo">
+                  <v-card>
+                    <v-card-text>
+                      Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.
+                    </v-card-text>
+                  </v-card>
+
+                  <v-card-actions>
+
+                  </v-card-actions>
+
+                </v-dialog>
+
+                <!--                <v-tooltip max-width="396px" bottom color="#f6f6f6">-->
+                <!--                  <template v-slot:activator="{ on, attrs }">-->
+
+                <!--                  </template>-->
+                <!--                  <span class="tooltip px-4 py-2"></span>-->
+                <!--                </v-tooltip>-->
               </div>
+
 
               <div class="" style="width: 290px;text-align: center">
                 <v-menu
@@ -61,9 +84,9 @@
                     offset-y
                     min-width="auto"
                 >
-<!--                  <template v-slot:activator="{ on }">-->
-<!--                    <v-text-field v-on="on"></v-text-field>-->
-<!--                  </template>-->
+                  <!--                  <template v-slot:activator="{ on }">-->
+                  <!--                    <v-text-field v-on="on"></v-text-field>-->
+                  <!--                  </template>-->
                   <template v-slot:activator="{ on }">
                     <v-text-field
                         class="buttonText mt-4"
@@ -175,9 +198,11 @@
       <v-spacer></v-spacer>
       <v-btn height="80px" width="100%" @click="e1++" elevation="0" color="#c4c4c4" dark>Weiter</v-btn>
     </div>
-    <v-dialog v-model="showInfo" width="50%" >
-      <v-card >
-        <div style="display: flex; justify-content: end"><v-icon>mdi-plus</v-icon></div>
+    <v-dialog v-model="showInfo" width="50%">
+      <v-card>
+        <div style="display: flex; justify-content: end">
+          <v-icon>mdi-plus</v-icon>
+        </div>
         <v-card-subtitle>
           Diese Informationen helfen uns, den Produktionszyklus Ihres Hochzeitskleides besser vorherzusagen.
         </v-card-subtitle>
@@ -229,31 +254,33 @@ export default {
 
 <style scoped>
 .questionText {
-  font-family: Inter;
+  font-family: Gill Sans Nova;
   font-style: normal;
-  font-weight: 500;
+  font-weight: normal;
   font-size: 36px;
-  line-height: 36px;
-  /* or 67% */
-  letter-spacing: -0.011em;
-  width: fit-content;
-
-}
-
-
-
-.question {
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 50px;
-  /* or 208% */
+  line-height: 125%;
+  /* or 45px */
 
   display: flex;
   align-items: center;
   text-align: center;
-  letter-spacing: 0.15em;
+
+  color: #4C4C4C;
+
+}
+
+
+.question {
+
+
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 125%;
+  /* or 30px */
+
+  letter-spacing: 0.05em;
 
   color: #4C4C4C;
 
@@ -279,6 +306,16 @@ export default {
   /* or 67% */
 
   letter-spacing: -0.011em;
+}
+
+.stepText {
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 69px;
+  text-align: center;
+
 
 }
 
