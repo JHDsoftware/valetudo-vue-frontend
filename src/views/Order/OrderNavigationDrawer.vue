@@ -45,7 +45,7 @@ export default {
           to: '/OrderIndex/FAQ'
         },
         {
-          title: 'KontaktUns',
+          title: 'Kontakt',
           to: '/OrderIndex/KontaktUns'
         }
       ]
