@@ -5,7 +5,15 @@
       <div class="questionLabel" style="width: 100%;text-align: center">Gib deinem Kleid zuerst einen Namen</div>
       <div style="width: 587px">
         <v-text-field v-model="name" class="buttonText2 text-center" style="margin-top: 36px"/>
-        <v-btn @click="createNewDesign" block tile height="60px" class="mt-4" color="#e0ddd6" elevation="0">
+        <v-btn @click="createNewDesign"
+               block tile
+               height="60px"
+               class="mt-4"
+
+               :color="name ? '#817163' : '#C4C4C4'"
+               elevation="0"
+               style="text-transform: none; color: white; font-size: 24px"
+        >
           Confirm, start to design!
         </v-btn>
       </div>
