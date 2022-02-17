@@ -1,7 +1,7 @@
 <template>
   <div class="imgContainer" style="width: 100%;position: relative;">
     <v-img class="partImg model"  width="92.97%"
-           :src="require('@/assets/image/structure/model/'+(isFrontView?'frontModel.png':'backModel.png'))">
+           :src="'/model/'+(isFrontView?'frontModel.png':'backModel.png')">
     </v-img>
 
     <v-img style="z-index: 2" class="partImg top" width="92.97%"
@@ -119,7 +119,6 @@ export default {
   methods: {
     findDefaultPartInImageSet (partName, selectedParts, excludeFilter = () => true) {
       const targetSet = [partName, this.currentView, ...selectedParts]
-      console.log(targetSet)
       return availablePicSet.filter(excludeFilter).find(s => targetSet.every(p => s.includes(p))) ?? null
     },
     filterPartsWithMask (mask = [], pageFilter = 0) {

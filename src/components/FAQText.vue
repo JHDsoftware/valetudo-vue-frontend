@@ -3,15 +3,13 @@
        class="textFamily"
        @click="show=!show">
     <div style="padding-right: 40px; padding-left: 40px; width: 100%">
-      <!--      <div style="padding-bottom: 8px" class="text36">{{ title }}</div>-->
-
       <div class="d-flex justify-space-between" style="height: 60px;">
         <span class="text24">{{ question }}</span>
         <v-icon v-if="show">mdi-plus</v-icon>
         <v-icon v-else>mdi-minus</v-icon>
       </div>
 
-      <div v-if="!show" style="height: 60px;" class="text24">
+      <div v-if="!show" style="min-height: 60px;padding:12px 0" class="text24">
         {{ answer }}
       </div>
 
