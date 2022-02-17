@@ -14,7 +14,7 @@
 export default {
   name: "OrderIndex",
   components: {
-    OrderNavigationDrawer: () => import('./items/OrderNavigationDrawer')
+    OrderNavigationDrawer: () => import('./OrderNavigationDrawer')
   }
 }
 </script>

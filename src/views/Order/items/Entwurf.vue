@@ -174,12 +174,12 @@
 
                   <valet-input-text-field
                       title="Vorname*"
-                      v-model="firstname"
+                      v-model="firstName"
                   ></valet-input-text-field>
 
                   <valet-input-text-field
                       title="Name*"
-                      v-model="lastname"
+                      v-model="lastName"
                   ></valet-input-text-field>
 
                   <valet-input-text-field
@@ -243,28 +243,13 @@ export default {
       showdress: false,
       showKontakt: false,
       showCompleteTip: false,
-      menuRouter: [
-        {
-          title: 'Dein Entwurf',
-          to: '/OrderIndex/Entwurf'
-        },
-        {
-          title: 'Deine Bestellung',
-          to: '/OrderIndex/OrderBestellung'
-        },
-        {
-          title: 'Persönliche Daten',
-          to: '/OrderIndex/OrderPersonData',
-        },
-        {
-          title: 'FAQ',
-          to: '/OrderIndex/FAQ'
-        },
-        {
-          title: 'KontaktUns',
-          to: '/OrderIndex/KontaktUns'
-        }
-      ]
+      firstName: "",
+      lastName: "",
+      city: "",
+      phone: "",
+      email: "",
+      password: "",
+      passwordRepeat: "",
 
     };
   },

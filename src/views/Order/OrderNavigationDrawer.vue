@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {getMyDesign} from '../../../api/dressDesginService'
+import {getMyDesign} from '../../api/dressDesginService'
 // import DressDisplay from "@/views/DressDisplay";
 // import ValetInputTextField from "../../../components/ValetInputTextField";
 // import ValetButton from "../../../components/ValetButton";

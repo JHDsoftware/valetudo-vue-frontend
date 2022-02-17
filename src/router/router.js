@@ -45,6 +45,7 @@ const routes = [
   {
     path: '/OrderIndex',
     // name: 'OrderIndex',
+    redirect: '/OrderIndex/Entwurf',
     component: () => import('../views/Order/OrderIndex'),
     children: [
       {
