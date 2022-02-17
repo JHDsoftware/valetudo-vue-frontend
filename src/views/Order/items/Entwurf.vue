@@ -266,38 +266,6 @@ export default {
 </script>
 
 <style scoped>
-.navHeader {
-  font-family: Palanquin, serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 35px;
-  line-height: 63px;
-  color: #CCC6BB;
-}
-
-.navItem {
-  font-family: Gill Sans Nova;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 125%;
-  /* identical to box height, or 30px */
-
-  display: flex;
-  align-items: flex-end;
-
-  color: #CCC6BB;
-
-}
-
-.navItem:hover {
-  color: #817163;
-  border-bottom: 3px solid #817163;
-}
-
-.navItem.active {
-  border-bottom: 3px solid #817163;
-}
 
 .noContent {
   width: 311px;

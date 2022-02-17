@@ -20,7 +20,7 @@ align-items: center;
 letter-spacing: -0.011em;
 
 color: #817163;">
-              Joan & D
+              {{ dressName }}
             </div>
             <div style="font-family: Gill Sans Nova;
 font-style: normal;
@@ -34,7 +34,7 @@ text-align: right;
 letter-spacing: -0.011em;
 
 color: #817163;">
-              Created at 05. Marz. 2021
+              Created at {{ dressDate }}
             </div>
             <div style="font-family: Gill Sans Nova;
 font-style: normal;
@@ -49,7 +49,7 @@ margin-top: 51px;
 color: #817163;">
               Nice piece! Do you want to make it ture? In Valetudo, you can find personal consultant (free of charge for the first appoinement), you can also order samples of lace and fabrics online. That would be our pleasuere to realize your dream dress with you!
             </div>
-            <valet-button to="/OrderIndex/Entwurf" style="margin-top: 51px" button-text="Check your dress in your account">
+            <valet-button @click="$router.push('/OrderIndex/Entwurf')" style="margin-top: 51px" button-text="Check your dress in your account">
             </valet-button>
           </div>
         </div>
@@ -210,6 +210,7 @@ import { views } from '../api/dressDisplayRule'
 import { getDressPartList, refreshCurrentPartInfo } from '../api/dressPartService'
 import { loadDesign, setDressComplete, updateMyDesignParts } from '../api/dressDesginService'
 import ValetButton from '../components/ValetButton'
+import dayjs from 'dayjs'
 
 const parts = [
   {
@@ -249,7 +250,9 @@ export default {
       showDressFinishConfirm: null,
       showLoading: null,
       refreshCounter: 0,
-      finished:true,
+      finished:false,
+      dressName:"",
+      dressDate:""
     }
   },
   computed: {
@@ -267,8 +270,9 @@ export default {
     async finishDesign () {
       this.showLoading = true
       try {
-        const res = await setDressComplete(this.dressId)
-        console.log(res)
+        const {name,completedAt}=await setDressComplete(this.dressId)
+        this.dressName=name
+        this.dressDate=dayjs(completedAt).format('DD. MMM. YYYY')
         this.finished=true
       } catch (e) {
         console.log(e)
@@ -284,7 +288,6 @@ export default {
       console.log("------>")
     },
     changeView () {
-      console.log("change")
       this.dressLoading=true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
       setTimeout(()=>{
@@ -306,7 +309,6 @@ export default {
       })
       const currentPart = Object.values(this.selectedPart).map(p => p.partId)
       this.currentMask = await refreshCurrentPartInfo(currentPart)
-      console.log(currentPart)
       await updateMyDesignParts(this.dressId, currentPart)
       this.refreshCounter++
       if (toggle) {

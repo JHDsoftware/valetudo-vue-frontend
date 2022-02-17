@@ -1,12 +1,12 @@
 <template>
-  <v-app>
-    <v-navigation-drawer width="240px" app>
-      <order-navigation-drawer/>
-    </v-navigation-drawer>
-    <v-content class="pa-0">
+  <div style="position: relative;">
+    <order-navigation-drawer style="position: fixed;top: 60px;left: 0;"/>
+    <div
+        style="position: absolute; left: 240px;right: 0;">
       <router-view/>
-    </v-content>
-  </v-app>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -20,5 +20,6 @@ export default {
 </script>
 
 <style scoped>
+
 
 </style>

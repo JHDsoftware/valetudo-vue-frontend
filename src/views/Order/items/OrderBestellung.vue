@@ -1,38 +1,32 @@
 <template>
   <div>
+    <v-simple-table>
+      <thead style="height: 90px;background: #e0ddd6;color:  #6F6154;">
+      <tr>
+        <th>Bestellnummber </th>
+        <th>Bestelldatum </th>
+        <th>Artikel </th>
+        <th>Name des Kleides </th>
+        <th>Anzahl </th>
+        <th>Gesamtsumme </th>
+        <th>Bezahlstatus </th>
+        <th>action </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Bestellnummber </td>
+        <td>Bestelldatum </td>
+        <td>Artikel </td>
+        <td>Name des Kleides </td>
+        <td>Anzahl </td>
+        <td>Gesamtsumme </td>
+        <td>Bezahlstatus </td>
+        <td>Action </td>
+      </tr>
 
-    <!--    <div class="Header" style="display: grid; grid-template-columns: repeat(8, 1fr); height: 90px">-->
-    <!--      <template v-for="(head,ind) in headers">-->
-    <!--        <span :key="'bestellung'+ind" class="d-flex align-center justify-center">{{ head }}</span>-->
-    <!--      </template>-->
-    <!--    </div>-->
-
-    <v-data-table
-        :headers="headers"
-        :items="items"
-    >
-      <template v-slot:item.bStatus="{item}">
-        <v-checkbox
-            v-model="item.bStatus"
-            hide-details>
-
-        </v-checkbox>
-      </template>
-      <template v-slot:item.action="{item}">
-        <v-btn style="color: #817163" width="266px">
-          {{ item.actionTitle }}
-        </v-btn>
-      </template>
-
-    </v-data-table>
-    <!--    <div v-for="(item,ind) in items" :key="'body'+ind">-->
-    <!--        <template v-for="(body,index) in item">-->
-    <!--          <div :key="'bestell'+index" class="d-flex align-center justify-center">{{ body }}</div>-->
-    <!--          <v-btn>Kontakt uns</v-btn>-->
-    <!--        </template>-->
-    <!--    </div>-->
-
-
+      </tbody>
+    </v-simple-table>
   </div>
 </template>
 
@@ -86,7 +80,17 @@ export default {
 </script>
 
 <style scoped>
-.Header {
-  background: #E0DDD6;
+
+td,th{
+  text-align: center !important;
+  border-bottom: 1px solid #817163 !important;
+}
+th{
+  border-bottom: 1px solid #817163 !important;
+  box-shadow: 0px 4px 4px rgba(204, 198, 187, 0.85);
+}
+
+td{
+  height: 120px !important;
 }
 </style>
