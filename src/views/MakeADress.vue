@@ -337,11 +337,5 @@ export default {
   border-bottom: 1px solid black;
 }
 
-.partImg {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  margin: auto
-}
+
 </style>
