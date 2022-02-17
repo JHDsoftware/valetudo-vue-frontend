@@ -1,9 +1,10 @@
 <template>
   <div style="display: grid;grid-template-columns: 50% 50%;overflow: hidden">
     <v-sheet
-        style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9">
-      <dress-display :refresh-counter="refreshCounter" :dress-id="dressId"/>
-      <div style="position: absolute;right: 46px;bottom: 8px;">
+        class="px-8"
+        style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9;">
+      <dress-display v-if="!dressLoading" :refresh-counter="refreshCounter" :dress-id="dressId" :current-view="currentView" style="height: 100%"/>
+      <div style="position: absolute;right: 46px;bottom: 8px; z-index: 100">
         <div class="roundFab">
           <v-img :src="require('@/assets/image/frameUI/zoom-in.png')"></v-img>
         </div>
@@ -43,7 +44,7 @@
               <v-item-group mandatory>
                 <div style="display: grid;grid-template-columns: repeat(7,1fr)">
                   <template v-for="option in item.filteredPart">
-                    <v-item :key="option.code" v-slot="{active,toggle}">
+                    <v-item :key="option.code+option.id" v-slot="{active,toggle}">
                       <div class="weddingItem"
                            @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
                            :class="active?' active':''">
@@ -182,6 +183,7 @@ export default {
       selectedPart: {},
       currentMask: [],
       loading: true,
+      dressLoading:false,
       showDressFinishConfirm: null,
       showLoading: null,
       refreshCounter: 0
@@ -218,7 +220,12 @@ export default {
       console.log("------>")
     },
     changeView () {
+      console.log("change")
+      this.dressLoading=true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
+      setTimeout(()=>{
+        this.dressLoading=false
+      },400)
     },
     async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
       this.logSelectedParts()
