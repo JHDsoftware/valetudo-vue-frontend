@@ -44,6 +44,7 @@
 import ValetInputTextField from "@/components/ValetInputTextField";
 import ValetButton from "@/components/ValetButton";
 import ValetSnackBar from "@/components/ValetSnackBar";
+import {resetPassword} from "../../api/customerService";
 
 export default {
   name: "SetPassword",
@@ -53,14 +54,26 @@ export default {
       snackbar: false,
       snackbarText: '',
       password: null,
-      confirmPassword: null
+      confirmPassword: null,
+      token: localStorage.getItem('token')
     }
   },
   methods:{
+
     handle(){
       if(this.password !=this.confirmPassword){
         this.snackbar=true
         this.snackbarText="Die beide Password sind nicht gleich"
+      }
+      else {
+        const  res = resetPassword(this.token, this.password)
+        if(res.code === 200){
+          this.$router.push('/SetPasswordComplete')
+        }
+        else {
+          this.snackbar=true
+          this.snackbarText="Ein Fehler war erschienen."
+        }
       }
 
     }
