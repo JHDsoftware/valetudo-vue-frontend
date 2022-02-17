@@ -49,8 +49,7 @@ margin-top: 51px;
 color: #817163;">
               Nice piece! Do you want to make it ture? In Valetudo, you can find personal consultant (free of charge for the first appoinement), you can also order samples of lace and fabrics online. That would be our pleasuere to realize your dream dress with you!
             </div>
-            <valet-button style="margin-top: 51px" button-text="Check your dress in your account">
-
+            <valet-button to="/OrderIndex/Entwurf" style="margin-top: 51px" button-text="Check your dress in your account">
             </valet-button>
           </div>
         </div>
@@ -270,6 +269,7 @@ export default {
       try {
         const res = await setDressComplete(this.dressId)
         console.log(res)
+        this.finished=true
       } catch (e) {
         console.log(e)
       } finally {

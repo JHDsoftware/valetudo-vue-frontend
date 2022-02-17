@@ -73,7 +73,7 @@
 
       <div>MakeADress：</div>
       <v-list-item>
-        <div @click="$router.push('/DressDisplay')" style="border-bottom: 1px solid grey">MakeADress</div>
+        <div @click="$router.push('/MakeADress')" style="border-bottom: 1px solid grey">MakeADress</div>
       </v-list-item>
 
     </v-card>
