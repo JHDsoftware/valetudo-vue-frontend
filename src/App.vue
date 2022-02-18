@@ -5,7 +5,7 @@
       <div >
         <span class="appHeaderValetudo">VALETUDO</span> <span class="appHeaderMyDress" style="width: available">My Dress</span>
       </div>
-      <div style="position: fixed;right: 43px;top:22px" class="d-flex">
+      <div style="position: fixed;right: 63px;top:22px" class="d-flex">
         <router-link class="flatButton" to="/">Login/Register</router-link>
         <router-link class="flatButton" to="/order" style="margin-left: 32px">Konto</router-link>
       </div>
