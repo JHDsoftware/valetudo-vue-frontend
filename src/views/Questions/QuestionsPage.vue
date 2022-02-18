@@ -217,7 +217,7 @@ export default {
   data: function () {
     return {
       isReady: false,
-      e1: 3,
+      e1: 1,
       activePicker: null,
       date: null,
       budget: null,

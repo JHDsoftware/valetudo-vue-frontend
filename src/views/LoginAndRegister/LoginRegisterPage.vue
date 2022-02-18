@@ -31,10 +31,6 @@
         ></ValetButton>
 
 
-        <div style="color: red; border-bottom: 1px solid grey; margin-top: 60px;"
-             @click="$router.push('temporaryGuid')">
-          *内部开发测试页面总览
-        </div>
       </div>
 
     </div>

@@ -27,7 +27,8 @@
       <div>
         <template v-if="anzahlStep === 1">
           <div style="padding-top: 96px">
-            <div style="display: grid;grid-template-columns: repeat(4,1fr);width: 100% ;border-bottom: 1px solid #8F8F8F; padding-bottom: 8px">
+            <div
+                style="display: grid;grid-template-columns: repeat(4,1fr);width: 100% ;border-bottom: 1px solid #8F8F8F; padding-bottom: 8px">
               <div>
                 <div class="unterTitle24">ARTIKEL</div>
                 <div>
@@ -41,11 +42,11 @@
               </div>
               <div class="d-flex flex-column align-center">
                 <div class="unterTitle24">ANZAHL</div>
-                <v-select style="width: 120px" v-model="amount" outlined hide-details :items="selectItems" ></v-select>
+                <v-select style="width: 120px" v-model="amount" outlined hide-details :items="selectItems"></v-select>
               </div>
               <div class="d-flex align-end flex-column">
                 <div class="unterTitle24">PREIS</div>
-                <div class="unterTitle36">{{ price.toFixed(2).replace(".",",")+" €" }}</div>
+                <div class="unterTitle36">{{ price.toFixed(2).replace(".", ",") + " €" }}</div>
               </div>
             </div>
 
@@ -125,46 +126,55 @@ line-height: 125%;
 
 text-transform: uppercase;
 
-color: #4C4C4C;">ZAHLUNGSART</div>
+color: #4C4C4C;">ZAHLUNGSART
+                </div>
                 <div class="mt-4">
                   <v-item-group mandatory>
                     <v-item #default="{active,toggle}">
                       <div class="d-flex align-baseline" @click="toggle" :class="active?'active':''">
-                        <div class="notion" ></div>
+                        <div class="notion"></div>
                         <div class="ml-3 flex-grow-1">
                           <div class="d-flex justify-space-between">
                             <div class="name">PayPal</div>
-                            <div class="image" style="width: 170px"><v-img :src="require('@/assets/image/frameUI/paypal.png')"></v-img></div>
+                            <div class="image" style="width: 170px">
+                              <v-img :src="require('@/assets/image/frameUI/paypal.png')"></v-img>
+                            </div>
                           </div>
-                          <div v-if="active" class="hint mt-3">Du wirst an PayPal weitergeleitet, um den Bezahlvorgang abzuschließen.</div>
+                          <div v-if="active" class="hint mt-3">Du wirst an PayPal weitergeleitet, um den Bezahlvorgang
+                            abzuschließen.
+                          </div>
                         </div>
                       </div>
 
                     </v-item>
                     <v-item #default="{active,toggle}">
                       <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
-                        <div class="notion" ></div>
+                        <div class="notion"></div>
                         <div class="ml-3 flex-grow-1">
                           <div class="d-flex justify-space-between">
                             <div class="name">Rechnung</div>
                           </div>
-                          <div v-if="active" class="hint mt-3">Der Rechnungsbetrag wird erst innerhalb von 14 Tagen nach der Versandbestätigung per E-Mail
-                            fällig.</div>
+                          <div v-if="active" class="hint mt-3">Der Rechnungsbetrag wird erst innerhalb von 14 Tagen nach
+                            der Versandbestätigung per E-Mail
+                            fällig.
+                          </div>
                         </div>
                       </div>
 
                     </v-item>
                     <v-item #default="{active,toggle}">
                       <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
-                        <div class="notion" ></div>
+                        <div class="notion"></div>
                         <div class="ml-3 flex-grow-1">
                           <div class="d-flex justify-space-between">
                             <div class="name">Vorkasse</div>
                           </div>
-                          <div v-if="active" class="hint mt-3">Nachdem du deine Bestellung aufgegeben hast, senden wir dir die Informationen zur
+                          <div v-if="active" class="hint mt-3">Nachdem du deine Bestellung aufgegeben hast, senden wir
+                            dir die Informationen zur
                             Banküberweisung per E-Mail. Wir können deine Artikel nur für 7 Tage reservieren. Bitte halte
                             dieses Zeitfenster ein. Je eher wir deine Zahlung erhalten, desto schneller wird deine
-                            Bestellung verschickt.</div>
+                            Bestellung verschickt.
+                          </div>
                         </div>
                       </div>
 
@@ -175,9 +185,47 @@ color: #4C4C4C;">ZAHLUNGSART</div>
             </div>
             <div style="height: 100%;border-right: 1px solid #000000;"></div>
             <div style="width: 50%">
-              <v-card width="40vw" class="d-flex justify-center" flat>
+              <v-card width="40vw" class="d-flex justify-center" flat style="margin-left: 100px ">
                 <div>
                   <div style="font-weight: 600; font-size: 24px;">BESTELLÜBERSICHT</div>
+
+                  <v-card  width="30vw" flat tile style="padding-right: 20px">
+
+                      <div class="d-flex justify-space-between"
+                           style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #AFA69D; margin-top: 39px">
+                        {{ personData[3].title }}
+                        <v-icon>mdi-pencil</v-icon>
+                      </div>
+
+                    <div style="font-size: 24px; padding-top: 8px">
+
+                      <div>{{personData[3].data.vorname}} {{personData[3].data.nachname}}</div>
+                      <div>{{personData[3].data.address}}</div>
+                      <div>{{personData[3].data.zipCode}} {{personData[3].data.stadt}}</div>
+                      <div>{{personData[3].data.country}} </div>
+                    </div>
+
+                    <div class="d-flex justify-space-between unterTitle24"
+                         style="border-bottom: 2px solid #AFA69D; font-size: 24px; font-weight: bold; padding-top: 17px" >
+                      Bestellt
+                    </div>
+
+                    <div class="d-flex justify-space-between unterTitle24" style="padding-top: 8px">
+                      <div>Musterbox</div>
+                      <div style="font-weight: bold">29,99 €</div>
+                    </div>
+
+                    <div class="d-flex justify-space-between unterTitle24" style="border-bottom: 1px solid #AFA69D; padding-top: 8px">
+                      <div>Versand</div>
+                      <div style="font-weight: bold">0,00 €</div>
+                    </div>
+
+                    <div class="d-flex justify-space-between unterTitle24" style="font-size: 24px; padding-top: 15px">
+                      <div>Gesamtsumme inkl.MwSt.</div>
+                      <div style="font-weight: bold">29,99 €</div>
+                    </div>
+                  </v-card>
+
                   <div style="   padding-top: 40px">
                     <ValetButton button-text="Bestätigen und bezahlen" @click="confirm"/>
                   </div>
@@ -205,7 +253,7 @@ color: #4C4C4C;">ZAHLUNGSART</div>
                 </v-card>
               </div>
               <div class="d-flex justify-center" style="padding-top: 24px">
-                <v-card  class="text-center" flat>
+                <v-card class="text-center" flat>
                   <ValetButton style="width: 540px" button-text="Bestellung Ansehen"/>
 
                 </v-card>
@@ -258,22 +306,22 @@ export default {
   name: "SampleOrder",
   components: {FormAdress, ValetButton},
   computed: {
-    items () {
+    items() {
       const res = this.personData[4]
       console.log("items", res)
       return res
     },
-    price(){
-      return (this.amount??1)*29.99
+    price() {
+      return (this.amount ?? 1) * 29.99
     }
   },
   props: {id: {}},
-  mounted () {
+  mounted() {
 
   },
-  data () {
+  data() {
     return {
-      amount:1,
+      amount: 1,
       dialogLiferAdress: false,
       dialogRechnungAdress: false,
       // items: personData[4],
@@ -344,13 +392,13 @@ export default {
     }
   },
   methods: {
-    confirm () {
+    confirm() {
       this.anzahlStep = this.anzahlStep + 1
     },
-    adressConfirm () {
+    adressConfirm() {
       this.showEditAdress = false
     },
-    handleClose () {
+    handleClose() {
       this.dialogLiferAdress = false
       this.dialogRechnungAdress = false
     }
@@ -364,7 +412,7 @@ export default {
 
 }
 
-.notion{
+.notion {
   width: 30px;
   border-radius: 15px;
   height: 30px;
@@ -373,7 +421,7 @@ export default {
   box-sizing: border-box;
 }
 
-.name{
+.name {
   font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: 600;
