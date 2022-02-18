@@ -275,7 +275,7 @@ export default {
   },
   methods: {
     toOrderPage(id){
-      this.$router.push({path:'/SampleOrder',params:{id}})
+      this.$router.push({path:'/SampleOrder/'+id})
     },
     showPriceQuestionDialog () {
       this.showKontakt = false

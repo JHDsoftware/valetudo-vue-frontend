@@ -227,7 +227,7 @@ color: #4C4C4C;">ZAHLUNGSART
                   </v-card>
 
                   <div style="   padding-top: 40px">
-                    <ValetButton button-text="Bestätigen und bezahlen" @click="confirm"/>
+                    <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
                   </div>
                 </div>
 
@@ -300,6 +300,7 @@ color: #4C4C4C;">ZAHLUNGSART
 <script>
 import ValetButton from "../../../components/ValetButton"
 import FormAdress from "../../../fragments/FormAdress"
+import { placeAndPaySampleOrder } from '../../../api/dressDesginService'
 
 
 export default {
@@ -315,8 +316,8 @@ export default {
       return (this.amount ?? 1) * 29.99
     }
   },
-  props: {id: {}},
-  mounted() {
+  props: {id: {},status:{}},
+  mounted () {
 
   },
   data() {
@@ -395,7 +396,11 @@ export default {
     confirm() {
       this.anzahlStep = this.anzahlStep + 1
     },
-    adressConfirm() {
+    async tryToPaySampleOrder () {
+      console.log(this.id, '要支付的订单ID')
+      location.href=await placeAndPaySampleOrder(this.id)
+    },
+    adressConfirm () {
       this.showEditAdress = false
     },
     handleClose() {
