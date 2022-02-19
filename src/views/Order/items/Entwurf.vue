@@ -32,7 +32,7 @@
             </div>
 
             <div>
-              <div class="dressContainer d-flex justify-center align-center">
+              <div @click="$router.push('/questionspage')" class="dressContainer d-flex justify-center align-center">
                 <div class="noContent">
                   <div class="bigHint">Design more for 19.99 €</div>
                   <v-btn block tile height="52px" color="#e0ddd6" class="mt-4" elevation="0">Start</v-btn>

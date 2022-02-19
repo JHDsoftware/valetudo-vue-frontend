@@ -2,8 +2,9 @@
   <v-app>
     <v-app-bar height="60px" app class="d-flex justify-center" flat
                style="border-bottom: 1px solid #817163;background-color: white">
-      <div >
-        <span class="appHeaderValetudo">VALETUDO</span> <span class="appHeaderMyDress" style="width: available">My Dress</span>
+      <div class="d-flex align-center">
+        <v-img width="118px" :src="require('@/assets/image/frameUI/logoFront.png')"></v-img>
+        <v-img width="80px" class="ml-2" :src="require('@/assets/image/frameUI/logoBack.png')"></v-img>
       </div>
       <div style="position: fixed;right: 63px;top:22px" class="d-flex">
         <router-link class="flatButton" to="/">Login/Register</router-link>

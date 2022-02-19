@@ -38,11 +38,12 @@
               </div>
               <div class="d-flex flex-column align-center">
                 <div class="unterTitle24">BRAUTKLEID</div>
-                <div class="unterTitle36">Anni</div>
+                <div class="unterTitle36">{{ productInfo&&productInfo.name }}</div>
               </div>
               <div class="d-flex flex-column align-center">
                 <div class="unterTitle24">ANZAHL</div>
-                <v-select style="width: 120px" v-model="amount" outlined hide-details :items="selectItems"></v-select>
+                <v-select style="width: 120px" v-model="amount"
+                          outlined hide-details :items="selectItems"></v-select>
               </div>
               <div class="d-flex align-end flex-column">
                 <div class="unterTitle24">PREIS</div>
@@ -300,7 +301,7 @@ color: #4C4C4C;">ZAHLUNGSART
 <script>
 import ValetButton from "../../../components/ValetButton"
 import FormAdress from "../../../fragments/FormAdress"
-import { placeAndPaySampleOrder } from '../../../api/dressDesginService'
+import { loadDesign, placeAndPaySampleOrder } from '../../../api/dressDesginService'
 
 
 export default {
@@ -317,15 +318,16 @@ export default {
     }
   },
   props: {id: {},status:{}},
-  mounted () {
-
+  async mounted () {
+    this.productInfo=await loadDesign(this.id)
+    console.log(this.productInfo)
   },
   data() {
     return {
       amount: 1,
       dialogLiferAdress: false,
       dialogRechnungAdress: false,
-      // items: personData[4],
+      productInfo:null,
       refreshButtonFlag: false,
       showEditAdress: true,
       anzahlStep: 1,
