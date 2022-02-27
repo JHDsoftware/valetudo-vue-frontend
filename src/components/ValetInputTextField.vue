@@ -8,10 +8,12 @@
 
       <v-text-field
           outlined
-          style="borderRadius : 0; width: 100%; height: 60px;"
+          style="borderRadius : 0; width: 100%; "
+          :style="customHeight? {'height':customHeight} : {'height': '60px'}"
           :rules="useRule? [rules.required] : []"
           v-model="localValue"
           :type="type"
+          :hide-details="hideDetails"
       />
 <!--      :style="useStyle ? {border: '2px solid #4C4C4C'} : {}"-->
 
@@ -48,7 +50,15 @@ export default {
       default: ''
     },
     widthInput: {},
-    rulesInput: {}
+    rulesInput: {},
+    hideDetails: {
+      type: Boolean,
+      default: false
+    },
+    customHeight:{
+      type:String,
+      default: ''
+    }
   },
   watch:{
     localValue(val){

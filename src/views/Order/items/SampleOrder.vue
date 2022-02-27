@@ -65,6 +65,7 @@
             <template v-if="showEditAdress">
               <FormAdress title="Lieferadresse"
                           style="font-size: 24px; padding-bottom: 8px;"
+                          v-model="lieferAddressForm"
                           button-text="Speichern und weiter"
                           @click="adressConfirm"/>
             </template>
@@ -118,16 +119,7 @@
           <div style="display: grid;grid-template-columns: 540px 1px 540px;grid-gap: 100px">
             <div>
               <v-card height="30vh" flat>
-                <div style="font-family: Gill Sans Nova;
-font-style: normal;
-font-weight: 600;
-font-size: 24px;
-line-height: 125%;
-/* identical to box height, or 30px */
-
-text-transform: uppercase;
-
-color: #4C4C4C;">ZAHLUNGSART
+                <div style="text-transform: uppercase; color: #4C4C4C;" class="unterTitle24">ZAHLUNGSART
                 </div>
                 <div class="mt-4">
                   <v-item-group mandatory>
@@ -366,7 +358,7 @@ export default {
           editTitle: 'Passwort ändern'
         },
         {
-          title: 'Lieferaddresse',
+          title: 'Lieferadresse',
           icon: 'mdi-home',
           data: {
             vorname: 'Liqiong',
@@ -391,7 +383,16 @@ export default {
           },
           editTitle: 'Rechnungsadresse ändern'
         }
-      ]
+      ],
+      lieferAddressForm: {
+        vorname: '',
+        nachname: '',
+        address: '',
+        zusatzAdress: '',
+        zipCode: '',
+        stadt: '',
+        country: ''
+      }
     }
   },
   methods: {

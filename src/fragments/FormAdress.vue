@@ -14,14 +14,32 @@
       </div>
     </template>
 
-    <ValetInputTextField title="Vorname*" width-input="266px" v-model="localForm.vorname"/>
-    <ValetInputTextField title="Name*" width-input="266px" v-model="localForm.nachname"/>
-    <ValetInputTextField title="Adresse*" width-input="540px" v-model="localForm.address"
+    <ValetInputTextField title="Vorname*"
+                         width-input="266px"
+                         :customHeight="customHeight"
+                         v-model="localForm.vorname"/>
+    <ValetInputTextField title="Name*"
+                         width-input="266px"
+                         :customHeight="customHeight"
+                         v-model="localForm.nachname"/>
+    <ValetInputTextField title="Adresse*"
+                         width-input="540px"
+                         :customHeight="customHeight"
+                         v-model="localForm.address"
                          style="grid-column: 1/3"/>
-    <ValetInputTextField title="Zusätzliche Adresse" width-input="540px" v-model="localForm.zusatzAdress"
+    <ValetInputTextField title="Zusätzliche Adresse"
+                         width-input="540px"
+                         :customHeight="customHeight"
+                         v-model="localForm.zusatzAdress"
                          style="grid-column: 1/3"/>
-    <ValetInputTextField title="PLZ*" width-input="266px" v-model="localForm.zipCode"/>
-    <ValetInputTextField title="Stadt*" width-input="266px" v-model="localForm.stadt"/>
+    <ValetInputTextField title="PLZ*"
+                         width-input="266px"
+                         :customHeight="customHeight"
+                         v-model="localForm.zipCode"/>
+    <ValetInputTextField title="Stadt*"
+                         :customHeight="customHeight"
+                         width-input="266px"
+                         v-model="localForm.stadt"/>
     <div class="mt-1">{{ localForm.country }}</div>
     <ValetButton :buttonText="buttonText" style="grid-column: 1/3; margin-top: 24px"
                  @click="$emit('click',true)"></ValetButton>
@@ -63,25 +81,32 @@ export default {
     useClose: {
       type: Boolean,
       default: false
+    },
+    customHeight:{
+      type: String,
+      default: ''
     }
 
   },
+  watch:{
+    localForm(val){
+      this.$emit('input',val)
+    },
+    value:{
+      immediate: true,
+      handler(val){
+        this.localForm=Object.assign({}, defaultForm, val)
+      }
+    }
+  },
   data () {
     return {
-      localForm: {
-        vorname: '',
-        nachname: '',
-        address: '',
-        zusatzAdress: '',
-        zipCode: '',
-        stadt: '',
-        country: ''
-      }
+      localForm: Object.assign({}, defaultForm, this.value)
     }
   },
 
   mounted () {
-    this.localForm = Object.assign({}, defaultForm, this.form)
+    // this.localForm = Object.assign({}, defaultForm, this.form)
   }
 }
 </script>
