@@ -5,25 +5,9 @@
     </template>
 
     <div @click="clickButton"
-         class="d-flex justify-center align-center"
-         style="font-family: Gill Sans Nova;
-font-style: normal;
-font-weight: normal;
-font-size: 24px;
-line-height: 10px;
-/* or 42% */
-width: 100%;
-height: 60px;
-background: #817163;
-
-text-align: center;
-letter-spacing: -0.011em;
-
-color: #FFFFFF;
-border-radius: 0px; text-transform: none;
-"
+         class="d-flex justify-center align-center label24"
     >
-      <span >
+      <span>
       {{ buttonText }}
     </span>
     </div>
@@ -47,7 +31,7 @@ export default {
     type: {},
     value: {}
   },
-  model:{
+  model: {
     prop: "value",
     event: "input"
   },
@@ -81,6 +65,26 @@ export default {
   align-items: start;
 
   color: #4C4C4C;
+}
+
+.label24 {
+  font-family: Gill Sans Nova;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 10px;
+  /* or 42% */
+  width: 100%;
+  height: 60px;
+  background: #817163;
+
+  text-align: center;
+  letter-spacing: -0.011em;
+
+  color: #FFFFFF;
+  border-radius: 0px;
+  text-transform: none;
+
 }
 
 .label12 {

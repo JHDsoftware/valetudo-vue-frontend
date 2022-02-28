@@ -5,7 +5,7 @@
 
     <template v-if="useClose">
       <div style="position: absolute; right: 0px; top:24px">
-        <v-icon x-large @click="$emit('closeButton')">mdi-close</v-icon>
+        <v-icon x-large @click="handelClose">mdi-close</v-icon>
       </div>
     </template>
     <template v-if="title">
@@ -30,6 +30,7 @@
     <ValetInputTextField title="Zusätzliche Adresse"
                          width-input="540px"
                          :customHeight="customHeight"
+                         :useRule="false"
                          v-model="localForm.zusatzAdress"
                          style="grid-column: 1/3"/>
     <ValetInputTextField title="PLZ*"
@@ -41,8 +42,9 @@
                          width-input="266px"
                          v-model="localForm.stadt"/>
     <div class="mt-1">{{ localForm.country }}</div>
+
     <ValetButton :buttonText="buttonText" style="grid-column: 1/3; margin-top: 24px"
-                 @click="$emit('click',true)"></ValetButton>
+                 @click="$emit('click',true); "></ValetButton>
 
   </v-card>
 </template>
@@ -58,7 +60,7 @@ const defaultForm = {
   zusatzAdress: '',
   zipCode: '',
   stadt: '',
-  country: ''
+  country: 'Germany'
 }
 
 export default {
@@ -76,6 +78,10 @@ export default {
     form: {
       // type: Object,
       // default: () => {}
+    },
+    value:{
+      type: Object,
+      default: ()=>{}
     },
     styleInput: {},
     useClose: {
@@ -95,7 +101,7 @@ export default {
     value:{
       immediate: true,
       handler(val){
-        this.localForm=Object.assign({}, defaultForm, val)
+        this.localForm= val
       }
     }
   },
@@ -104,9 +110,11 @@ export default {
       localForm: Object.assign({}, defaultForm, this.value)
     }
   },
-
-  mounted () {
-    // this.localForm = Object.assign({}, defaultForm, this.form)
+  methods:{
+    handelClose() {
+      this.$emit('closeButton')
+      // this.localForm = defaultForm
+    }
   }
 }
 </script>

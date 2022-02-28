@@ -46,7 +46,9 @@
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
               <ValetInputTextField title="Handy Number" width-input="266px" v-model="dText.data.phone"/>
               <div style="margin-top: 24px" class="">Germany</div>
-              <ValetButton buttonText="Speichern" style="grid-column: 1/3; margin-top: 24px"></ValetButton>
+              <ValetButton buttonText="Speichern"
+                           style="grid-column: 1/3; margin-top: 24px"
+                           @click="dialogClose"></ValetButton>
             </v-card>
           </div>
         </template>
@@ -59,7 +61,9 @@
               <ValetInputTextField title="Neue E-Mail-Adresse*" width-input="540px" v-model="email"/>
               <ValetInputTextField title="Neue E-Mail-Adresse bestaätigen*" width-input="540px" v-model="confirmEmail"/>
               <ValetInputTextField title="Passwort*" width-input="540px" type="password" v-model="password"/>
-              <ValetButton buttonText="Speichern" style="grid-column: 1/3; margin-top: 24px"></ValetButton>
+              <ValetButton buttonText="Speichern"
+                           style="grid-column: 1/3; margin-top: 24px"
+                           @click="dialogClose"></ValetButton>
             </v-card>
           </div>
         </template>
@@ -71,7 +75,9 @@
               <ValetInputTextField title="Passwort*" width-input="540px" v-model="password"/>
               <ValetInputTextField :title="'Neues Passwort*'+ hintText " width-input="540px" v-model="confirmEmail"/>
               <ValetInputTextField title="Passwort bestätigen*" width-input="540px" type="password" v-model="password"/>
-              <ValetButton buttonText="Speichern" style="grid-column: 1/3; margin-top: 24px"></ValetButton>
+              <ValetButton buttonText="Speichern"
+                           style="grid-column: 1/3; margin-top: 24px"
+                           @click="dialogClose"></ValetButton>
             </v-card>
           </div>
         </template>
@@ -91,7 +97,9 @@
               <ValetInputTextField title="PLZ*" width-input="266px" v-model="dText.data.zipCode"/>
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
               <div class="mt-1">{{ dText.data.country }}</div>
-              <ValetButton buttonText="Speichern" style="grid-column: 1/3; margin-top: 24px"></ValetButton>
+              <ValetButton buttonText="Speichern"
+                           style="grid-column: 1/3; margin-top: 24px"
+                           @click="dialogClose"></ValetButton>
 
             </v-card>
           </div>
@@ -112,7 +120,9 @@
               <ValetInputTextField title="PLZ*" width-input="266px" v-model="dText.data.zipCode"/>
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
               <div class="mt-1">{{ dText.data.country }}</div>
-              <ValetButton buttonText="Speichern" style="grid-column: 1/3; margin-top: 24px"></ValetButton>
+              <ValetButton buttonText="Speichern"
+                           style="grid-column: 1/3; margin-top: 24px"
+                           @click="dialogClose"></ValetButton>
 
             </v-card>
           </div>
@@ -205,6 +215,7 @@ export default {
       // this.items = items
     },
     dialogClose() {
+      console.log("close +1")
       this.dText = {}
       this.dialogBearbeit = false
     }

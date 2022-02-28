@@ -38,7 +38,7 @@
               </div>
               <div class="d-flex flex-column align-center">
                 <div class="unterTitle24">BRAUTKLEID</div>
-                <div class="unterTitle36">{{ productInfo&&productInfo.name }}</div>
+                <div class="unterTitle36">{{ productInfo && productInfo.name }}</div>
               </div>
               <div class="d-flex flex-column align-center">
                 <div class="unterTitle24">ANZAHL</div>
@@ -47,7 +47,7 @@
               </div>
               <div class="d-flex align-end flex-column">
                 <div class="unterTitle24">PREIS</div>
-                <div class="unterTitle36">{{ price.toFixed(2).replace(".", ",") + " €" }}</div>
+                <div class="unterTitle36">{{ price | priceDisplay }} €</div>
               </div>
             </div>
 
@@ -68,6 +68,7 @@
                           v-model="lieferAddressForm"
                           button-text="Speichern und weiter"
                           @click="adressConfirm"/>
+
             </template>
             <template v-else>
 
@@ -76,8 +77,8 @@
 
                   <v-card class="d-flex justify-start" width="30vw" flat tile style="padding-right: 20px">
                     <div>
-                      <div style="font-size: 24px; font-weight: bold">{{ personData[3].title }}</div>
-                      <template v-for="(item,j) in personData[3].data">
+                      <div style="font-size: 24px; font-weight: bold"> Lieferadresse</div>
+                      <template v-for="(item,j) in lieferAddressForm">
                         <div :key="'item'+j">
                           {{ item }}
                         </div>
@@ -90,8 +91,8 @@
                   <v-card class="d-flex " width="30vw" style="padding-left: 80px; border-left: 2px solid grey" flat
                           tile>
                     <div>
-                      <div style="font-size: 24px; font-weight: bold">{{ personData[4].title }}</div>
-                      <template v-for="(item,j) in personData[4].data">
+                      <div style="font-size: 24px; font-weight: bold">Rechnungsadresse</div>
+                      <template v-for="(item,j) in RechnungAddressForm">
                         <div :key="'item'+j">
                           {{ item }}
                         </div>
@@ -113,6 +114,10 @@
 
           </div>
 
+          <ValetSnackBar
+              v-model="snackBar"
+              :snackbar-text="snackbarText"
+          ></ValetSnackBar>
         </template>
 
         <template v-if="anzahlStep === 3">
@@ -182,40 +187,41 @@
                 <div>
                   <div style="font-weight: 600; font-size: 24px;">BESTELLÜBERSICHT</div>
 
-                  <v-card  width="30vw" flat tile style="padding-right: 20px">
+                  <v-card width="30vw" flat tile style="padding-right: 20px">
 
-                      <div class="d-flex justify-space-between"
-                           style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #AFA69D; margin-top: 39px">
-                        {{ personData[3].title }}
-                        <v-icon>mdi-pencil</v-icon>
-                      </div>
+                    <div class="d-flex justify-space-between"
+                         style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #AFA69D; margin-top: 39px">
+                      Lieferadresse
+                      <v-icon>mdi-pencil</v-icon>
+                    </div>
 
                     <div style="font-size: 24px; padding-top: 8px">
 
-                      <div>{{personData[3].data.vorname}} {{personData[3].data.nachname}}</div>
-                      <div>{{personData[3].data.address}}</div>
-                      <div>{{personData[3].data.zipCode}} {{personData[3].data.stadt}}</div>
-                      <div>{{personData[3].data.country}} </div>
+                      <div>{{ lieferAddressForm.vorname }} {{ lieferAddressForm.nachname }}</div>
+                      <div>{{ lieferAddressForm.address }}</div>
+                      <div>{{ lieferAddressForm.zipCode }} {{ lieferAddressForm.stadt }}</div>
+                      <div>{{ lieferAddressForm.country }}</div>
                     </div>
 
                     <div class="d-flex justify-space-between unterTitle24"
-                         style="border-bottom: 2px solid #AFA69D; font-size: 24px; font-weight: bold; padding-top: 17px" >
+                         style="border-bottom: 2px solid #AFA69D; font-size: 24px; font-weight: bold; padding-top: 17px">
                       Bestellt
                     </div>
 
                     <div class="d-flex justify-space-between unterTitle24" style="padding-top: 8px">
                       <div>Musterbox</div>
-                      <div style="font-weight: bold">29,99 €</div>
+                      <div style="font-weight: bold">{{ price | priceDisplay }} €</div>
                     </div>
 
-                    <div class="d-flex justify-space-between unterTitle24" style="border-bottom: 1px solid #AFA69D; padding-top: 8px">
+                    <div class="d-flex justify-space-between unterTitle24"
+                         style="border-bottom: 1px solid #AFA69D; padding-top: 8px">
                       <div>Versand</div>
-                      <div style="font-weight: bold">0,00 €</div>
+                      <div style="font-weight: bold">{{ versandPrice | priceDisplay }} €</div>
                     </div>
 
                     <div class="d-flex justify-space-between unterTitle24" style="font-size: 24px; padding-top: 15px">
                       <div>Gesamtsumme inkl.MwSt.</div>
-                      <div style="font-weight: bold">29,99 €</div>
+                      <div style="font-weight: bold">{{ price + versandPrice | priceDisplay }} €</div>
                     </div>
                   </v-card>
 
@@ -266,8 +272,10 @@
         <div>
           <FormAdress
               use-close
-              @closeButton="handleClose"
+              @closeButton="handelClose"
+              @click="handelClose"
               title="Lieferadresse ändern"
+              v-model="lieferAddressForm"
               :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
 
         </div>
@@ -279,8 +287,9 @@
     <v-dialog v-model="dialogRechnungAdress" width="45vw">
       <div class="d-flex justify-center" style="background-color: white; ">
         <FormAdress
-            @closeButton="handleClose"
+            @closeButton="handelClose"
             use-close
+            v-model="RechnungAddressForm"
             title="Rechnungsadresse ändern"
             :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
       </div>
@@ -292,34 +301,40 @@
 
 <script>
 import ValetButton from "../../../components/ValetButton"
+import ValetSnackBar from "@/components/ValetSnackBar";
 import FormAdress from "../../../fragments/FormAdress"
-import { loadDesign, placeAndPaySampleOrder } from '../../../api/dressDesginService'
+import {loadDesign, placeAndPaySampleOrder} from '../../../api/dressDesginService'
 
 
 export default {
   name: "SampleOrder",
-  components: {FormAdress, ValetButton},
+  components: {FormAdress, ValetButton, ValetSnackBar},
   computed: {
-    items() {
-      const res = this.personData[4]
-      console.log("items", res)
-      return res
-    },
+    // items() {
+    //   const res = this.personData[4]
+    //   console.log("items", res)
+    //   return res
+    // },
     price() {
       return (this.amount ?? 1) * 29.99
+    },
+    versandPrice() {
+      return 0.00
     }
   },
-  props: {id: {},status:{}},
-  async mounted () {
-    this.productInfo=await loadDesign(this.id)
+  props: {id: {}, status: {}},
+  async mounted() {
+    this.productInfo = await loadDesign(this.id)
     console.log(this.productInfo)
   },
   data() {
     return {
-      amount: 1,
+      snackBar: false,
+      snackbarText: "Alle erforderliche Field soll ausgeführt werden.",
+      amount: '1',
       dialogLiferAdress: false,
       dialogRechnungAdress: false,
-      productInfo:null,
+      productInfo: null,
       refreshButtonFlag: false,
       showEditAdress: true,
       anzahlStep: 1,
@@ -329,10 +344,11 @@ export default {
         'ARTIKEL', 'BRAUTKLEID', 'ANZAHL', 'PREIS'
       ],
       selectItems: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10+'],
-      stepHeaders: [{title: 'Produkt', value: 1}, {title: 'Adresse', value: 2}, {
-        title: 'Zahlung',
-        value: 3
-      }, {title: 'Fertig', value: 4}],
+      stepHeaders: [
+        {title: 'Produkt', value: 1},
+        {title: 'Adresse', value: 2},
+        {title: 'Zahlung', value: 3},
+        {title: 'Fertig',  value: 4}],
       personData: [
         {
           title: 'Name',
@@ -391,22 +407,42 @@ export default {
         zusatzAdress: '',
         zipCode: '',
         stadt: '',
+        country: 'Germany'
+      },
+      RechnungAddressForm: {
+        vorname: '',
+        nachname: '',
+        address: '',
+        zusatzAdress: '',
+        zipCode: '',
+        stadt: '',
         country: ''
       }
     }
   },
   methods: {
     confirm() {
+
       this.anzahlStep = this.anzahlStep + 1
     },
-    async tryToPaySampleOrder () {
+    async tryToPaySampleOrder() {
       console.log(this.id, '要支付的订单ID')
-      location.href=await placeAndPaySampleOrder(this.id)
+      location.href = await placeAndPaySampleOrder(this.id)
     },
-    adressConfirm () {
-      this.showEditAdress = false
+    adressConfirm() {
+      const res = Object.entries(this.lieferAddressForm).filter(i => i[0]!='zusatzAdress')
+
+      console.log("res.every(i => {return i[1] ? true : false})",res.every(i => {return i[1] ? true : false}))
+      if(res.every(i => {return i[1] ? true : false}))
+      {
+        this.showEditAdress = false
+      }
+      else {
+        this.snackBar=true
+      }
+      this.RechnungAddressForm = this.lieferAddressForm
     },
-    handleClose() {
+    handelClose() {
       this.dialogLiferAdress = false
       this.dialogRechnungAdress = false
     }

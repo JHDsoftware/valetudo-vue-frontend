@@ -10,7 +10,7 @@
           outlined
           style="borderRadius : 0; width: 100%; "
           :style="customHeight? {'height':customHeight} : {'height': '60px'}"
-          :rules="useRule? [rules.required] : []"
+          :rules="useRule? localRules.required : []"
           v-model="localValue"
           :type="type"
           :hide-details="hideDetails"
@@ -50,7 +50,10 @@ export default {
       default: ''
     },
     widthInput: {},
-    rulesInput: {},
+    rulesInput: {
+      type: Object,
+      default: ()=> {}
+    },
     hideDetails: {
       type: Boolean,
       default: false
@@ -74,8 +77,8 @@ export default {
   data() {
     return {
       localValue: this.value,
-      rules: {
-        required: (value) => (value && Boolean(value)) || 'Erforderlich'
+      localRules: {
+        required: [(value) => (value && Boolean(value)) || 'Erforderlich']
       }
       // localType: this.type
     }

@@ -12,6 +12,13 @@ export function getToken () {
 
 Vue.config.productionTip = false
 
+
+Vue.filter('priceDisplay',
+    function (price){
+  return parseFloat(price).toFixed(2).replace('.',',')
+})
+
+
 hillo.initial('http://3.124.147.27:8080')
 
 export function refreshHeader () {
