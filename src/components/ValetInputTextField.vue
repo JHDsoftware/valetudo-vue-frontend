@@ -10,9 +10,10 @@
           outlined
           style="borderRadius : 0; width: 100%; "
           :style="customHeight? {'height':customHeight} : {'height': '60px'}"
-          :rules="useRule? localRules.required : []"
+          :rules="useRule? rules : []"
           v-model="localValue"
           :type="type"
+          :required="required"
           :hide-details="hideDetails"
       />
 <!--      :style="useStyle ? {border: '2px solid #4C4C4C'} : {}"-->
@@ -41,6 +42,14 @@ export default {
     useRule: {
       type: Boolean,
       default: true
+    },
+    rules: {
+      type: Array,
+      default: () => [v => !!v || 'Field is required']
+    },
+    required: {
+      type: Boolean,
+      default: false
     },
     title: {},
     type: {},
@@ -77,9 +86,9 @@ export default {
   data() {
     return {
       localValue: this.value,
-      localRules: {
-        required: [(value) => (value && Boolean(value)) || 'Erforderlich']
-      }
+      // localRules: {
+      //   required: [(value) => (value && Boolean(value)) || 'Erforderlich']
+      // }
       // localType: this.type
     }
   },

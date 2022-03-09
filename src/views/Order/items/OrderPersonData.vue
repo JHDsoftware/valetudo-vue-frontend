@@ -28,7 +28,7 @@
       </template>
     </v-card>
 
-    <v-dialog v-model="dialogBearbeit" width="45vw" persistent>
+    <v-dialog v-model="dialogBearbeit" width="35vw" persistent>
       <v-card tile flat>
         <v-icon large style="position: absolute; right: 34px; top: 34px" @click="dialogClose">mdi-close
         </v-icon>
@@ -41,14 +41,22 @@
             <v-card
                 style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 8px; width: 540px; margin-bottom: 60px"
                 flat tile>
-              <ValetInputTextField title="Vorname*" width-input="266px" v-model="dText.data.vorname"/>
-              <ValetInputTextField title="Nachname*" width-input="266px" v-model="dText.data.nachname"/>
-              <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
-              <ValetInputTextField title="Handy Number" width-input="266px" v-model="dText.data.phone"/>
-              <div style="margin-top: 24px" class="">Germany</div>
-              <ValetButton buttonText="Speichern"
-                           style="grid-column: 1/3; margin-top: 24px"
-                           @click="dialogClose"></ValetButton>
+
+                <ValetInputTextField title="Vorname*"
+                                     :rules="requireRule"
+                                     :required="true"
+                                     width-input="266px" v-model="dText.data.vorname"/>
+                <ValetInputTextField title="Nachname*"
+                                     width-input="266px"
+                                     :rules="requireRule"
+                                     v-model="dText.data.nachname"/>
+                <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
+                <ValetInputTextField title="Handy Number" width-input="266px" v-model="dText.data.phone"/>
+                <div style="margin-top: 24px" class="">Germany</div>
+                <ValetButton buttonText="Speichern"
+                             style="grid-column: 1/3; margin-top: 24px"
+                             @click="dialogClose();  "></ValetButton>
+
             </v-card>
           </div>
         </template>
@@ -88,8 +96,13 @@
                 style="display: grid; grid-template-columns: repeat(2,1fr); grid-column-gap: 8px; width: 540px; margin-bottom: 60px"
                 flat tile>
 
-              <ValetInputTextField title="Vorname*" width-input="266px" v-model="dText.data.vorname"/>
-              <ValetInputTextField title="Name*" width-input="266px" v-model="dText.data.nachname"/>
+
+              <ValetInputTextField title="Vorname*"
+
+                                   width-input="266px" v-model="dText.data.vorname"/>
+              <ValetInputTextField title="Name*"
+
+                                   width-input="266px" v-model="dText.data.nachname"/>
               <ValetInputTextField title="Adresse*" width-input="540px" v-model="dText.data.address"
                                    style="grid-column: 1/3"/>
               <ValetInputTextField title="Zusätzliche Adresse" width-input="540px" v-model="zusatzAdress"
@@ -144,8 +157,14 @@ import ValetInputTextField from "@/components/ValetInputTextField";
 export default {
   name: "OrderPersonData",
   components: {ValetInputTextField, ValetButton},
+  watch:{
+    dTextData() {
+      return this.dText.data
+    }
+  },
   data() {
     return {
+      valid: true,
       password: null,
       confirmEmail: null,
       email: null,
@@ -156,6 +175,7 @@ export default {
       rules: {
         required: (value) => (value && Boolean(value)) || 'Required'
       },
+      requireRule: [v => !!v || 'Name is required'],
       personData: [
         {
           title: 'Name',
@@ -215,16 +235,48 @@ export default {
       // this.items = items
     },
     dialogClose() {
-      console.log("close +1")
       this.dText = {}
-      this.dialogBearbeit = false
+      if(this.dText.title == 'Name'){
+        if(this.dTextData.vorname
+            && this.dTextData.nachname
+            && this.dTextData.stadt){
+          this.dialogBearbeit = false
+        }
+
+      }else if(this.dText.title == 'E-Mail'){
+        if(this.dTextData.Email
+            && this.dTextData.confirmEmail
+            && this.dTextData.password){
+          this.dialogBearbeit = false
+        }
+
+
+        // }else if(this.item.title == 'Dein Passwort'){
+        //
+        // }else if(this.item.title == 'Lieferaddresse'){
+        //
+        // }else if(this.item.title == 'Rechnungsadresse'){
+
+      }else{
+        this.dialogBearbeit = true
+      }
+
+    },
+    validate () {
+      this.$refs.form.validate()
+    },
+    reset() {
+      this.$refs.form.reset()
+    },
+    resetValidation () {
+      this.$refs.form.resetValidatiaon()
     }
   }
 }
 </script>
 
 <style scoped>
-.v-caption{
+.v-caption {
   font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: 600;
@@ -237,6 +289,7 @@ export default {
 
   color: #4C4C4C;
 }
+
 .contentText {
   font-family: Gill Sans Nova;
   font-style: normal;

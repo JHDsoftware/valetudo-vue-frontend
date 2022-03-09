@@ -267,7 +267,7 @@
       </div>
     </div>
 
-    <v-dialog v-model="dialogLiferAdress" width="45vw">
+    <v-dialog v-model="dialogLiferAdress" width="35vw">
       <div class="d-flex justify-center" style="background-color: white; ">
         <div>
           <FormAdress
@@ -284,7 +284,7 @@
 
     </v-dialog>
 
-    <v-dialog v-model="dialogRechnungAdress" width="45vw">
+    <v-dialog v-model="dialogRechnungAdress" width="35vw">
       <div class="d-flex justify-center" style="background-color: white; ">
         <FormAdress
             @closeButton="handelClose"

@@ -10,7 +10,7 @@
           <ValetInputTextField title="Vorname*" width-input="266px" v-model="personData.phone"/>
           <div style="grid-column: 1/3; margin-top: 4px">{{ ('Nachricht') }}</div>
           <v-textarea flat outlined style="grid-column: 1/3; margin-top: 24px" v-model="personData.nachricht" solo/>
-          <ValetButton buttonText="Senden" style="grid-column: 1/3; margin-top: 4px"/>
+          <ValetButton buttonText="Senden" style="grid-column: 1/3; margin-top: 4px" @click="send" />
         </v-card>
       </div>
     </div>
@@ -52,6 +52,11 @@ export default {
         nachricht: null
       }
 
+
+    }
+  },
+  methods: {
+    send(){
 
     }
   }

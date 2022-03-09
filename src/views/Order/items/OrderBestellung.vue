@@ -22,7 +22,7 @@
         <td>{{ i.quantity }}</td>
         <td>{{ i.totalPrice.toFixed(2).replace('.', ',') + " €" }}</td>
         <td>{{ i.paymentStatus }}</td>
-        <td><valet-button :button-text="'Kontakt uns'"></valet-button></td>
+        <td><valet-button  :button-text="'Kontakt uns'" @click="$router.push('/OrderIndex/KontaktUns')"></valet-button></td>
       </tr>
 
       </tbody>
