@@ -7,9 +7,9 @@
           <ValetInputTextField title="Vorname*" width-input="266px" v-model="personData.vorname"/>
           <ValetInputTextField title="Name*" width-input="266px" v-model="personData.nachname"/>
           <ValetInputTextField title="E-Mail*" width-input="266px" v-model="personData.email"/>
-          <ValetInputTextField title="Vorname*" width-input="266px" v-model="personData.phone"/>
+          <ValetInputTextField title="Handy Number" width-input="266px" v-model="personData.phone"/>
           <div style="grid-column: 1/3; margin-top: 4px">{{ ('Nachricht') }}</div>
-          <v-textarea flat outlined style="grid-column: 1/3; margin-top: 24px" v-model="personData.nachricht" solo/>
+          <v-textarea flat outlined style="grid-column: 1/3; margin-top: 24px" v-model="personData.message" solo/>
           <ValetButton buttonText="Senden" style="grid-column: 1/3; margin-top: 4px" @click="send" />
         </v-card>
       </div>
@@ -38,6 +38,7 @@
 <script>
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from '@/components/ValetButton'
+import {customerMe,contactUsAdd} from "@/api/customerService";
 
 export default {
   name: "KontaktUns",
@@ -49,16 +50,37 @@ export default {
         nachname: null,
         email: null,
         phone: null,
-        nachricht: null
+        message: null
       }
 
 
     }
   },
-  methods: {
-    send(){
+  async mounted() {
+    const personData = (await customerMe()).data
+    this.vorname = personData.firstName
+    this.nachname = personData.lastname
+    this.email = personData.userName
 
-    }
+  },
+  methods: {
+    async send() {
+
+      const personData = {
+        firstName: this.vorname,
+        lastName: this.nachname,
+        email: this.email,
+        phone: this.phone ?? '',
+        message: this.message
+      }
+
+      await contactUsAdd(personData)
+
+
+    },
+
+
+
   }
 }
 </script>

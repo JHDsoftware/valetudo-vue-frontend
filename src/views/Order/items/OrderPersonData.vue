@@ -30,7 +30,7 @@
 
     <v-dialog v-model="dialogBearbeit" width="35vw" persistent>
       <v-card tile flat>
-        <v-icon large style="position: absolute; right: 34px; top: 34px" @click="dialogClose">mdi-close
+        <v-icon large style="position: absolute; right: 34px; top: 34px" @click="dialogClose()">mdi-close
         </v-icon>
         <div class="text-center contentText" style="font-size: 36px; padding-top: 60px; padding-bottom: 60px">
           {{ dText.editTitle }}
@@ -42,20 +42,20 @@
                 style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 8px; width: 540px; margin-bottom: 60px"
                 flat tile>
 
-                <ValetInputTextField title="Vorname*"
-                                     :rules="requireRule"
-                                     :required="true"
-                                     width-input="266px" v-model="dText.data.vorname"/>
-                <ValetInputTextField title="Nachname*"
-                                     width-input="266px"
-                                     :rules="requireRule"
-                                     v-model="dText.data.nachname"/>
-                <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
-                <ValetInputTextField title="Handy Number" width-input="266px" v-model="dText.data.phone"/>
-                <div style="margin-top: 24px" class="">Germany</div>
-                <ValetButton buttonText="Speichern"
-                             style="grid-column: 1/3; margin-top: 24px"
-                             @click="dialogClose();  "></ValetButton>
+              <ValetInputTextField title="Vorname*"
+                                   :rules="requireRule"
+                                   :required="true"
+                                   width-input="266px" v-model="dText.data.vorname"/>
+              <ValetInputTextField title="Nachname*"
+                                   width-input="266px"
+                                   :rules="requireRule"
+                                   v-model="dText.data.nachname"/>
+              <ValetInputTextField title="Stadt*" width-input="266px" v-model="dText.data.stadt"/>
+              <ValetInputTextField title="Handy Number" width-input="266px" v-model="dText.data.phone"/>
+              <div style="margin-top: 24px" class="">Germany</div>
+              <ValetButton buttonText="Speichern"
+                           style="grid-column: 1/3; margin-top: 24px"
+                           @click="dialogSpeichern"></ValetButton>
 
             </v-card>
           </div>
@@ -67,11 +67,11 @@
               <div style="font-size: 24px; font-weight: bold">Aktuelle E-Mail-Adresse</div>
               <div style="font-size: 24px; margin-bottom: 40px">{{ dText.data.Email }}</div>
               <ValetInputTextField title="Neue E-Mail-Adresse*" width-input="540px" v-model="email"/>
-              <ValetInputTextField title="Neue E-Mail-Adresse bestaätigen*" width-input="540px" v-model="confirmEmail"/>
+              <ValetInputTextField title="Neue E-Mail-Adresse bestätigen*" width-input="540px" v-model="confirmEmail"/>
               <ValetInputTextField title="Passwort*" width-input="540px" type="password" v-model="password"/>
               <ValetButton buttonText="Speichern"
                            style="grid-column: 1/3; margin-top: 24px"
-                           @click="dialogClose"></ValetButton>
+                           @click="dialogSpeichern"></ValetButton>
             </v-card>
           </div>
         </template>
@@ -85,7 +85,7 @@
               <ValetInputTextField title="Passwort bestätigen*" width-input="540px" type="password" v-model="password"/>
               <ValetButton buttonText="Speichern"
                            style="grid-column: 1/3; margin-top: 24px"
-                           @click="dialogClose"></ValetButton>
+                           @click="dialogSpeichern"></ValetButton>
             </v-card>
           </div>
         </template>
@@ -112,7 +112,7 @@
               <div class="mt-1">{{ dText.data.country }}</div>
               <ValetButton buttonText="Speichern"
                            style="grid-column: 1/3; margin-top: 24px"
-                           @click="dialogClose"></ValetButton>
+                           @click="dialogSpeichern"></ValetButton>
 
             </v-card>
           </div>
@@ -135,7 +135,7 @@
               <div class="mt-1">{{ dText.data.country }}</div>
               <ValetButton buttonText="Speichern"
                            style="grid-column: 1/3; margin-top: 24px"
-                           @click="dialogClose"></ValetButton>
+                           @click="dialogSpeichern"></ValetButton>
 
             </v-card>
           </div>
@@ -152,15 +152,49 @@
 
 import ValetButton from '@/components/ValetButton'
 import ValetInputTextField from "@/components/ValetInputTextField";
-// import {personData} from "../../../model/personDataExp";
+import {customerMe, customerEditMe} from "@/api/customerService";
 
 export default {
   name: "OrderPersonData",
   components: {ValetInputTextField, ValetButton},
-  watch:{
+  watch: {
+    dataBody(val) {
+      this.personData[0].data.vorname = val.firstName
+      this.personData[0].data.nachname = val.lastName
+      this.personData[0].data.stadt = val.city
+      this.personData[0].data.phone = val.phone
+
+      this.personData[1].data.Email = val.userName
+      // this.personData[2].data.Password
+
+      const delivery =val.deliveryAddress.split(',')
+      this.personData[3].data.address = delivery[0] ?? ''
+      this.personData[3].data.zipCode = delivery[1] ?? ''
+      this.personData[3].data.stadt = delivery[2] ?? ''
+
+      this.personData[3].data.vorname = val.firstName
+      this.personData[3].data.nachname = val.lastName
+      // this.personData[3].data.zipCode=personData.
+
+
+      const billing =val.billingAddress.split(',')
+      this.personData[4].data.address = billing[0] ?? ''
+      this.personData[4].data.zipCode = billing[1] ?? ''
+      this.personData[4].data.stadt = billing[2] ?? ''
+
+      this.personData[4].data.address = val.billingAddress.split(',')
+      this.personData[4].data.vorname = val.firstName
+      this.personData[4].data.nachname = val.lastName
+      // this.personData[4].data.
+    }
+  },
+  computed:{
     dTextData() {
       return this.dText.data
-    }
+    },
+  },
+  mounted() {
+    this.getPersonData()
   },
   data() {
     return {
@@ -176,6 +210,14 @@ export default {
         required: (value) => (value && Boolean(value)) || 'Required'
       },
       requireRule: [v => !!v || 'Name is required'],
+      dataBody: {
+        firstName: 'Liqiong',
+        lastName: 'Wang',
+        city: 'Berlin',
+        phone: '01578963222',
+        deliveryAddress: 'Teltower Damm 227B, 14177 Berlin, Germany',
+        billingAddress: 'Teltower Damm 227B, 14177 Berlin, Germany'
+      },
       personData: [
         {
           title: 'Name',
@@ -211,15 +253,17 @@ export default {
             zipCode: '14177',
             country: 'Germany'
           },
-          editTitle: 'Lieferadresse ändern'
+          editTitle: 'Lieferaddresse ändern'
         },
         {
           title: 'Rechnungsadresse',
           icon: 'mdi-home',
           data: {
             vorname: 'Liqiong Wang',
+            nachname: 'Wang',
             address: 'Teltower Damm 227B',
-            stadt: '14177 Berlin',
+            stadt: 'Berlin',
+            zipCode: '14177',
             country: 'Germany'
           },
           editTitle: 'Rechnungsadresse ändern'
@@ -227,48 +271,118 @@ export default {
       ],
     }
   },
+
   methods: {
+
+    async getPersonData() {
+      // console.log("get Data")
+      const res = await customerMe()
+      if (res.code != 200) {
+        return null
+      }
+
+      this.dataBody = res.data
+
+      // const personData = res.data
+      //
+      // this.dataBody.firstName = personData.firstName
+      // this.dataBody.lastName = personData.lastName
+      // this.dataBody.city = personData.city
+      // this.dataBody.deliveryAddress = personData.deliveryAddress
+      // this.dataBody.billingAddress = personData.billingAddress
+      // this.dataBody.phone = personData.phone
+
+    },
     handleButtonClick(items) {
 
       this.dialogBearbeit = true
       this.dText = items
       // this.items = items
     },
-    dialogClose() {
-      this.dText = {}
-      if(this.dText.title == 'Name'){
-        if(this.dTextData.vorname
-            && this.dTextData.nachname
-            && this.dTextData.stadt){
-          this.dialogBearbeit = false
+    async dialogSpeichern() {
+
+      console.log('this.dTextData',this.dTextData)
+      try {
+        if (this.dText.title === 'Name') {
+          if (this.dTextData.vorname
+              && this.dTextData.nachname
+              && this.dTextData.stadt) {
+
+            this.dataBody.firstName = this.dTextData.vorname
+            this.dataBody.lastName = this.dTextData.nachname
+            this.dataBody.city = this.dTextData.stadt
+
+            await customerEditMe(this.dataBody)
+            this.dialogBearbeit = false
+          }
+        } else if (this.dText.title === 'E-Mail') {
+          if (this.dTextData.Email
+              && this.dTextData.confirmEmail
+              && this.dTextData.password) {
+
+            // this.dataBody.firstName = this.dTextData.vorname
+            // this.dataBody.lastName = this.dTextData.nachname
+            // this.dataBody.city = this.dTextData.stadt
+
+            // await this.custo
+            this.dialogBearbeit = false
+          }
+
+
+          // }else if(this.item.title == 'Dein Passwort'){
+          //
+        } else if (this.dText.title == 'Lieferaddresse') {
+
+          if (this.dTextData.firstName
+              && this.dTextData.lastName
+              && this.dTextData.billingAddress
+              && this.dTextData.zipCode && this.dTextData.stadt) {
+            this.dataBody.firstName = this.dTextData.vorname
+            this.dataBody.lastName = this.dTextData.nachname
+            this.dataBody.deliveryAddress =
+                this.dTextData.address + ',' + this.dTextData.zipCode + ',' + this.dTextData.stadt
+
+            await this.customerEditMe(this.dataBody)
+            this.dialogBearbeit = false
+          }
+
+        } else if (this.dText.title == 'Rechnungsadresse') {
+
+          if (this.dTextData.firstName
+              && this.dTextData.lastName
+              && this.dTextData.billingAddress
+              && this.dTextData.zipCode && this.dTextData.stadt) {
+
+            this.dataBody.firstName = this.dTextData.vorname
+            this.dataBody.lastName = this.dTextData.nachname
+            this.dataBody.billingAddress =
+                this.dTextData.address + ',' + this.dTextData.zipCode + ',' + this.dTextData.stadt
+
+            await this.customerEditMe(this.dataBody)
+            this.dialogBearbeit = false
+          }
+
+        } else {
+          this.dialogBearbeit = true
         }
-
-      }else if(this.dText.title == 'E-Mail'){
-        if(this.dTextData.Email
-            && this.dTextData.confirmEmail
-            && this.dTextData.password){
-          this.dialogBearbeit = false
-        }
-
-
-        // }else if(this.item.title == 'Dein Passwort'){
-        //
-        // }else if(this.item.title == 'Lieferaddresse'){
-        //
-        // }else if(this.item.title == 'Rechnungsadresse'){
-
-      }else{
-        this.dialogBearbeit = true
+        this.dText = {}
+      } catch (e) {
+        console.log(e)
       }
 
+
     },
-    validate () {
+    dialogClose() {
+      this.dialogBearbeit = false
+      this.dTextData = {}
+    },
+    validate() {
       this.$refs.form.validate()
     },
     reset() {
       this.$refs.form.reset()
     },
-    resetValidation () {
+    resetValidation() {
       this.$refs.form.resetValidatiaon()
     }
   }

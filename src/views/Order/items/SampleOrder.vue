@@ -304,6 +304,7 @@ import ValetButton from "../../../components/ValetButton"
 import ValetSnackBar from "@/components/ValetSnackBar";
 import FormAdress from "../../../fragments/FormAdress"
 import {loadDesign, placeAndPaySampleOrder} from '../../../api/dressDesginService'
+import {customerEditMe, customerMe} from "@/api/customerService"
 
 
 export default {
@@ -325,10 +326,61 @@ export default {
   props: {id: {}, status: {}},
   async mounted() {
     this.productInfo = await loadDesign(this.id)
+    this.dataBody = (await customerMe()).data ?? []
+
+    const val = this.dataBody
+    console.log("p",val)
+    this.lieferAddressForm.vorname = val.firstName
+    this.lieferAddressForm.nachname = val.lastName
+    this.lieferAddressForm.address = val.address.split(',')[0]
+    this.lieferAddressForm.zipCode = val.address.split(',')[1]
+    this.lieferAddressForm.stadt = val.address.split(',')[1] ?? null
+
+    this.RechnungAddressForm.vorname = val.firstName
+    this.RechnungAddressForm.nachname = val.lastName
+    this.RechnungAddressForm.address = val.address.split(',')[0]
+    this.RechnungAddressForm.zipCode = val.address.split(',')[1]
+    this.RechnungAddressForm.stadt = val.address.split(',')[1] ?? null
+
     console.log(this.productInfo)
+  },
+  watch:{
+    dataBody(val) {
+      this.personData[0].data.vorname = val.firstName
+      this.personData[0].data.nachname = val.lastName
+      this.personData[0].data.stadt = val.city
+      this.personData[0].data.phone = val.phone
+
+      this.personData[1].data.Email = val.userName
+      // this.personData[2].data.Password
+
+      const delivery =val.deliveryAddress.split(',')
+      this.personData[3].data.address = delivery[0] ?? ''
+      this.personData[3].data.zipCode = delivery[1] ?? ''
+      this.personData[3].data.stadt = delivery[2] ?? ''
+
+      this.personData[3].data.vorname = val.firstName
+      this.personData[3].data.nachname = val.lastName
+      // this.personData[3].data.zipCode=personData.
+
+
+      const billing =val.billingAddress.split(',')
+      this.personData[4].data.address = billing[0] ?? ''
+      this.personData[4].data.zipCode = billing[1] ?? ''
+      this.personData[4].data.stadt = billing[2] ?? ''
+
+      this.personData[4].data.address = val.billingAddress.split(',')
+      this.personData[4].data.vorname = val.firstName
+      this.personData[4].data.nachname = val.lastName
+      // this.personData[4].data.
+
+
+      },
+
   },
   data() {
     return {
+      dataBody:[],
       snackBar: false,
       snackbarText: "Alle erforderliche Field soll ausgeführt werden.",
       amount: '1',
@@ -337,7 +389,7 @@ export default {
       productInfo: null,
       refreshButtonFlag: false,
       showEditAdress: true,
-      anzahlStep: 1,
+      anzahlStep: 3,
       anzahl: 1,
       anzahlMenu: false,
       headers: [
@@ -348,7 +400,7 @@ export default {
         {title: 'Produkt', value: 1},
         {title: 'Adresse', value: 2},
         {title: 'Zahlung', value: 3},
-        {title: 'Fertig',  value: 4}],
+        {title: 'Fertig', value: 4}],
       personData: [
         {
           title: 'Name',
@@ -421,31 +473,52 @@ export default {
     }
   },
   methods: {
-    confirm() {
+    async confirm() {
+
+
+      if (this.anzahlStep === 2) {
+        const data = {
+          firstName: this.lieferAddressForm.vorname,
+          lastName: this.lieferAddressForm.nachname,
+          Lieferadresse: this.lieferAddressForm.address + ',' + this.lieferAddressForm.zipCode,
+          phone: this.phone
+        }
+
+        await this.customerEditMe(data)
+      }
 
       this.anzahlStep = this.anzahlStep + 1
+
+
     },
     async tryToPaySampleOrder() {
       console.log(this.id, '要支付的订单ID')
       location.href = await placeAndPaySampleOrder(this.id)
     },
-    adressConfirm() {
-      const res = Object.entries(this.lieferAddressForm).filter(i => i[0]!='zusatzAdress')
+    async adressConfirm() {
+      const res = Object.entries(this.lieferAddressForm).filter(i => i[0] != 'zusatzAdress')
 
-      console.log("res.every(i => {return i[1] ? true : false})",res.every(i => {return i[1] ? true : false}))
-      if(res.every(i => {return i[1] ? true : false}))
-      {
+
+      await customerEditMe(this.dataBody)
+
+
+      console.log("res.every(i => {return i[1] ? true : false})", res.every(i => {
+        return i[1] ? true : false
+      }))
+      if (res.every(i => {
+        return i[1] ? true : false
+      })) {
         this.showEditAdress = false
-      }
-      else {
-        this.snackBar=true
+      } else {
+        this.snackBar = true
       }
       this.RechnungAddressForm = this.lieferAddressForm
     },
     handelClose() {
       this.dialogLiferAdress = false
       this.dialogRechnungAdress = false
-    }
+    },
+
   }
 }
 </script>

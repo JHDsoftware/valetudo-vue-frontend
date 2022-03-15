@@ -27,10 +27,23 @@ export async function customerMe () {
   return await hillo.get('/customer/me')
 }
 
+export async function customerEditMe(data) {
+  return await hillo.post('/customer/editMe',data)
+}
+
 export async function customerInit (customer, weddingDate, likeAndHate, imgs) {
   return await hillo.post('/customer/init', {customer, weddingDate, likeAndHate, imgs})
 }
 
 export async  function resetPassword (token, newPassword) {
   return await hillo.post('/customer/resetPassword', token, newPassword)
+}
+
+
+export async function contactUsEdit (id) {
+  return await hillo.post('/contactUs/'+`${id}`+'/update')
+}
+
+export async function contactUsAdd (data) {
+  return await hillo.post('/contactUs/', data)
 }
