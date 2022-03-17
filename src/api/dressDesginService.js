@@ -31,6 +31,14 @@ export async function paySampleOrder (id) {
   return (await hillo.post('/dressDesign/paySampleOrder/' + `${id}`)).data
 }
 
+export async function paySampleOrderAdvance(id){
+  return (await hillo.post(`/paySampleOrderAdvance/${id}`)).data
+}
+
+export async function paySampleOrderBilling(id) {
+  return (await hillo.post(`/paySampleOrderBilling/${id}`)).data
+}
+
 export async function loadDesign (id) {
   return (await hillo.get('/dressDesign/getById/' + id)).data
 }

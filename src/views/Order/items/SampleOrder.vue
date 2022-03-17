@@ -75,9 +75,9 @@
               <div class="d-flex justify-center">
                 <v-card width="70vw" class="d-flex justify-center" flat>
 
-                  <v-card class="d-flex justify-start" width="30vw" flat tile style="padding-right: 20px">
-                    <div>
-                      <div style="font-size: 24px; font-weight: bold"> Lieferadresse</div>
+                  <v-card class="d-flex justify-start" width="30vw" flat tile style="padding-right:20px; margin-bottom: 90px">
+                    <div style="font-size: 24px;">
+                      <div class="font-weight-bold"> Lieferadresse</div>
                       <template v-for="(item,j) in lieferAddressForm">
                         <div :key="'item'+j">
                           {{ item }}
@@ -90,8 +90,8 @@
                   </v-card>
                   <v-card class="d-flex " width="30vw" style="padding-left: 80px; border-left: 2px solid grey" flat
                           tile>
-                    <div>
-                      <div style="font-size: 24px; font-weight: bold">Rechnungsadresse</div>
+                    <div style="font-size: 24px; ">
+                      <div class="font-weight-bold">Rechnungsadresse</div>
                       <template v-for="(item,j) in RechnungAddressForm">
                         <div :key="'item'+j">
                           {{ item }}
@@ -121,13 +121,14 @@
         </template>
 
         <template v-if="anzahlStep === 3">
+          <template v-if="payStatus">
           <div style="display: grid;grid-template-columns: 540px 1px 540px;grid-gap: 100px">
             <div>
               <v-card height="30vh" flat>
                 <div style="text-transform: uppercase; color: #4C4C4C;" class="unterTitle24">ZAHLUNGSART
                 </div>
                 <div class="mt-4">
-                  <v-item-group mandatory>
+                  <v-item-group mandatory v-model="payMethodValue">
                     <v-item #default="{active,toggle}">
                       <div class="d-flex align-baseline" @click="toggle" :class="active?'active':''">
                         <div class="notion"></div>
@@ -192,7 +193,7 @@
                     <div class="d-flex justify-space-between"
                          style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #AFA69D; margin-top: 39px">
                       Lieferadresse
-                      <v-icon>mdi-pencil</v-icon>
+                      <v-icon @click="dialogLiferAdress=true">mdi-pencil</v-icon>
                     </div>
 
                     <div style="font-size: 24px; padding-top: 8px">
@@ -225,7 +226,7 @@
                     </div>
                   </v-card>
 
-                  <div style="   padding-top: 40px">
+                  <div style="padding-top: 40px">
                     <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
                   </div>
                 </div>
@@ -233,7 +234,32 @@
               </v-card>
             </div>
           </div>
+          </template>
 
+          <template v-else>
+          <div class="d-flex justify-center" >
+            <v-card width="60vw" flat>
+              <div class="d-flex justify-center">
+                <v-card width="645px" class=" text-center" flat>
+                  <div style="font-size: 48px;line-height: 125%; padding-top: 30px; padding-bottom: 55px">
+                    Wir konnten Deine Bestellung nicht bearbeiten
+                  </div>
+                  <div style=" font-size: 36px;line-height: 125%;">
+                    Es scheint, dass ein Problem mit PayPal vorliegt. Bitte versuche es später noch einmal.
+                  </div>
+                </v-card>
+              </div>
+              <div class="d-flex justify-center" style="padding-top: 24px">
+                <v-card class="text-center" flat>
+                  <ValetButton style="width: 540px"
+                               button-text="Bestellung Ansehen"
+                               @click="this.$router.replace('/OrderIndex/Entwurf')"/>
+
+                </v-card>
+              </div>
+            </v-card>
+          </div>
+          </template>
         </template>
 
         <template v-if="anzahlStep === 4">
@@ -253,14 +279,16 @@
               </div>
               <div class="d-flex justify-center" style="padding-top: 24px">
                 <v-card class="text-center" flat>
-                  <ValetButton style="width: 540px" button-text="Bestellung Ansehen"/>
+                  <ValetButton style="width: 540px"
+                               button-text="Bestellung Ansehen"
+                               @click="this.$router.replace('/OrderIndex/Entwurf')"/>
 
                 </v-card>
               </div>
-
-
             </v-card>
           </div>
+
+
 
         </template>
 
@@ -288,6 +316,7 @@
       <div class="d-flex justify-center" style="background-color: white; ">
         <FormAdress
             @closeButton="handelClose"
+            @click="handelClose"
             use-close
             v-model="RechnungAddressForm"
             title="Rechnungsadresse ändern"
@@ -303,7 +332,13 @@
 import ValetButton from "../../../components/ValetButton"
 import ValetSnackBar from "@/components/ValetSnackBar";
 import FormAdress from "../../../fragments/FormAdress"
-import {loadDesign, placeAndPaySampleOrder} from '../../../api/dressDesginService'
+import {
+  loadDesign,
+  paySampleOrder,
+  paySampleOrderAdvance, paySampleOrderBilling,
+  placeAndPaySampleOrder,
+  placeSampleOrder
+} from '../../../api/dressDesginService'
 import {customerEditMe, customerMe} from "@/api/customerService"
 
 
@@ -328,8 +363,10 @@ export default {
     this.productInfo = await loadDesign(this.id)
     this.dataBody = (await customerMe()).data ?? []
 
+    this.token = localStorage.getItem('token')
+
     const val = this.dataBody
-    console.log("p",val)
+    console.log("databody",val,'lieferAddressForm',this.lieferAddressForm)
     this.lieferAddressForm.vorname = val.firstName
     this.lieferAddressForm.nachname = val.lastName
     this.lieferAddressForm.address = val.address.split(',')[0]
@@ -380,6 +417,9 @@ export default {
   },
   data() {
     return {
+      payStatus: true,
+      payMethodValue:0,
+      token: null,
       dataBody:[],
       snackBar: false,
       snackbarText: "Alle erforderliche Field soll ausgeführt werden.",
@@ -389,7 +429,7 @@ export default {
       productInfo: null,
       refreshButtonFlag: false,
       showEditAdress: true,
-      anzahlStep: 3,
+      anzahlStep: 1,
       anzahl: 1,
       anzahlMenu: false,
       headers: [
@@ -484,16 +524,31 @@ export default {
           phone: this.phone
         }
 
-        await this.customerEditMe(data)
+        await customerEditMe(data)
       }
 
       this.anzahlStep = this.anzahlStep + 1
 
 
     },
+    async placeAndPaySampleOrder(id) {
+      await placeSampleOrder(id, parseInt(this.amount), this.lieferAddressForm.address, this.RechnungAddressForm.address)
+
+      switch (this.payMethodValue) {
+        case 0:
+          return (await paySampleOrder(id))
+        case 1:
+          return (await paySampleOrderAdvance(id))
+        default:
+          return (await paySampleOrderBilling(id))
+      }
+
+    },
+
     async tryToPaySampleOrder() {
-      console.log(this.id, '要支付的订单ID')
+      // console.log(this.id, '要支付的订单ID')
       location.href = await placeAndPaySampleOrder(this.id)
+
     },
     async adressConfirm() {
       const res = Object.entries(this.lieferAddressForm).filter(i => i[0] != 'zusatzAdress')
@@ -512,7 +567,7 @@ export default {
       } else {
         this.snackBar = true
       }
-      this.RechnungAddressForm = this.lieferAddressForm
+      this.RechnungAddressForm = Object.assign({},this.lieferAddressForm)
     },
     handelClose() {
       this.dialogLiferAdress = false

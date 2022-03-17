@@ -1,6 +1,33 @@
 <template>
   <div class="d-flex justify-center" style="height: calc(100%); margin-top: 60px">
     <v-card width="60%" flat tile>
+
+<!--      <v-card flat>-->
+<!--        <div style="display: grid;-->
+<!--                    grid-template-columns: 60px auto 300px;-->
+<!--                    border-bottom: 1px solid #BFB8B1;-->
+<!--                    min-height: 100px"-->
+<!--             class="py-4">-->
+<!--          <div class="contentText">-->
+<!--            <v-icon>mdi-account</v-icon>-->
+<!--          </div>-->
+
+<!--          <div class="contentText">-->
+<!--            <div class="mb-2 v-caption">Name</div>-->
+<!--            <div>{{dataBody.firstName}}</div>-->
+<!--            <div>{{dataBody.lastName}}</div>-->
+<!--            <div>{{dataBody.city}}</div>-->
+<!--            <div>{{dataBody.phone}}</div>-->
+<!--          </div>-->
+
+<!--          <div>-->
+<!--            <ValetButton buttonText="Bearbeiten" @click="handleButtonClick(items)"/>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </v-card>-->
+      
+
       <template v-for="(items,i) in personData">
         <v-card :key="'data'+i" flat tile>
           <div
@@ -217,6 +244,24 @@ export default {
         phone: '01578963222',
         deliveryAddress: 'Teltower Damm 227B, 14177 Berlin, Germany',
         billingAddress: 'Teltower Damm 227B, 14177 Berlin, Germany'
+      },
+      lieferAddressForm: {
+        vorname: '',
+        nachname: '',
+        address: '',
+        zusatzAdress: '',
+        zipCode: '',
+        stadt: '',
+        country: 'Germany'
+      },
+      RechnungAddressForm: {
+        vorname: '',
+        nachname: '',
+        address: '',
+        zusatzAdress: '',
+        zipCode: '',
+        stadt: '',
+        country: ''
       },
       personData: [
         {
