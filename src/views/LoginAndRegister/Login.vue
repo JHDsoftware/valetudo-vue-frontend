@@ -5,7 +5,7 @@
       <div class="formTitle mt-n16 d-flex justify-center" style="margin-bottom: 40px; font-weight: 600;">Login</div>
 
       <ValetInputTextField
-          title="Email*"
+          title="E-Mail*"
           v-model="loginEmail"
           width-input="540px"
       >
@@ -88,7 +88,7 @@ export default {
 <style scoped>
 
 .label12 {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 12px;

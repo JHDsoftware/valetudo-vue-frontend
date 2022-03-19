@@ -1,6 +1,8 @@
 <template>
+  <div class="d-flex justify-center align-center" style="height: 100%">
+  <v-card flat width="100%">
   <div
-      style="display: grid;grid-template-columns: repeat(2,50%);justify-items: center;padding: 72px 0">
+      style="display: grid;grid-template-columns: repeat(2,50%);justify-items: center;">
 
     <div class="loginForm"
          style="border-right: 1px solid #817163;width: 100%;display: flex;justify-content: center;align-items: center;height: 100%">
@@ -8,9 +10,10 @@
         <div class="formTitle " style="margin-bottom: 40px; ">Login</div>
 
         <ValetInputTextField
-            title="Email*"
+            title="E-Mail*"
             v-model="loginEmail"
             width-input="540px"
+            hide-details
         >
         </ValetInputTextField>
 
@@ -19,10 +22,12 @@
             title="Password*"
             v-model="loginPassword"
             type="password"
-            width-input="540px"></ValetInputTextField>
+            width-input="540px"
+            hide-details
+        ></ValetInputTextField>
 
         <div class="content18"
-             style="padding-bottom: 24px;"
+             style="padding-bottom: 24px;line-height: 26px;"
         ><span @click="$router.push('/forgetPasswordConfirmEmail')">Passwort vergessen?</span></div>
 
         <ValetButton
@@ -72,14 +77,14 @@
 
 
         <ValetInputTextField
-            title="Email*"
+            title="E-Mail*"
             v-model="email"
             width-input="540px"
         ></ValetInputTextField>
 
 
-        <div style="margin-bottom: 8px">
-          Password* <span style="font-size: 12px"> Bitte mindestens 8 Zahlen oder Zeichen</span>
+        <div style="margin-bottom: 8px; font-size: 18px">
+          Password*<span style="font-size: 12px;line-height: 17px; margin-left: 8px">Bitte mindestens 8 Zahlen oder Zeichen</span>
         </div>
         <ValetInputTextField
             :use-title="false"
@@ -90,7 +95,7 @@
 
 
         <ValetInputTextField
-            title="Password Confirm*"
+            title="Password bestätigen*"
             type="password"
             v-model="passwordRepeat"
             width-input="540px"></ValetInputTextField>
@@ -98,10 +103,9 @@
         <div style="width: 540px">
 
           <div class="label12" style="margin-bottom: 24px">
-            Durch Klicken auf "Registrieren stimmst du den Nutzungsbedingungen und der
-            Datenschutzrichtlinie von Valetuto zu. Valetudo kann dir von Zeit zu Zeit Mitteilungen zusenden. Du kannst
-            entsprechende Einstellungen in deinen Kontoeinstellungen ändern. Wir werden nie etwas ohne deine Erlaubnis
-            posten.
+            Durch Klicken auf "Registrieren stimmst du den Nutzungsbedingungen und der Datenschutzrichtlinie von
+            Valetuto zu. Valetudo kann dir von Zeit zu Zeit Mitteilungen zusenden. Du kannst entsprechende Einstellungen
+            in deinen Kontoeinstellungen ändern. Wir werden nie etwas ohne deine Erlaubnis posten.
 
           </div>
 
@@ -126,6 +130,8 @@
     ></ValetSnackBar>
 
   </div>
+  </v-card>
+  </div>
 </template>
 
 <script>
@@ -138,7 +144,7 @@ import ValetSnackBar from "../../components/ValetSnackBar";
 export default {
   name: "LoginPage",
   components: {ValetInputTextField, ValetButton, ValetSnackBar},
-  computed:{
+  computed: {
     // valetSnackBar(){
     //   return this.snackbar
     // }
@@ -194,28 +200,26 @@ export default {
         // phone: this.phone
       }
 
-      if(this.passwordRepeat != this.password){
-        this.snackbar=true
-        this.snackbarText="Die beide Password sind nicht gleich"
-      }
-      else{
-        if (Object.values(data).every((i)=> i ? true : false)) {
-          data.phone=this.phone
+      if (this.passwordRepeat != this.password) {
+        this.snackbar = true
+        this.snackbarText = "Die beide Password sind nicht gleich"
+      } else {
+        if (Object.values(data).every((i) => i ? true : false)) {
+          data.phone = this.phone
           const res = await customerRegister(data)
 
           if (res.code === 200) {
             await this.$router.push('/registerComplete')
-          }else {
-            this.snackbar=true
-            this.snackbarText="Registrierung erscheit Fehler"
+          } else {
+            this.snackbar = true
+            this.snackbarText = "Registrierung erscheit Fehler"
           }
         }
       }
 
 
-
     },
-    filter(value, index, arr){
+    filter(value, index, arr) {
       return arr[value] ? true : false
     }
   }
@@ -225,9 +229,9 @@ export default {
 <style scoped>
 
 .label12 {
-  font-family: Gill Sans Nova;
+
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   font-size: 12px;
   line-height: 125%;
   /* or 15px */
@@ -239,7 +243,7 @@ export default {
 }
 
 .content18 {
-  font-family: Gill Sans Nova;
+
   font-style: normal;
   font-weight: normal;
   font-size: 18px;

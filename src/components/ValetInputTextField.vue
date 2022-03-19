@@ -1,15 +1,17 @@
 <template>
   <div :style="{width: widthInput}">
-    <template v-if="useTitle" style="margin-bottom: 8px">
-      <div class="label align-end" v-html="title"></div>
+    <template v-if="useTitle" >
+      <div class="label align-end"
+           style=" line-height: 26px; font-size: 18px; margin-bottom: 8px; font-weight: 400;"
+           v-html="title"></div>
     </template>
 
-    <div style="margin-bottom: 16px">
+    <div style="margin-bottom: 8px">
 
       <v-text-field
           outlined
-          style="borderRadius : 0; width: 100%; "
-          :style="customHeight? {'height':customHeight} : {'height': '60px'}"
+          style="borderRadius : 0; width: 100%; font-size: 24px; line-height: 34px; "
+          :height="customHeight ? customHeight : '60px'"
           :rules="useRule? rules : []"
           v-model="localValue"
           :type="type"
@@ -65,7 +67,7 @@ export default {
     },
     hideDetails: {
       type: Boolean,
-      default: false
+      default: true
     },
     customHeight:{
       type:String,
@@ -102,7 +104,7 @@ export default {
 
 <style scoped>
 .label {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 18px;

@@ -1,13 +1,17 @@
 <template>
+  <div class="d-flex align-center flex-wrap" style="height: 100%">
   <message-display
       title="Vielen Dank für Ihre Anmeldung"
-      :message="message"
-      hint="Ich habe Probleme bei der Registrierung"
       button-text="Aktualisieren"
+      button-height="60px"
+      button-width="266px"
       :show-button="true"
+      :message="message"
+      :hint="hint"
       v-on:clickButton="$router.replace('/login')"
       v-on:clickHint="$router.replace('/FAQ')"
   ></message-display>
+  </div>
 </template>
 
 
@@ -20,7 +24,8 @@ export default {
   data() {
     return {
       message: "Wir haben Ihnen eine E-Mail geschickt. Bitte klicken Sie auf den Link, um Ihre Anmeldung zu bestätigen.\n" +
-          "Klicken Sie nach Ihrer Bestätigung auf den Button \"Aktualisieren\"."
+          "Klicken Sie nach Ihrer Bestätigung auf den Button \"Aktualisieren\".",
+      hint: `<span style="font-size: 18px; color: #817163">Ich habe Probleme bei der Registrierung</span>`
     }
   },
   methods: {

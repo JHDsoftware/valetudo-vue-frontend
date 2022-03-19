@@ -1,24 +1,35 @@
 <template>
+
+  <v-card width="100%" flat>
   <div class="fill-height d-flex justify-center align-center">
-    <div style="width: 700px;text-align: center">
+    <div style="text-align: center">
       <div class="d-flex justify-center ">
         <v-icon v-if="showTopLogo" size="54px">mdi-check-circle-outline</v-icon>
       </div>
-      <div class="titleAlert">{{ title }}</div>
-      <div class="content d-flex justify-center align-center py-7" style="width: 100%;text-align: center; white-space: pre-wrap" >{{message}}
-      </div>
-      <slot ></slot>
-      <div v-if="showButton" style="margin-bottom: 24px">
-        <v-btn tile width="540px"
-               height="60px"
+      <v-container class="pa-0">
+        <div class="titleAlert" >{{ title }}</div>
+      </v-container>
+
+      <v-container class="pa-0">
+        <div class="content d-flex justify-space-between align-center"
+             style="width: 650px; padding-top: 40px; padding-bottom: 24px; white-space: pre-wrap" >{{message}}
+        </div>
+      </v-container>
+
+      <slot name="TextTop"></slot>
+      <slot name="TextBottom"></slot>
+      <div v-if="showButton">
+        <v-btn tile :width="buttonWidth"
+               :height="buttonHeight"
                style="background-color: #817163; color: white;font-size: 24px; text-transform: none "
                elevation="0" @click="clickButton">{{ buttonText }}</v-btn>
       </div>
-      <div style="width: 650px" class="d-flex align-center justify-center" @click="clickHint">
-        <span class="mt-2" v-html="hint"></span>
+      <div style="width: 650px; padding-top: 24px" class="d-flex align-center justify-center" @click="clickHint">
+        <span v-html="hint"></span>
       </div>
     </div>
   </div>
+  </v-card>
 </template>
 
 <script>
@@ -30,7 +41,16 @@ export default {
     showButton: {},
     showTopLogo: {},
     buttonText: {},
-    hint: {}
+    hint: {},
+    buttonWidth:{
+      type: String,
+      default: '540px'
+    },
+    buttonHeight: {
+      type: String,
+      default: '60px'
+    }
+
   },
   methods :{
    clickButton(){

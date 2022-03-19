@@ -54,7 +54,7 @@ export default {
 
 <style scoped>
 .label18 {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
@@ -68,7 +68,7 @@ export default {
 }
 
 .label24 {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 24px;
@@ -88,7 +88,7 @@ export default {
 }
 
 .label12 {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 12px;

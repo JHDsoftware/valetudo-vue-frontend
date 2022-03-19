@@ -26,7 +26,7 @@
 <!--        </div>-->
 
 <!--      </v-card>-->
-      
+
 
       <template v-for="(items,i) in personData">
         <v-card :key="'data'+i" flat tile>

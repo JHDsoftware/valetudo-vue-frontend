@@ -7,8 +7,8 @@
         <v-img width="80px" class="ml-2" :src="require('@/assets/image/frameUI/logoBack.png')"></v-img>
       </div>
       <div style="position: fixed;right: 63px;top:22px" class="d-flex">
-        <router-link class="flatButton" to="/">Login/Register</router-link>
-        <router-link class="flatButton" to="/order" style="margin-left: 32px">Konto</router-link>
+        <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
+        <router-link class="flatButton text-decoration-none" to="/order" style="margin-left: 32px">Konto</router-link>
       </div>
     </v-app-bar>
 
@@ -44,7 +44,7 @@ export default {
 }
 
 .appHeaderMyDress{
-  font-family: Oranienbaum;
+  /*font-family: Oranienbaum;*/
   font-style: normal;
   font-weight: normal;
   font-size: 22px;
@@ -55,7 +55,7 @@ export default {
 }
 
 .flatButton {
-  font-family: Palanquin;
+  /*font-family: Palanquin;*/
   font-style: normal;
   font-weight: normal;
   font-size: 13px;
@@ -66,7 +66,7 @@ export default {
 
 .label {
 
-  font-family: Inter;
+  /*font-family: Inter;*/
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -79,11 +79,11 @@ export default {
 }
 
 .titleAlert {
-  font-family: Palanquin;
+  /*font-family: Palanquin;*/
   font-style: normal;
   font-weight: 300;
   font-size: 48px;
-  line-height: 87px;
+  line-height: 125%;
   /* identical to box height */
 
   text-align: center;
@@ -92,7 +92,7 @@ export default {
 }
 
 .content {
-  font-family: Palanquin;
+  /*font-family: Palanquin;*/
   font-style: normal;
   font-weight: normal;
   font-size: 36px;
@@ -110,6 +110,7 @@ export default {
   font-weight: 600;
   font-size: 48px;
   line-height: 125%;
+  text-align: center;
   /* identical to box height, or 60px */
 
   color: #817163;
@@ -132,7 +133,7 @@ export default {
 }
 
 .tinyHint {
-  font-family: Inter;
+  /*font-family: Inter;*/
   font-style: normal;
   font-weight: 500;
   font-size: 10px;
@@ -150,7 +151,7 @@ export default {
 }
 
 .buttonText{
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
