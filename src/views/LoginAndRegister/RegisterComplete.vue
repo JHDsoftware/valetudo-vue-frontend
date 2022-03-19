@@ -7,10 +7,17 @@
       button-width="266px"
       :show-button="true"
       :message="message"
+      message-width="620px"
       :hint="hint"
       v-on:clickButton="$router.replace('/login')"
       v-on:clickHint="$router.replace('/FAQ')"
-  ></message-display>
+  >
+    <template v-slot:TextTop>
+      <div>
+
+      </div>
+    </template>
+  </message-display>
   </div>
 </template>
 

@@ -11,8 +11,10 @@
       </v-container>
 
       <v-container class="pa-0">
-        <div class="content d-flex justify-space-between align-center"
-             style="width: 650px; padding-top: 40px; padding-bottom: 24px; white-space: pre-wrap" >{{message}}
+        <div class="content d-flex  align-center"
+             style="padding-top: 40px; padding-bottom: 24px; white-space: pre-wrap"
+             :style="{'width': messageWidth}"
+        >{{message}}
         </div>
       </v-container>
 
@@ -49,6 +51,10 @@ export default {
     buttonHeight: {
       type: String,
       default: '60px'
+    },
+    messageWidth: {
+      stye: String,
+      default: '650px'
     }
 
   },
