@@ -1,28 +1,29 @@
 <template>
-  <div>
+  <div >
     <v-simple-table>
       <thead style="height: 90px;background: #e0ddd6;color:  #6F6154;">
-      <tr>
-        <th>Bestellnummber</th>
-        <th>Bestelldatum</th>
-        <th>Artikel</th>
-        <th>Name des Kleides</th>
-        <th>Anzahl</th>
-        <th>Gesamtsumme</th>
-        <th>Bezahlstatus</th>
-        <th>action</th>
+      <tr >
+        <th style="font-size: 18px">Bestellnummber</th>
+        <th style="font-size: 18px">Bestelldatum</th>
+        <th style="font-size: 18px">Artikel</th>
+        <th style="font-size: 18px">Name des Kleides</th>
+        <th style="font-size: 18px">Anzahl</th>
+        <th style="font-size: 18px">Gesamtsumme</th>
+        <th style="font-size: 18px">Bezahlstatus</th>
+        <th style="font-size: 18px">Action</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="i in items" :key="i.bId">
-        <td>{{ i.bId }}</td>
-        <td>{{ i.time }}</td>
-        <td>{{ i.type }}</td>
-        <td>{{ i.name ?i.name: '-' }}</td>
-        <td>{{ i.quantity }}</td>
-        <td>{{ i.totalPrice.toFixed(2).replace('.', ',') + " €" }}</td>
-        <td>{{ i.paymentStatus }}</td>
-        <td><valet-button  :button-text="'Kontakt uns'" @click="$router.push('/OrderIndex/KontaktUns')"></valet-button></td>
+        <td style="font-size: 24px">{{ i.bId }}</td>
+        <td style="font-size: 24px">{{ i.time }}</td>
+        <td style="font-size: 24px">{{ i.type }}</td>
+        <td style="font-size: 24px">{{ i.name ?i.name: '-' }}</td>
+        <td style="font-size: 24px">{{ i.quantity }}</td>
+        <td style="font-size: 24px">{{ i.totalPrice.toFixed(2).replace('.', ',') + " €" }}</td>
+        <td><v-icon x-large> {{ i.paymentStatusIcon }} </v-icon></td>
+        <td style="width: 266px"><valet-button :button-text="i.buttonText"
+                          @click="handleZahlen(i)"></valet-button></td>
       </tr>
 
       </tbody>
@@ -39,22 +40,59 @@ import ValetButton from '../../../components/ValetButton'
 export default {
   name: "Bestellung",
   components: {ValetButton},
+
   data () {
     return {
       headers: orderBestellungHeader,
-      items: []
+      items: [],
     }
   },
-  async mounted () {
-    this.items = (await getMyDesign()).filter(i => i.designCompleted).map(i => {
-      i.bId = i.id.toString().padStart(4, '0')
-      i.time = dayjs(i.completedAt).format('YYYY-MM-DD')
-      i.type = 'MusterBox'
-      i.quantity = i.quantity || 1
+  mounted () {
+    this.init()
+  },
+  methods: {
+    paymentStatus(item) {
+      let iconStatus =  'mdi-close-circle'
+      let buttonText = 'Bezahlen'
+      if(item === 'Success') {
+        iconStatus = 'mdi-check-circle'
+        buttonText = 'Kontakt uns'
+      }
+      if(item === 'Pending'){
+        iconStatus = 'mdi-help-circle'
+        buttonText = 'Kontakt uns'
+      }
+      return [iconStatus, buttonText]
+    },
+    handleZahlen(i){
+      if(i.paymentStatus === 'Success'){
+        this.$router.push('/OrderIndex/KontaktUns')
+      }else {
+        this.$router.push({
+          path: '/OrderIndex/KontaktUns',
+          query: {
+            data: 3
+          }
+        })
+      }
 
-      return i
-    })
-    console.log(this.items)
+    },
+    async init() {
+      this.items = (await getMyDesign()).filter(i => i.designCompleted).map(i => {
+        i.bId = i.id.toString().padStart(4, '0')
+        i.time = dayjs(i.completedAt).format('YYYY-MM-DD')
+        i.type = 'MusterBox'
+        i.quantity = i.quantity || 1
+        i.paymentStatusIcon = this.paymentStatus(i.paymentStatus)[0]
+        i.buttonText = this.paymentStatus(i.paymentStatus)[1]
+
+        return i
+      })
+
+
+      console.log(this.items)
+
+    }
   }
 }
 </script>
@@ -64,11 +102,12 @@ export default {
 td, th {
   text-align: center !important;
   border-bottom: 1px solid #817163 !important;
+
 }
 
 th {
   border-bottom: 1px solid #817163 !important;
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
@@ -82,7 +121,7 @@ th {
 }
 
 td {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: bold;
   font-size: 26px;
@@ -92,4 +131,9 @@ td {
   color: #4C4C4C;
   height: 120px !important;
 }
+
+.text18 {
+  font-size: 18px
+}
+
 </style>

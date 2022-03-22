@@ -60,7 +60,10 @@ export default {
       type: String,
       default: ''
     },
-    widthInput: {},
+    widthInput: {
+      type: String,
+      default: '550px'
+    },
     rulesInput: {
       type: Object,
       default: ()=> {}

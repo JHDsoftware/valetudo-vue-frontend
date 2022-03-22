@@ -7,7 +7,7 @@
       button-width="266px"
       :show-button="true"
       :message="message"
-      message-width="620px"
+      message-width="650px"
       :hint="hint"
       v-on:clickButton="$router.replace('/login')"
       v-on:clickHint="$router.replace('/FAQ')"

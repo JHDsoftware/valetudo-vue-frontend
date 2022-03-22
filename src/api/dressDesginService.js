@@ -27,20 +27,30 @@ export async function placeSampleOrder (id, quantity = 1, deliveryAddress = defa
   })).data
 }
 
+// 有订单ID
 export async function paySampleOrder (id) {
   return (await hillo.post('/dressDesign/paySampleOrder/' + `${id}`)).data
+}
+export async function paySampleOrderBilling(id) {
+  return (await hillo.post(`/paySampleOrderBilling/${id}`)).data
 }
 
 export async function paySampleOrderAdvance(id){
   return (await hillo.post(`/paySampleOrderAdvance/${id}`)).data
 }
 
-export async function paySampleOrderBilling(id) {
-  return (await hillo.post(`/paySampleOrderBilling/${id}`)).data
-}
+
 
 export async function loadDesign (id) {
   return (await hillo.get('/dressDesign/getById/' + id)).data
+}
+
+// 无订单ID
+export async function payNewByPaypal (data) {
+  return (await hillo.post('/dressDesign/createNewByPaypal',data)).data
+}
+export async function payNewByBilling(data) {
+  return (await hillo.post(`/dressDesign/createNewByBilling`,data)).data
 }
 
 export async function createNewDesign (name) {

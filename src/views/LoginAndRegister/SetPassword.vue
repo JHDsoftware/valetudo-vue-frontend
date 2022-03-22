@@ -1,5 +1,6 @@
 <template>
-  <div style="margin-top: 15%">
+  <div class="d-flex justify-center align-center" style="height: 100%">
+    <v-card width="100%" flat>
     <div class="positionCenter">
       <div class="text">
         Ihr neues Passwort einrichten</div>
@@ -8,7 +9,7 @@
     <div class="positionCenter" style="margin-top: 40px">
       <div>
           <valet-input-text-field
-              style="width: 581px"
+              :widthInput="'580px'"
               title="Neues Passwort*:"
               v-model="password"
           />
@@ -19,7 +20,7 @@
               v-model="confirmPassword"
               type="password"></valet-input-text-field>
 
-        <div style="margin-top: 8px">
+        <div style="margin-top: 24px">
         <ValetButton buttonText="Bestätigen" @click="handle"/>
         </div>
 <!--          <v-btn class="buttonText"-->
@@ -33,6 +34,8 @@
 <!--                >Bestätigen</v-btn>-->
       </div>
     </div>
+
+    </v-card>
     <ValetSnackBar
         v-model="snackbar"
         :snackbar-text="snackbarText"
@@ -84,11 +87,11 @@ export default {
 <style scoped>
 
 .text {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 48px;
-  line-height: 5px;
+  line-height: 125%;
   /* or 10% */
 
   display: flex;
@@ -100,7 +103,7 @@ export default {
 
 }
 .buttonText{
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 24px;

@@ -16,13 +16,14 @@
               style="width: 100%"/>
 
           <ValetButton
+              style="margin-top: 24px"
               buttonText="Bestätigen"
               @click="confirm"/>
 
         </div>
 
       </div>
-      <div style="margin-top: 24px; width: 650px" class="hint">
+      <div style="margin-top: 24px; width: 600px" class="hint">
         {{ hintMessage }}
       </div>
     </div>
@@ -61,6 +62,7 @@ export default {
         console.log(res)
         if (res.code == 200)
           this.$router.push('/forgetPasswordComplete')
+        // else this.Message('error')
       }
 
     }
@@ -70,7 +72,7 @@ export default {
 
 <style scoped>
 .buttonText {
-  font-family: Gill Sans Nova;
+
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
@@ -83,7 +85,7 @@ export default {
 }
 
 .hint {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 18px;

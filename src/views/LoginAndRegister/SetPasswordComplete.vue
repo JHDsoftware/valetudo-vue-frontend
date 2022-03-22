@@ -1,6 +1,7 @@
 <template>
-  <div style="margin-top: 5%" class="positionCenter">
+  <div style="height: 100%" class="d-flex justify-center align-center">
 
+    <v-card width="540px" flat>
     <div style="width: 540px">
 
       <div class="titleAlert" style="margin-bottom: 40px">
@@ -40,6 +41,7 @@
         :snackbar-text="snackbarText"
     ></ValetSnackBar>
 
+    </v-card>
   </div>
 </template>
 
@@ -83,7 +85,7 @@ export default {
 
 <style scoped>
 .titleAlert {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 48px;

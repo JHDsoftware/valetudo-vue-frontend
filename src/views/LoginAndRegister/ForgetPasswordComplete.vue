@@ -6,8 +6,8 @@
         Vielen Dank
       </div>
 
-      <div class="contentAlert" style="margin-bottom: 24px; width: 650px">
-        Wir haben Ihnen das neue Passwort an Ihre E-Mail geschickt.Bitte überprüfen Sie Ihren "Trash" oder “Spam”, wenn Sie die E-Mail in Ihrem E-Mail-Eingang nicht finden können.
+      <div class="contentAlert" style="margin-bottom: 24px; width: 650px; white-space: pre-wrap">
+        {{message}}
       </div>
 
       <div class="d-flex justify-center align-center">
@@ -32,7 +32,7 @@ export default {
   components: { ValetButton},
   data() {
     return {
-      // message: `Wir haben Ihnen das neue Passwort an Ihre E-Mail geschickt. Bitte überprüfen Sie Ihren "Trash" oder “Spam”, wenn Sie die E-Mail in Ihrem E-Mail-Eingang nicht finden können.`
+      message: `Wir haben Ihnen das neue Passwort an Ihre E-Mail geschickt. \n Bitte überprüfen Sie Ihren "Trash" oder “Spam”, wenn Sie die E-Mail in Ihrem E-Mail-Eingang nicht finden können.`
     }
   },
   methods:{
@@ -46,7 +46,7 @@ export default {
 <style scoped>
 
 .titleAlert {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 48px;
@@ -59,7 +59,7 @@ export default {
 
 }
 .contentAlert{
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 36px;

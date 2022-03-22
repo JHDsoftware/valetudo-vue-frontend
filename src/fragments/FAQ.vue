@@ -43,7 +43,6 @@ export default {
 
 <style scoped>
 .FAQ {
-  font-family: Gill Sans Nova;
   font-style: normal;
   font-weight: 600;
   font-size: 48px;
@@ -58,7 +57,7 @@ export default {
 .titleText{
   margin-top: 40px;
   margin-bottom: 8px;
-  font-family: Gill Sans Nova;
+
   font-style: normal;
   font-weight: normal;
   font-size: 36px;

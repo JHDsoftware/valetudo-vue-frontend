@@ -2,7 +2,7 @@
 
   <v-card width="100%" flat>
   <div class="fill-height d-flex justify-center align-center">
-    <div style="text-align: center">
+    <div class="text-center">
       <div class="d-flex justify-center ">
         <v-icon v-if="showTopLogo" size="54px">mdi-check-circle-outline</v-icon>
       </div>
@@ -11,8 +11,8 @@
       </v-container>
 
       <v-container class="pa-0">
-        <div class="content d-flex  align-center"
-             style="padding-top: 40px; padding-bottom: 24px; white-space: pre-wrap"
+        <div class="d-flex justify-center"
+             style="padding-top: 40px; padding-bottom: 24px; white-space: pre-wrap; font-size: 36px"
              :style="{'width': messageWidth}"
         >{{message}}
         </div>

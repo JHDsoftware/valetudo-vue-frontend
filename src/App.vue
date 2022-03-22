@@ -7,8 +7,10 @@
         <v-img width="80px" class="ml-2" :src="require('@/assets/image/frameUI/logoBack.png')"></v-img>
       </div>
       <div style="position: fixed;right: 63px;top:22px" class="d-flex">
+
+        <template v-if="showLoginRegister"></template>
         <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
-        <router-link class="flatButton text-decoration-none" to="/order" style="margin-left: 32px">Konto</router-link>
+        <router-link class="flatButton text-decoration-none" to="/OrderIndex/OrderPersonData" style="margin-left: 32px">Konto</router-link>
       </div>
     </v-app-bar>
 
@@ -30,8 +32,15 @@
 
 export default {
   // components: {ValetInputTextField},
+  // computed:{
+  //   showLoginRegister(){
+  //     console.log("xx", this.route.path)
+  //     return true
+  //   }
+  // },
   data () {
     return {
+      showLoginRegister: true,
       testValue: null
     }
   }

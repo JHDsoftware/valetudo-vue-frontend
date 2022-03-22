@@ -24,18 +24,31 @@
             </div>
             <div @click="$router.push('/createNewDress')">
               <div class="dressContainer d-flex justify-center align-center">
-                <div class="noContent">
-                  <div class="bigHint">Design your dream dress for free!</div>
-                  <v-btn block tile height="52px" color="#e0ddd6" class="mt-4" elevation="0">Start</v-btn>
+                <div class="noContent" style="width: 260px; font-size: 24px">
+                  <div class="bigHint">Entwirf Dein zweites Brautkleid kostenlos</div>
+                  <v-btn block
+                         tile
+                         style="text-transform: none; "
+                         height="52px"
+                         color="#e0ddd6"
+                         class="mt-4"
+                         elevation="0">Los geht's
+                  </v-btn>
                 </div>
               </div>
             </div>
 
             <div>
-              <div @click="$router.push('/questionspage')" class="dressContainer d-flex justify-center align-center">
-                <div class="noContent">
-                  <div class="bigHint">Design more for 19.99 €</div>
-                  <v-btn block tile height="52px" color="#e0ddd6" class="mt-4" elevation="0">Start</v-btn>
+              <div @click="$router.push({path: '/SampleOrder/' + '-1'})" class="dressContainer d-flex justify-center align-center">
+                <div class="noContent" style="font-size: 24px">
+                  <v-container class="bigHint" style="width: 240px">Entwirf mehr Brautkleid für 19.90 €</v-container>
+                  <v-btn block
+                         tile
+                         style="text-transform: none; "
+                         height="52px"
+                         color="#e0ddd6"
+                         elevation="0">Los geht's
+                  </v-btn>
                 </div>
               </div>
             </div>
@@ -76,18 +89,19 @@
             </div>
 
             <v-card flat>
-              <v-card-title> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle>Musterbox für 29,99 €. Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
+              <v-card-title style="font-size: 24px; margin-bottom: 8px"> Mussterbox bestellen</v-card-title>
+              <v-card-subtitle style="font-size: 18px">Musterbox für <span style="font-size: 24px; font-weight: bold">29,99 €</span> . Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
                 sowie
                 ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
               </v-card-subtitle>
               <v-card-actions>
-                <v-btn block height="60"
+                <v-btn tile
+                    height="60"
                        elevation="0"
                        color="#817163"
                        class="white--text"
-                       style="text-transform: none; font-size: 24px"
-                     @click="toOrderPage(dress.id)"
+                       style="text-transform: none; font-size: 24px; width: 266px"
+                       @click="toOrderPage(dress.id)"
 
                 >Bestellen
                 </v-btn>
@@ -95,22 +109,22 @@
             </v-card>
           </div>
 
-          <div class="d-flex justify-space-between justify-center" style="margin-bottom: 110px">
+          <div class="d-flex justify-space-between justify-center" style="margin-bottom: 80px">
             <div style="margin-right: 85px">
 
               <v-img src="@/assets/picture.png" width="225" height="225"></v-img>
             </div>
 
             <v-card flat>
-              <v-card-title>Preis anfragen</v-card-title>
-              <v-card-subtitle>
-                MDu bist mit deinem Entwurf zufrieden und möchtest die Skizze in die Realität umsetzen? Dann frag uns
+              <v-card-title style="font-size: 24px; margin-bottom: 8px">Preis anfragen</v-card-title>
+              <v-card-subtitle style="font-size: 18px">
+                Du bist mit deinem Entwurf zufrieden und möchtest die Skizze in die Realität umsetzen? Dann frag uns
                 nach dem Preis. Wir werden Dich in 1-3 Tagen kontaktieren.
               </v-card-subtitle>
               <v-card-actions>
-                <v-btn block height="60" elevation="0" color="#817163" class="white--text"
+                <v-btn tile height="60" elevation="0" color="#817163" class="white--text"
                        @click="showKontakt=true"
-                       style="text-transform: none; font-size: 24px">Preis anfragen
+                       style="text-transform: none; font-size: 24px; width: 266px">Preis anfragen
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -123,15 +137,16 @@
             </div>
 
             <v-card flat>
-              <v-card-title>Termin vereinbaren</v-card-title>
-              <v-card-subtitle>Wenn Du weitere Hilfe von einem Experten benötigst, um Dein endgültiges Kleid zu
+              <v-card-title style="font-size: 24px; margin-bottom: 8px">Termin vereinbaren</v-card-title>
+              <v-card-subtitle style="font-size: 18px">Wenn Du weitere Hilfe von einem Experten benötigst, um Dein endgültiges Kleid zu
                 entwerfen, oder wenn Du Designerkleider in unserem Showroom anprobieren möchtest, dann kannst Du gerne
                 einen Termin vereinbaren.
 
               </v-card-subtitle>
               <v-card-actions>
-                <v-btn block height="60" elevation="0" color="#817163" class="white--text"
-                       style="text-transform: none; font-size: 24px">Termin vereinbaren
+                <v-btn tile height="60" elevation="0" color="#817163" class="white--text"
+                       @click="$router.push('/questionspage')"
+                       style="text-transform: none; font-size: 24px; width: 266px">Termin vereinbaren
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -142,48 +157,58 @@
 
       <v-dialog v-model="showKontakt"
                 persistent
-                max-width="40vw"
+                width="660px"
       >
-        <div class="d-flex justify-center">
-          <v-card width="40vw" height="65vh">
-            <div class="dressName d-flex justify-center" style="margin-top: 61px">
-              Kontaktdaten bestätigen
-            </div>
-            <div style="position: absolute; right: 35px; top: 35px">
-              <v-icon x-large @click="showKontakt=false">mdi-close</v-icon>
-            </div>
 
-            <div style="margin-top: 40px; " class="dressHint d-flex justify-center">
-              <div>
-                <div style="width: 540px; margin-bottom: 40px; font-size: 24px; text-align: center">
-                  Wir werden uns innerhalb von 1-3 Arbeitstagen mit Dir in Verbindung setzen, um Dir ein Angebot zu
-                  machen. Bitte überprüfe Deine Kontaktinformationen unten.
-                </div>
+        <v-card flat style="padding: 61px 59px 60px 59px" >
+          <div style="position: absolute; right: 34px; top: 34px">
+            <v-icon x-large @click="showKontakt=false">mdi-close</v-icon>
+          </div>
 
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 8px ">
+          <div class="d-flex justify-center dressName">
+            Kontaktdaten bestätigen
+          </div>
 
-                  <valet-input-text-field
-                      title="Vorname*"
-                      v-model="firstName"
-                  ></valet-input-text-field>
 
-                  <valet-input-text-field
-                      title="Name*"
-                      v-model="lastName"
-                  ></valet-input-text-field>
+          <div style="margin-top: 40px; " class="dressHint">
+            <div>
+              <div style=" margin-bottom: 40px; font-size: 24px; text-align: center">
+                Wir werden uns innerhalb von 1-3 Arbeitstagen mit Dir in Verbindung setzen, um Dir ein Angebot zu
+                machen. Bitte überprüfe Deine Kontaktinformationen unten.
+              </div>
 
-                  <valet-input-text-field
-                      title="Handy Number*"
-                      v-model="phone"
-                  ></valet-input-text-field>
+              <!--                <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 8px ">-->
+              <div class="d-flex justify-center flex-wrap">
 
-                  <valet-input-text-field
-                      title="Stadt*"
-                      v-model="city"
-                  ></valet-input-text-field>
+                <valet-input-text-field
+                    title="Vorname*"
+                    v-model="personData.firstName"
+                    widthInput="266px"
+                    style="margin-right: 8px"
+                ></valet-input-text-field>
 
-                </div>
+                <valet-input-text-field
+                    title="Name*"
+                    v-model="personData.lastName"
+                    widthInput="266px"
+                ></valet-input-text-field>
 
+                <valet-input-text-field
+                    title="Handy Number*"
+                    v-model="personData.phone"
+                    widthInput="266px"
+                    style="margin-right: 8px"
+                ></valet-input-text-field>
+
+                <valet-input-text-field
+                    title="Stadt*"
+                    v-model="personData.city"
+                    widthInput="266px"
+                ></valet-input-text-field>
+
+              </div>
+
+              <div style="width: 540px" class="">
                 <valet-button
                     text-before="Germany"
                     button-text="Anfrage senden"
@@ -191,24 +216,27 @@
                 >
                 </valet-button>
               </div>
+
             </div>
-          </v-card>
-        </div>
+          </div>
+        </v-card>
+
       </v-dialog>
-      <v-dialog v-model="confirmDeleteDialog" width="660px">
-        <div style="width: 660px;padding: 46px 50px;background: white;text-align: center">
-          <div style="font-family: Gill Sans Nova;
-font-style: normal;
-font-weight: 600;
-font-size: 36px;
-line-height: 125%;
-/* or 45px */
+      <v-dialog v-model="confirmDeleteDialog" width="600px">
+        <div style="width: 600px;padding: 46px 50px;background: white;text-align: center">
+          <div style="
+                      font-style: normal;
+                      font-weight: 600;
+                      font-size: 36px;
+                      line-height: 125%;
+                      /* or 45px */
 
-display: flex;
-align-items: center;
-text-align: center;
+                      display: flex;
+                      align-items: center;
+                      text-align: center;
 
-color: #4C4C4C;">Wollen Sie den Kleid wirklich löschen?
+                      color: #4C4C4C;">
+            Wollen Sie den Kleid wirklich löschen?
           </div>
           <div style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 8px;" class="mt-5">
             <valet-button @click="confirmDeleteDialog=false" button-text="Abbrechen"></valet-button>
@@ -242,11 +270,12 @@ color: #4C4C4C;">Wollen Sie den Kleid wirklich löschen?
 
 <script>
 import DressDisplay from "../../../views/DressDisplay"
-import { deleteDress, getMyDesign } from '../../../api/dressDesginService'
+import {deleteDress, getMyDesign} from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
-import { views } from '../../../api/dressDisplayRule'
+import {views} from '../../../api/dressDisplayRule'
+import {customerMe} from "../../../api/customerService";
 
 export default {
   name: "Entwurf",
@@ -258,10 +287,6 @@ export default {
       dress: null,
       showKontakt: false,
       showCompleteTip: false,
-      firstName: "",
-      lastName: "",
-      city: "",
-      phone: "",
       email: "",
       password: "",
       passwordRepeat: "",
@@ -269,43 +294,70 @@ export default {
       targetDeleteId: null,
       dayjs,
       currentView: views[0],
-      dressLoading: false
+      dressLoading: false,
+      personData: {
+        firstName: null,
+        lastName: null,
+        email: null,
+        city: null,
+        phone: null,
+        message: null,
+      }
 
     }
   },
+  async mounted() {
+    await this.loadDressList()
+    await this.getPersonData()
+  },
   methods: {
-    toOrderPage(id){
-      this.$router.push({path:'/SampleOrder/'+id})
+
+    toOrderPage(id) {
+      this.$router.push({path: '/SampleOrder/' + id})
     },
-    showPriceQuestionDialog () {
+    showPriceQuestionDialog() {
       this.showKontakt = false
       this.showCompleteTip = true
+
       setTimeout(() => {
         this.showCompleteTip = false
       }, 5000)
     },
-    changeView () {
+    changeView() {
       this.dressLoading = true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
       setTimeout(() => {
         this.dressLoading = false
       }, 400)
     },
-    async deleteDress () {
+    async deleteDress() {
       if (this.targetDeleteId) {
         await deleteDress(this.targetDeleteId)
         await this.loadDressList()
         this.confirmDeleteDialog = false
       }
     },
-    async loadDressList () {
+    async loadDressList() {
       this.myDressList = await getMyDesign()
       console.log(this.myDressList)
-    }
+    },
+    async getPersonData() {
+      const res = await customerMe()
+      if (res.code != 200) {
+        return null
+      }
+      console.log("res",res)
+
+      this.personData.firstName = res.data.firstName
+      this.personData.lastName = res.data.lastName
+      this.personData.email = res.data.userName
+      this.personData.phone = res.data.phone
+      this.personData.city = res.data.city
+
+    },
   },
-  mounted () {
-    this.loadDressList()
-  }
+
+
 }
 </script>
 
@@ -319,7 +371,7 @@ export default {
   ont-family: Palanquin;
   font-style: normal;
   font-weight: 500;
-  font-size: 36px;
+  font-size: 24px;
   line-height: 40px;
   /* or 111% */
   letter-spacing: -0.011em;
@@ -342,22 +394,20 @@ export default {
 }
 
 .dressName {
-  font-family: Palanquin;
+  /*font-family: Palanquin;*/
   font-style: normal;
   font-weight: 500;
   font-size: 36px;
   line-height: 24px;
   /* identical to box height, or 67% */
 
-  display: flex;
-  align-items: center;
   letter-spacing: -0.011em;
 
   color: #4C4C4C;
 }
 
 .dressCreateTime {
-  font-family: Inter;
+  /*font-family: Inter;*/
   font-style: normal;
   font-weight: 500;
   font-size: 18px;

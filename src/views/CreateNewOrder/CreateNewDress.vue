@@ -1,10 +1,26 @@
 <template>
   <div style="width: 100%;position: relative;" class="d-flex">
-    <v-img height="calc(100vh - 64px)" :src="require('@/assets/image/frameUI/dress.png')"></v-img>
-    <div style="position: absolute;top:323px;right: 144px;width: 587px;text-align: center">
-      <div class="questionLabel" style="width: 100%;text-align: center">Gib deinem Kleid zuerst einen Namen</div>
-      <div style="width: 587px">
-        <v-text-field v-model="name" class="buttonText2 text-center" style="margin-top: 36px"/>
+    <v-img height="calc(100vh - 64px)" :src="require('@/assets/image/frameUI/dress.png')" contain style="margin-left: -240px"></v-img>
+
+    <div style="position: absolute;top:323px;right: 78px;width: 680px;text-align: center">
+      <div class="questionLabel" style="width: 100%;text-align: center; color: #817163">Gib deinem Kleid zuerst einen Namen</div>
+
+
+
+      <v-container style="width: 540px">
+      <div >
+<!--        <ValetInputTextField-->
+<!--            v-model="name"-->
+<!--            width-input="540px"-->
+<!--            hide-details-->
+<!--        >-->
+<!--        </ValetInputTextField>-->
+
+        <v-text-field v-model="name"
+                      height="52px"
+                      class="buttonText2 text-center"
+                      style="margin-top: 36px;"/>
+
         <v-btn @click="createNewDesign"
                block tile
                height="60px"
@@ -17,6 +33,7 @@
           Confirm, start to design!
         </v-btn>
       </div>
+      </v-container>
     </div>
   </div>
 </template>
@@ -34,14 +51,19 @@ export default {
   },
   methods: {
     async createNewDesign () {
-      const res = await createNewDesign(this.name)
-      if(res.id){
-        await this.$router.push({
-          path: 'edit/' + res.id
-        })
-      }else{
-        alert(res)
+      const res = (await createNewDesign(this.name)) ?? {code: -1, message: 'The return value is null'}
+      console.log("what is res", res)
+      if(res.code === 100){
+        if(res.id){
+          await this.$router.push({
+            path: 'edit/' + res.id
+          })
+        }
       }
+      else{
+        alert(res.message)
+      }
+
 
     }
   }
@@ -50,11 +72,11 @@ export default {
 
 <style scoped>
 .questionLabel {
-  font-family: Palanquin;
+  /*font-family: Palanquin;*/
   font-style: normal;
-  font-weight: 300;
-  font-size: 36px;
-  line-height: 24px;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 125%;
   /* or 67% */
 
   letter-spacing: -0.011em;
@@ -63,7 +85,7 @@ export default {
 }
 
 .buttonText2 {
-  font-family: Palanquin;
+  /*font-family: Palanquin;*/
   font-style: normal;
   font-weight: 500;
   font-size: 30px;

@@ -4,8 +4,8 @@
       <div>
         <div class="d-flex justify-center align-center display-2" style="margin-bottom: 60px; ">Kontakt uns</div>
         <v-card style="display: grid; grid-template-columns: repeat(2,1fr); grid-column-gap: 8px" tile flat>
-          <ValetInputTextField title="Vorname*" width-input="266px" v-model="personData.vorname"/>
-          <ValetInputTextField title="Name*" width-input="266px" v-model="personData.nachname"/>
+          <ValetInputTextField title="Vorname*" width-input="266px" v-model="personData.firstName"/>
+          <ValetInputTextField title="Name*" width-input="266px" v-model="personData.lastName"/>
           <ValetInputTextField title="E-Mail*" width-input="266px" v-model="personData.email"/>
           <ValetInputTextField title="Handy Number" width-input="266px" v-model="personData.phone"/>
           <div style="grid-column: 1/3; margin-top: 4px">{{ ('Nachricht') }}</div>
@@ -46,8 +46,8 @@ export default {
   data () {
     return {
       personData: {
-        vorname: null,
-        nachname: null,
+        firstName: null,
+        lastName: null,
         email: null,
         phone: null,
         message: null
@@ -57,26 +57,24 @@ export default {
     }
   },
   async mounted() {
-    const personData = (await customerMe()).data
-    this.vorname = personData.firstName
-    this.nachname = personData.lastname
-    this.email = personData.userName
-
+    await this.getPersonData()
   },
   methods: {
-    async send() {
-
-      const personData = {
-        firstName: this.vorname,
-        lastName: this.nachname,
-        email: this.email,
-        phone: this.phone ?? '',
-        message: this.message
+    async getPersonData() {
+      const res = await customerMe()
+      if (res.code != 200) {
+        return null
       }
 
-      await contactUsAdd(personData)
+      console.log("res",res)
+      this.personData.firstName = res.data.firstName
+      this.personData.lastName = res.data.lastName
+      this.personData.email = res.data.userName
+      this.personData.phone = res.data.phone
 
-
+    },
+    async send() {
+      await contactUsAdd(this.personData)
     },
 
 

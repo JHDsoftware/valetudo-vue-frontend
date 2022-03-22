@@ -5,11 +5,20 @@
 
       <div style="margin-top: 100px">
 
-        <template v-for="(item,i) in menuRouter">
+        <v-item-group v-model="orderNav">
+          <v-item v-for="(item,i) in menuRouter"
+                  :key="'orderNav'+i"
+                  v-slot="{active}"
+                  >
 
-          <div class="navItem" :key="'item' + i" @click="$router.push(item.to)">{{ item.title }} </div>
+            <div class="navItem"
+                :style="active ? {'color': '#817163', 'border-bottom': '3px solid #817163'}: {}"
+                 @click="$router.push(item.to); orderNav=i">{{ item.title }} </div>
 
-        </template>
+
+          </v-item>
+        </v-item-group>
+
 
       </div>
     </div>
@@ -27,6 +36,7 @@ export default {
   name: "OrderNavigationDrawer",
   data: function () {
     return {
+      orderNav: 0,
       menuRouter: [
         {
           title: 'Dein Entwurf',
@@ -65,7 +75,7 @@ export default {
 }
 
 .navItem {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 400;
   font-size: 21px;

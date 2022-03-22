@@ -4,12 +4,15 @@
       <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">Musterbox bestellen</div>
       <v-stepper
           color="#817163"
-          alt-labels style="width: 476px" flat tile v-model="anzahlStep">
+          alt-labels
+          style="width: 646px; font-size: 24px" flat v-model="anzahlStep">
         <v-stepper-header>
           <template v-for="(item,i) in stepHeaders">
             <v-stepper-step
                 :step="item.value"
                 :key="i"
+                style="font-size: 18px"
+                @click="handleReturn(i)"
                 :complete="anzahlStep>item.value">
               {{ item.title }}
             </v-stepper-step>
@@ -32,14 +35,19 @@
               <div>
                 <div class="unterTitle24">ARTIKEL</div>
                 <div>
-                  <div class="unterTitle36">Musterbox</div>
-                  <div class="unterTitle18">(Inkl. Versandkosten)</div>
+                  <div class="unterTitle36" v-if="id!=-1">Musterbox</div>
+                  <div class="unterTitle36" v-else>Neuer Entwurf</div>
+
+                  <div class="unterTitle18" v-if="id!=-1">(Inkl. Versandkosten)</div>
+                  <div class="unterTitle18" v-else>(Keine Versandkosten)</div>
                 </div>
               </div>
+
               <div class="d-flex flex-column align-center">
-                <div class="unterTitle24">BRAUTKLEID</div>
+                <div class="unterTitle24" v-if="id!=-1">BRAUTKLEID</div>
                 <div class="unterTitle36">{{ productInfo && productInfo.name }}</div>
               </div>
+
               <div class="d-flex flex-column align-center">
                 <div class="unterTitle24">ANZAHL</div>
                 <v-select style="width: 120px" v-model="amount"
@@ -75,7 +83,8 @@
               <div class="d-flex justify-center">
                 <v-card width="70vw" class="d-flex justify-center" flat>
 
-                  <v-card class="d-flex justify-start" width="30vw" flat tile style="padding-right:20px; margin-bottom: 90px">
+                  <v-card class="d-flex justify-start" width="30vw" flat tile
+                          style="padding-right:20px; margin-bottom: 90px">
                     <div style="font-size: 24px;">
                       <div class="font-weight-bold"> Lieferadresse</div>
                       <template v-for="(item,j) in lieferAddressForm">
@@ -122,143 +131,145 @@
 
         <template v-if="anzahlStep === 3">
           <template v-if="payStatus">
-          <div style="display: grid;grid-template-columns: 540px 1px 540px;grid-gap: 100px">
-            <div>
-              <v-card height="30vh" flat>
-                <div style="text-transform: uppercase; color: #4C4C4C;" class="unterTitle24">ZAHLUNGSART
-                </div>
-                <div class="mt-4">
-                  <v-item-group mandatory v-model="payMethodValue">
-                    <v-item #default="{active,toggle}">
-                      <div class="d-flex align-baseline" @click="toggle" :class="active?'active':''">
-                        <div class="notion"></div>
-                        <div class="ml-3 flex-grow-1">
-                          <div class="d-flex justify-space-between">
-                            <div class="name">PayPal</div>
-                            <div class="image" style="width: 170px">
-                              <v-img :src="require('@/assets/image/frameUI/paypal.png')"></v-img>
+            <div style="display: grid;grid-template-columns: 540px 1px 540px;grid-gap: 100px">
+              <div>
+                <v-card height="30vh" flat>
+                  <div style="text-transform: uppercase; color: #4C4C4C;" class="unterTitle24">ZAHLUNGSART
+                  </div>
+                  <div class="mt-4">
+                    <v-item-group mandatory v-model="payMethodValue">
+                      <v-item #default="{active,toggle}">
+                        <div class="d-flex align-baseline" @click="toggle" :class="active?'active':''">
+                          <div class="notion"></div>
+                          <div class="ml-3 flex-grow-1">
+                            <div class="d-flex justify-space-between">
+                              <div class="name">PayPal</div>
+                              <div class="image" style="width: 170px">
+                                <v-img :src="require('@/assets/image/frameUI/paypal.png')"></v-img>
+                              </div>
+                            </div>
+                            <div v-if="active" class="hint mt-3">Du wirst an PayPal weitergeleitet, um den Bezahlvorgang
+                              abzuschließen.
                             </div>
                           </div>
-                          <div v-if="active" class="hint mt-3">Du wirst an PayPal weitergeleitet, um den Bezahlvorgang
-                            abzuschließen.
+                        </div>
+
+                      </v-item>
+                      <v-item #default="{active,toggle}">
+                        <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
+                          <div class="notion"></div>
+                          <div class="ml-3 flex-grow-1">
+                            <div class="d-flex justify-space-between">
+                              <div class="name">Rechnung</div>
+                            </div>
+                            <div v-if="active" class="hint mt-3">Der Rechnungsbetrag wird erst innerhalb von 14 Tagen
+                              nach
+                              der Versandbestätigung per E-Mail
+                              fällig.
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                    </v-item>
-                    <v-item #default="{active,toggle}">
-                      <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
-                        <div class="notion"></div>
-                        <div class="ml-3 flex-grow-1">
-                          <div class="d-flex justify-space-between">
-                            <div class="name">Rechnung</div>
-                          </div>
-                          <div v-if="active" class="hint mt-3">Der Rechnungsbetrag wird erst innerhalb von 14 Tagen nach
-                            der Versandbestätigung per E-Mail
-                            fällig.
-                          </div>
-                        </div>
-                      </div>
-
-                    </v-item>
-                    <v-item #default="{active,toggle}">
-                      <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
-                        <div class="notion"></div>
-                        <div class="ml-3 flex-grow-1">
-                          <div class="d-flex justify-space-between">
-                            <div class="name">Vorkasse</div>
-                          </div>
-                          <div v-if="active" class="hint mt-3">Nachdem du deine Bestellung aufgegeben hast, senden wir
-                            dir die Informationen zur
-                            Banküberweisung per E-Mail. Wir können deine Artikel nur für 7 Tage reservieren. Bitte halte
-                            dieses Zeitfenster ein. Je eher wir deine Zahlung erhalten, desto schneller wird deine
-                            Bestellung verschickt.
+                      </v-item>
+                      <v-item #default="{active,toggle}" v-if="id!=-1">
+                        <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
+                          <div class="notion"></div>
+                          <div class="ml-3 flex-grow-1">
+                            <div class="d-flex justify-space-between">
+                              <div class="name">Vorkasse</div>
+                            </div>
+                            <div v-if="active" class="hint mt-3">Nachdem du deine Bestellung aufgegeben hast, senden wir
+                              dir die Informationen zur
+                              Banküberweisung per E-Mail. Wir können deine Artikel nur für 7 Tage reservieren. Bitte
+                              halte
+                              dieses Zeitfenster ein. Je eher wir deine Zahlung erhalten, desto schneller wird deine
+                              Bestellung verschickt.
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                    </v-item>
-                  </v-item-group>
-                </div>
-              </v-card>
-            </div>
-            <div style="height: 100%;border-right: 1px solid #000000;"></div>
-            <div style="width: 50%">
-              <v-card width="40vw" class="d-flex justify-center" flat style="margin-left: 100px ">
-                <div>
-                  <div style="font-weight: 600; font-size: 24px;">BESTELLÜBERSICHT</div>
-
-                  <v-card width="30vw" flat tile style="padding-right: 20px">
-
-                    <div class="d-flex justify-space-between"
-                         style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #AFA69D; margin-top: 39px">
-                      Lieferadresse
-                      <v-icon @click="dialogLiferAdress=true">mdi-pencil</v-icon>
-                    </div>
-
-                    <div style="font-size: 24px; padding-top: 8px">
-
-                      <div>{{ lieferAddressForm.vorname }} {{ lieferAddressForm.nachname }}</div>
-                      <div>{{ lieferAddressForm.address }}</div>
-                      <div>{{ lieferAddressForm.zipCode }} {{ lieferAddressForm.stadt }}</div>
-                      <div>{{ lieferAddressForm.country }}</div>
-                    </div>
-
-                    <div class="d-flex justify-space-between unterTitle24"
-                         style="border-bottom: 2px solid #AFA69D; font-size: 24px; font-weight: bold; padding-top: 17px">
-                      Bestellt
-                    </div>
-
-                    <div class="d-flex justify-space-between unterTitle24" style="padding-top: 8px">
-                      <div>Musterbox</div>
-                      <div style="font-weight: bold">{{ price | priceDisplay }} €</div>
-                    </div>
-
-                    <div class="d-flex justify-space-between unterTitle24"
-                         style="border-bottom: 1px solid #AFA69D; padding-top: 8px">
-                      <div>Versand</div>
-                      <div style="font-weight: bold">{{ versandPrice | priceDisplay }} €</div>
-                    </div>
-
-                    <div class="d-flex justify-space-between unterTitle24" style="font-size: 24px; padding-top: 15px">
-                      <div>Gesamtsumme inkl.MwSt.</div>
-                      <div style="font-weight: bold">{{ price + versandPrice | priceDisplay }} €</div>
-                    </div>
-                  </v-card>
-
-                  <div style="padding-top: 40px">
-                    <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
+                      </v-item>
+                    </v-item-group>
                   </div>
-                </div>
+                </v-card>
+              </div>
+              <div style="height: 100%;border-right: 1px solid #000000;"></div>
+              <div style="width: 50%">
+                <v-card width="40vw" class="d-flex justify-center" flat style="margin-left: 100px ">
+                  <div>
+                    <div style="font-weight: 600; font-size: 24px;">BESTELLÜBERSICHT</div>
 
-              </v-card>
+                    <v-card width="30vw" flat tile style="padding-right: 20px">
+
+                      <div class="d-flex justify-space-between"
+                           style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #AFA69D; margin-top: 39px">
+                        Lieferadresse
+                        <v-icon @click="dialogLiferAdress=true">mdi-pencil</v-icon>
+                      </div>
+
+                      <div style="font-size: 24px; padding-top: 8px">
+
+                        <div>{{ lieferAddressForm.vorname }} {{ lieferAddressForm.nachname }}</div>
+                        <div>{{ lieferAddressForm.address }}</div>
+                        <div>{{ lieferAddressForm.zipCode }} {{ lieferAddressForm.stadt }}</div>
+                        <div>{{ lieferAddressForm.country }}</div>
+                      </div>
+
+                      <div class="d-flex justify-space-between unterTitle24"
+                           style="border-bottom: 2px solid #AFA69D; font-size: 24px; font-weight: bold; padding-top: 17px">
+                        Bestellt
+                      </div>
+
+                      <div class="d-flex justify-space-between unterTitle24" style="padding-top: 8px">
+                        <div>Musterbox</div>
+                        <div style="font-weight: bold">{{ price | priceDisplay }} €</div>
+                      </div>
+
+                      <div class="d-flex justify-space-between unterTitle24"
+                           style="border-bottom: 1px solid #AFA69D; padding-top: 8px">
+                        <div>Versand</div>
+                        <div style="font-weight: bold">{{ versandPrice | priceDisplay }} €</div>
+                      </div>
+
+                      <div class="d-flex justify-space-between unterTitle24" style="font-size: 24px; padding-top: 15px">
+                        <div>Gesamtsumme inkl.MwSt.</div>
+                        <div style="font-weight: bold">{{ price + versandPrice | priceDisplay }} €</div>
+                      </div>
+                    </v-card>
+
+                    <div style="padding-top: 40px">
+                      <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
+                    </div>
+                  </div>
+
+                </v-card>
+              </div>
             </div>
-          </div>
           </template>
 
           <template v-else>
-          <div class="d-flex justify-center" >
-            <v-card width="60vw" flat>
-              <div class="d-flex justify-center">
-                <v-card width="645px" class=" text-center" flat>
-                  <div style="font-size: 48px;line-height: 125%; padding-top: 30px; padding-bottom: 55px">
-                    Wir konnten Deine Bestellung nicht bearbeiten
-                  </div>
-                  <div style=" font-size: 36px;line-height: 125%;">
-                    Es scheint, dass ein Problem mit PayPal vorliegt. Bitte versuche es später noch einmal.
-                  </div>
-                </v-card>
-              </div>
-              <div class="d-flex justify-center" style="padding-top: 24px">
-                <v-card class="text-center" flat>
-                  <ValetButton style="width: 540px"
-                               button-text="Bestellung Ansehen"
-                               @click="this.$router.replace('/OrderIndex/Entwurf')"/>
+            <div class="d-flex justify-center">
+              <v-card width="60vw" flat>
+                <div class="d-flex justify-center">
+                  <v-card width="645px" class=" text-center" flat>
+                    <div style="font-size: 48px;line-height: 125%; padding-top: 30px; padding-bottom: 55px">
+                      Wir konnten Deine Bestellung nicht bearbeiten
+                    </div>
+                    <div style=" font-size: 36px;line-height: 125%;">
+                      Es scheint, dass ein Problem mit PayPal vorliegt. Bitte versuche es später noch einmal.
+                    </div>
+                  </v-card>
+                </div>
+                <div class="d-flex justify-center" style="padding-top: 24px">
+                  <v-card class="text-center" flat>
+                    <ValetButton style="width: 540px"
+                                 button-text="Bestellung Ansehen"
+                                 @click="this.$router.replace('/OrderIndex/Entwurf')"/>
 
-                </v-card>
-              </div>
-            </v-card>
-          </div>
+                  </v-card>
+                </div>
+              </v-card>
+            </div>
           </template>
         </template>
 
@@ -287,7 +298,6 @@
               </div>
             </v-card>
           </div>
-
 
 
         </template>
@@ -333,7 +343,7 @@ import ValetButton from "../../../components/ValetButton"
 import ValetSnackBar from "@/components/ValetSnackBar";
 import FormAdress from "../../../fragments/FormAdress"
 import {
-  loadDesign,
+  loadDesign, payNewByBilling, payNewByPaypal,
   paySampleOrder,
   paySampleOrderAdvance, paySampleOrderBilling,
   placeAndPaySampleOrder,
@@ -358,7 +368,10 @@ export default {
       return 0.00
     }
   },
-  props: {id: {}, status: {}},
+  props: {
+    id: {},
+    status: {}
+  },
   async mounted() {
     this.productInfo = await loadDesign(this.id)
     this.dataBody = (await customerMe()).data ?? []
@@ -366,7 +379,7 @@ export default {
     this.token = localStorage.getItem('token')
 
     const val = this.dataBody
-    console.log("databody",val,'lieferAddressForm',this.lieferAddressForm)
+    console.log("databody", val, 'lieferAddressForm', this.lieferAddressForm)
     this.lieferAddressForm.vorname = val.firstName
     this.lieferAddressForm.nachname = val.lastName
     this.lieferAddressForm.address = val.address.split(',')[0]
@@ -381,7 +394,7 @@ export default {
 
     console.log(this.productInfo)
   },
-  watch:{
+  watch: {
     dataBody(val) {
       this.personData[0].data.vorname = val.firstName
       this.personData[0].data.nachname = val.lastName
@@ -391,7 +404,7 @@ export default {
       this.personData[1].data.Email = val.userName
       // this.personData[2].data.Password
 
-      const delivery =val.deliveryAddress.split(',')
+      const delivery = val.deliveryAddress.split(',')
       this.personData[3].data.address = delivery[0] ?? ''
       this.personData[3].data.zipCode = delivery[1] ?? ''
       this.personData[3].data.stadt = delivery[2] ?? ''
@@ -401,7 +414,7 @@ export default {
       // this.personData[3].data.zipCode=personData.
 
 
-      const billing =val.billingAddress.split(',')
+      const billing = val.billingAddress.split(',')
       this.personData[4].data.address = billing[0] ?? ''
       this.personData[4].data.zipCode = billing[1] ?? ''
       this.personData[4].data.stadt = billing[2] ?? ''
@@ -412,15 +425,15 @@ export default {
       // this.personData[4].data.
 
 
-      },
+    },
 
   },
   data() {
     return {
       payStatus: true,
-      payMethodValue:0,
+      payMethodValue: 0,
       token: null,
-      dataBody:[],
+      dataBody: [],
       snackBar: false,
       snackbarText: "Alle erforderliche Field soll ausgeführt werden.",
       amount: '1',
@@ -513,8 +526,13 @@ export default {
     }
   },
   methods: {
-    async confirm() {
 
+    handleReturn(i) {
+      if (this.anzahlStep > (i + 1)) {
+        this.anzahlStep = (i + 1)
+      }
+    },
+    async confirm() {
 
       if (this.anzahlStep === 2) {
         const data = {
@@ -546,8 +564,19 @@ export default {
     },
 
     async tryToPaySampleOrder() {
-      // console.log(this.id, '要支付的订单ID')
-      location.href = await placeAndPaySampleOrder(this.id)
+      if (this.id != -1) {
+        // console.log(this.id, '要支付的订单ID')
+        location.href = await placeAndPaySampleOrder(this.id)
+      } else {
+        switch (this.payMethodValue) {
+          case 0:
+            location.href = (await payNewByPaypal(this.dataBody))
+            break;
+          default:
+            location.href = (await payNewByBilling(this.dataBody))
+        }
+      }
+
 
     },
     async adressConfirm() {
@@ -567,7 +596,7 @@ export default {
       } else {
         this.snackBar = true
       }
-      this.RechnungAddressForm = Object.assign({},this.lieferAddressForm)
+      this.RechnungAddressForm = Object.assign({}, this.lieferAddressForm)
     },
     handelClose() {
       this.dialogLiferAdress = false
@@ -594,7 +623,7 @@ export default {
 }
 
 .name {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 36px;
@@ -610,7 +639,7 @@ export default {
 
 
 .va-title {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 48px;
@@ -627,7 +656,7 @@ export default {
 }
 
 .unterTitle24 {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
@@ -642,7 +671,7 @@ export default {
 }
 
 .unterTitle36 {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 36px;
