@@ -1,7 +1,13 @@
 <template>
   <div style="height: calc(100vh - 60px);overflow: hidden">
     <div style="margin-top: 70px;" class="d-flex justify-center flex-wrap">
-      <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">Musterbox bestellen</div>
+
+      <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">
+        <span v-if="id!=-1">Musterbox</span>
+        <span v-else>Entwurf</span>
+        bestellen
+      </div>
+
       <v-stepper
           color="#817163"
           alt-labels
@@ -570,10 +576,10 @@ export default {
       } else {
         switch (this.payMethodValue) {
           case 0:
-            location.href = (await payNewByPaypal(this.dataBody))
+            (await payNewByPaypal(this.dataBody))
             break;
           default:
-            location.href = (await payNewByBilling(this.dataBody))
+             (await payNewByBilling(this.dataBody))
         }
       }
 

@@ -1,6 +1,8 @@
 <template>
   <div style="width: 100%;position: relative;" class="d-flex">
-    <v-img height="calc(100vh - 64px)" :src="require('@/assets/image/frameUI/dress.png')" contain style="margin-left: -240px"></v-img>
+    <v-img height="calc(100vh - 64px)"
+           :src="require('@/assets/image/frameUI/dress.png')"
+           contain style="margin-left: -240px"></v-img>
 
     <div style="position: absolute;top:323px;right: 78px;width: 680px;text-align: center">
       <div class="questionLabel" style="width: 100%;text-align: center; color: #817163">Gib deinem Kleid zuerst einen Namen</div>
@@ -51,9 +53,12 @@ export default {
   },
   methods: {
     async createNewDesign () {
-      const res = (await createNewDesign(this.name)) ?? {code: -1, message: 'The return value is null'}
+
+    // ?? {code: -1, message: 'The return value is null'}
+      const res = (await createNewDesign(this.name))
+
       console.log("what is res", res)
-      if(res.code === 100){
+      if(res.code === 200){
         if(res.id){
           await this.$router.push({
             path: 'edit/' + res.id

@@ -22,21 +22,43 @@
                 </div>
               </div>
             </div>
-            <div @click="$router.push('/createNewDress')">
-              <div class="dressContainer d-flex justify-center align-center">
-                <div class="noContent" style="width: 260px; font-size: 24px">
-                  <div class="bigHint">Entwirf Dein zweites Brautkleid kostenlos</div>
-                  <v-btn block
-                         tile
-                         style="text-transform: none; "
-                         height="52px"
-                         color="#e0ddd6"
-                         class="mt-4"
-                         elevation="0">Los geht's
-                  </v-btn>
+
+            <template v-if="myDressList.length<1">
+              <div @click="$router.push('/createNewDress')" >
+                <div class="dressContainer d-flex justify-center align-center">
+                  <div class="noContent" style="width: 260px; font-size: 24px">
+                    <div class="bigHint">Entwirf Dein Traumkleid kostenlos</div>
+                    <v-btn block
+                           tile
+                           style="text-transform: none; "
+                           height="52px"
+                           color="#e0ddd6"
+                           class="mt-4"
+                           elevation="0">Los geht's
+                    </v-btn>
+                  </div>
                 </div>
               </div>
-            </div>
+            </template>
+
+            <template v-if="myDressList.length<2">
+              <div @click="$router.push('/createNewDress')" >
+                <div class="dressContainer d-flex justify-center align-center">
+                  <div class="noContent" style="width: 260px; font-size: 24px">
+                    <div class="bigHint">Entwirf Dein zweites Brautkleid kostenlos</div>
+                    <v-btn block
+                           tile
+                           style="text-transform: none; "
+                           height="52px"
+                           color="#e0ddd6"
+                           class="mt-4"
+                           elevation="0">Los geht's
+                    </v-btn>
+                  </div>
+                </div>
+              </div>
+            </template>
+
 
             <div>
               <div @click="$router.push({path: '/SampleOrder/' + '-1'})" class="dressContainer d-flex justify-center align-center">
@@ -52,6 +74,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
