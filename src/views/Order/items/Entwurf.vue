@@ -61,7 +61,8 @@
 
 
             <div>
-              <div @click="$router.push({path: '/SampleOrder/' + '-1'})" class="dressContainer d-flex justify-center align-center">
+              <div @click="$router.push({path: '/SampleOrder/' + '-1'})"
+                   class="dressContainer d-flex justify-center align-center">
                 <div class="noContent" style="font-size: 24px">
                   <v-container class="bigHint" style="width: 240px">Entwirf mehr Brautkleid für 19.90 €</v-container>
                   <v-btn block
@@ -82,8 +83,10 @@
       <div v-else
            style="display: grid; grid-template-columns: repeat(2,1fr);height: calc(100vh - 60px);overflow: hidden">
         <div style="background: rgba(204, 198, 187, 0.85);padding-top: 40px;position: relative">
+          <div @click="$router.push('/edit/'+ dress.id)">
           <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id"
-                         :refreshCounter="dress.id"></dress-display>
+                         :refreshCounter="dress.id" ></dress-display>
+          </div>
           <div style="height: 50px; width: 50px; position: absolute; z-index: 2; top: 30px; left:28px"
                @click="dress=null">
             <v-icon>mdi-arrow-left</v-icon>

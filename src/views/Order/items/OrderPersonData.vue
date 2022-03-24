@@ -145,9 +145,9 @@
         <template v-if="dialogTitle === 'Dein Passwort'">
           <div class="d-flex justify-center">
             <v-card style="width: 540px; margin-bottom: 60px" flat tile>
-              <ValetInputTextField title="Passwort*" width-input="540px" type="password" v-model="password"/>
-              <ValetInputTextField :title="'Neues Passwort*'+ hintText " type="password" width-input="540px" v-model="confirmEmail"/>
-              <ValetInputTextField title="Passwort bestätigen*" width-input="540px" type="password" v-model="password"/>
+              <ValetInputTextField title="Passwort*" width-input="540px" type="password" v-model="currentPassword"/>
+              <ValetInputTextField :title="'Neues Passwort*'+ hintText " type="password" width-input="540px" v-model="newPassword"/>
+              <ValetInputTextField title="Passwort bestätigen*" width-input="540px" type="password" v-model="confirmNewPassword"/>
               <ValetButton buttonText="Speichern"
                            style="grid-column: 1/3; margin-top: 24px"
                            @click="dialogSpeichern"></ValetButton>
@@ -221,14 +221,15 @@
 
 import ValetButton from '@/components/ValetButton'
 import ValetInputTextField from "@/components/ValetInputTextField";
-import {customerMe} from "@/api/customerService";
+import {customerMe, resetPassword} from "@/api/customerService";
 import {customerChangeName, customerLogin} from "../../../api/customerService";
 import {refreshHeader} from "../../../main";
 import PersonDataCard from "../../../fragments/PersonDataCard";
+import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
   name: "OrderPersonData",
-  components: {PersonDataCard, ValetInputTextField, ValetButton},
+  components: {PersonDataCard, ValetInputTextField, ValetButton,ValetSnackBar},
   watch: {
   },
   computed:{
@@ -241,6 +242,9 @@ export default {
   },
   data() {
     return {
+      currentPassword: null,
+      newPassword: null,
+      confirmNewPassword: null,
       currentEmail: null,
       dialogTitle: null,
       snackbar: null,
@@ -332,8 +336,45 @@ export default {
           }
 
 
-          // }else if(this.item.title == 'Dein Passwort'){
-          //
+          }else if(this.dialogTitle == 'Dein Passwort'){
+
+          if(this.newPassword === this.confirmNewPassword){
+            if (this.currentEmail && this.currentPassword) {
+              const res = await customerLogin(this.currentEmail, this.currentPassword)
+              // console.log(res.data.tokenValue)
+              if (res.code === 200) {
+                localStorage.setItem('token', res.data.tokenValue)
+                localStorage.setItem('id',res.data.loginId)
+                refreshHeader()
+
+                const resRestPassword = await resetPassword({token:res.data.tokenValue, newPassword:this.newPassword})
+                if (resRestPassword.code === 200) {
+                  await this.$router.push('/SetPasswordComplete')
+                } else {
+                  this.snackbar = true
+                  this.snackbarText = "Ein Fehler war erschienen."
+                }
+                // this.snackbar = true
+                // this.snackbarText = "Password erfolgreich zurückgesetzt"
+
+                this.dialogBearbeit = false
+
+              } else {
+                this.snackbar = true
+                this.snackbarText = "Konto oder Passwort ist falsch"
+                this.$router.replace('/OrderIndex/OrderPersonData')
+              }
+            }
+
+
+          }else{
+            this.snackbar=true
+            this.snackbarText="Die beide Password sind nicht gleich. "
+          }
+          this.snackbar=false
+
+
+
         } else if (this.dialogTitle == 'Lieferaddresse') {
 
           if (this.dataBody.firstName

@@ -17,30 +17,30 @@
     <ValetInputTextField title="Vorname*"
                          width-input="266px"
                          :customHeight="customHeight"
-                         v-model="localForm.vorname"/>
+                         v-model="localForm.firstName"/>
     <ValetInputTextField title="Name*"
                          width-input="266px"
                          :customHeight="customHeight"
-                         v-model="localForm.nachname"/>
+                         v-model="localForm.lastName"/>
     <ValetInputTextField title="Adresse*"
                          width-input="540px"
                          :customHeight="customHeight"
-                         v-model="localForm.address"
+                         v-model="localForm.addressLine1"
                          style="grid-column: 1/3"/>
     <ValetInputTextField title="Zusätzliche Adresse"
                          width-input="540px"
                          :customHeight="customHeight"
                          :useRule="false"
-                         v-model="localForm.zusatzAdress"
+                         v-model="localForm.addressLine2"
                          style="grid-column: 1/3"/>
     <ValetInputTextField title="PLZ*"
                          width-input="266px"
                          :customHeight="customHeight"
-                         v-model="localForm.zipCode"/>
+                         v-model="localForm.postCode"/>
     <ValetInputTextField title="Stadt*"
                          :customHeight="customHeight"
                          width-input="266px"
-                         v-model="localForm.stadt"/>
+                         v-model="localForm.city"/>
     <div class="mt-1">{{ localForm.country }}</div>
 
     <ValetButton :buttonText="buttonText" style="grid-column: 1/3; margin-top: 24px"
@@ -54,12 +54,12 @@ import ValetInputTextField from '../components/ValetInputTextField'
 import ValetButton from '../components/ValetButton'
 
 const defaultForm = {
-  vorname: '',
-  nachname: '',
-  address: '',
-  zusatzAdress: '',
-  zipCode: '',
-  stadt: '',
+  firstName: '',
+  lastName: '',
+  addressLine1: '',
+  addressLine2: '',
+  postCode: '',
+  city: '',
   country: 'Germany'
 }
 
@@ -121,7 +121,7 @@ export default {
 
 <style scoped>
 .contentText {
-  font-family: Gill Sans Nova;
+  /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: normal;
   font-size: 24px;

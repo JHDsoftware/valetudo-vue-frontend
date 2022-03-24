@@ -6,8 +6,8 @@
         <v-card style="display: grid; grid-template-columns: repeat(2,1fr); grid-column-gap: 8px" tile flat>
           <ValetInputTextField title="Vorname*" width-input="266px" v-model="personData.firstName"/>
           <ValetInputTextField title="Name*" width-input="266px" v-model="personData.lastName"/>
-          <ValetInputTextField title="E-Mail*" width-input="266px" v-model="personData.email"/>
-          <ValetInputTextField title="Handy Number" width-input="266px" v-model="personData.phone"/>
+          <ValetInputTextField title="E-Mail*" width-input="266px" v-model="personData.userName"/>
+          <ValetInputTextField title="Handy Number" width-input="266px" v-model="personData.phone" :rules="[]"/>
           <div style="grid-column: 1/3; margin-top: 4px">{{ ('Nachricht') }}</div>
           <v-textarea flat outlined style="grid-column: 1/3; margin-top: 24px" v-model="personData.message" solo/>
           <ValetButton buttonText="Senden" style="grid-column: 1/3; margin-top: 4px" @click="send" />
@@ -31,6 +31,11 @@
 
       </div>
     </div>
+
+    <ValetSnackBar
+        v-model="snackbar"
+        :snackbar-text="snackbarText"
+    ></ValetSnackBar>
   </div>
 
 </template>
@@ -39,16 +44,26 @@
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from '@/components/ValetButton'
 import {customerMe,contactUsAdd} from "@/api/customerService";
+import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
   name: "KontaktUns",
-  components: {ValetInputTextField, ValetButton},
+  components: {ValetInputTextField, ValetButton,ValetSnackBar},
   data () {
     return {
-      personData: {
+      snackbar:null,
+      snackbarText: null,
+      personData:{
         firstName: null,
         lastName: null,
-        email: null,
+        userName: null,
+        phone: null,
+        message: null
+      },
+      defaultPersonData: {
+        firstName: null,
+        lastName: null,
+        userName: null,
         phone: null,
         message: null
       }
@@ -65,16 +80,26 @@ export default {
       if (res.code != 200) {
         return null
       }
-
-      console.log("res",res)
-      this.personData.firstName = res.data.firstName
-      this.personData.lastName = res.data.lastName
-      this.personData.email = res.data.userName
-      this.personData.phone = res.data.phone
+      this.personData = Object.assign(this.personData, res.data)
+      console.log("this.personData",this.personData)
 
     },
     async send() {
-      await contactUsAdd(this.personData)
+      const res = await contactUsAdd(this.personData)
+      console.log("send", res)
+
+      if(res.code === 200){
+
+        this.snackbar=true,
+        this.snackbarText= "Erfolgreich geschicket!"
+        this.personData.message = ""
+        // this.$router.push("/OrderIndex/Entwurf")
+      }
+      else {
+        this.snackbar=true,
+        this.snackbarText= "Erfolgreich geschicket!"
+        // this.message.warning("Error, bitte ausloggen und versuchen Sie noch mal.")
+      }
     },
 
 

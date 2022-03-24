@@ -8,8 +8,9 @@
       </div>
       <div style="position: fixed;right: 63px;top:22px" class="d-flex">
 
-        <template v-if="showLoginRegister"></template>
-        <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
+        <template v-if="showLoginRegister">
+          <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
+        </template>
         <router-link class="flatButton text-decoration-none" to="/OrderIndex/OrderPersonData" style="margin-left: 32px">Konto</router-link>
       </div>
     </v-app-bar>
@@ -18,29 +19,20 @@
       <router-view></router-view>
     </v-main>
 
-
-
-<!--    <valet-input-text-field v-model="testValue"></valet-input-text-field>-->
-<!--        <div>{{testValue}}</div>-->
-<!--    <div>:::::::::</div>-->
   </v-app>
 
 </template>
 
 <script>
-// import ValetInputTextField from "./components/ValetInputTextField";
 
 export default {
-  // components: {ValetInputTextField},
-  // computed:{
-  //   showLoginRegister(){
-  //     console.log("xx", this.route.path)
-  //     return true
-  //   }
-  // },
+  computed: {
+    showLoginRegister(){
+      return !localStorage.getItem('showLoginRegister')
+    }
+  },
   data () {
     return {
-      showLoginRegister: true,
       testValue: null
     }
   }

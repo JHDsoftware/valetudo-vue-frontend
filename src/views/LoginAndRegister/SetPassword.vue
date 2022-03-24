@@ -11,13 +11,14 @@
           <valet-input-text-field
               :widthInput="'580px'"
               title="Neues Passwort*:"
+              type="password"
               v-model="password"
           />
 
           <valet-input-text-field
               style="width: 581px"
               title="Neues Passwort bestätigen*:"
-              v-model="confirmPassword"
+              v-model="newPassword"
               type="password"></valet-input-text-field>
 
         <div style="margin-top: 24px">
@@ -57,25 +58,23 @@ export default {
       snackbar: false,
       snackbarText: '',
       password: null,
-      confirmPassword: null,
+      newPassword: null,
       token: localStorage.getItem('token')
     }
   },
   methods:{
 
-    handle(){
-      if(this.password !=this.confirmPassword){
-        this.snackbar=true
-        this.snackbarText="Die beide Password sind nicht gleich"
-      }
-      else {
-        const  res = resetPassword(this.token, this.password)
-        if(res.code === 200){
-          this.$router.push('/SetPasswordComplete')
-        }
-        else {
-          this.snackbar=true
-          this.snackbarText="Ein Fehler war erschienen."
+    async handle() {
+      if (this.password != this.newPassword) {
+        this.snackbar = true
+        this.snackbarText = "Die beide Password sind nicht gleich"
+      } else {
+        const res = await resetPassword({token:this.token, newPassword:this.password})
+        if (res.code === 200) {
+          await this.$router.push('/SetPasswordComplete')
+        } else {
+          this.snackbar = true
+          this.snackbarText = "Ein Fehler war erschienen."
         }
       }
 

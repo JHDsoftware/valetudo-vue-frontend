@@ -55,18 +55,23 @@ export default {
     async createNewDesign () {
 
     // ?? {code: -1, message: 'The return value is null'}
-      const res = (await createNewDesign(this.name))
+      const res = await createNewDesign(this.name)
+      alert(res.message)
+      console.log("res createDesign", res)
 
-      console.log("what is res", res)
-      if(res.code === 200){
-        if(res.id){
-          await this.$router.push({
-            path: 'edit/' + res.id
-          })
+      if(res){
+        if(res.customer){
+
+             await this.$router.push({
+              path: '/edit/' + res.customer.id
+            })
+
+           
         }
       }
-      else{
-        alert(res.message)
+     else {
+       
+       await this.$router.push("/OrderIndex/Entwurf")
       }
 
 

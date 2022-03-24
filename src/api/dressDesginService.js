@@ -32,11 +32,11 @@ export async function paySampleOrder (id) {
   return (await hillo.post('/dressDesign/paySampleOrder/' + `${id}`)).data
 }
 export async function paySampleOrderBilling(id) {
-  return (await hillo.post(`/paySampleOrderBilling/${id}`)).data
+  return (await hillo.post(`/dressDesign/paySampleOrderBilling/${id}`)).data
 }
 
 export async function paySampleOrderAdvance(id){
-  return (await hillo.post(`/paySampleOrderAdvance/${id}`)).data
+  return (await hillo.post(`/dressDesign/paySampleOrderAdvance/${id}`)).data
 }
 
 
