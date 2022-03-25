@@ -36,7 +36,7 @@
 
 import ValetInputTextField from "@/components/ValetInputTextField";
 import ValetButton from "@/components/ValetButton";
-import {customerCheckEmailRegistered} from '@/api/customerService'
+import {customerForgetPassword} from '@/api/customerService'
 
 export default {
   name: "ForgetPasswordConfirmEmail",
@@ -54,14 +54,20 @@ export default {
     }
   },
   methods: {
-    customerCheckEmailRegistered,
+    customerForgetPassword,
     async confirm() {
 
+      localStorage.setItem('token', null)
+
       if (this.email) {
-        const res = await customerCheckEmailRegistered(this.email)
+        const res = await customerForgetPassword(this.email)
         console.log(res)
-        if (res.code == 200)
+        if (res.code == 200) {
           this.$router.push('/forgetPasswordComplete')
+        } else {
+          this.$router.replace('/')
+        }
+
         // else this.Message('error')
       }
 

@@ -9,9 +9,16 @@
       <div style="position: fixed;right: 63px;top:22px" class="d-flex">
 
         <template v-if="showLoginRegister">
+
           <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
         </template>
-        <router-link class="flatButton text-decoration-none" to="/OrderIndex/OrderPersonData" style="margin-left: 32px">Konto</router-link>
+
+        <template v-if="$route.path.indexOf(hideKontoPath)>=0 ">
+          <div class="flatButton text-decoration-none"
+               @click="checkToken"
+               style="margin-left: 32px">Konto</div>
+        </template>
+
       </div>
     </v-app-bar>
 
@@ -26,14 +33,20 @@
 <script>
 
 export default {
-  computed: {
-    showLoginRegister(){
-      return !localStorage.getItem('showLoginRegister')
-    }
-  },
-  data () {
+  data(){
     return {
-      testValue: null
+      showLoginRegister: true,
+      hideKontoPath: ['/', '/login','/ConfirmEmail']
+    }
+
+  },
+
+  methods:{
+    checkToken(){
+      const token = localStorage.getItem('token')
+      if(token){
+        this.$router.replace('/OrderIndex/OrderPersonData')
+      }
     }
   }
 }

@@ -100,9 +100,9 @@ const routes = [
   },
 
   {
-    path: '/forgetPasswordConfirmEmail',
-    name: 'forgetPasswordConfirmEmail',
-    component: () => import("../views/LoginAndRegister/ForgetPasswordConfirmEmail")
+    path: '/ConfirmEmail',
+    name: 'ConfirmEmail',
+    component: () => import("../views/LoginAndRegister/ConfirmEmail")
   },
   {
     path: '/forgetPasswordComplete',

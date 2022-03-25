@@ -57,6 +57,10 @@ export default {
         {
           title: 'Kontakt',
           to: '/OrderIndex/KontaktUns'
+        },
+        {
+          title: 'Abmelden',
+          to: '/'
         }
       ]
     };

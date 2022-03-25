@@ -37,7 +37,8 @@ export default {
   },
   methods:{
     next(){
-      this.$router.replace('/login')
+      localStorage.setItem('token',null)
+      this.$router.replace('/SetPassword')
     }
   }
 }

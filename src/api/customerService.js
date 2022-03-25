@@ -14,7 +14,9 @@ export async function customerRegister (registerData) {
 export async function customerCheckEmailRegistered (email) {
   return await hillo.post('/customer/checkEmailRegistered', {email})
 }
-
+export async function customerForgetPassword(email){
+  return await hillo.post('/customer/forgetPassword', {email})
+}
 export async function customerConfirmRegister (uuid) {
   return await hillo.get('/customer/confirmRegister/', {uuid})
 }
