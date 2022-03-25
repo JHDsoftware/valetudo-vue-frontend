@@ -28,8 +28,8 @@ const routes = [
     component: () => import('../views/LoginAndRegister/LoginRegisterPage')
   },
   {
-    path: '/login',
-    name: 'login',
+    path: '/Login',
+    name: 'Login',
     component: () => import('../views/LoginAndRegister/Login')
   },
   {
@@ -105,25 +105,20 @@ const routes = [
     component: () => import("../views/LoginAndRegister/ConfirmEmail")
   },
   {
-    path: '/forgetPasswordComplete',
-    name: 'forgetPasswordComplete',
-    component: () => import('../views/LoginAndRegister/ForgetPasswordComplete')
-  },
-  {
-    path: '/resetPassword',
-    name: 'resetPassword',
-    component: () => import('../views/LoginAndRegister/backup/ResetPassword')
+    path: '/ConfirmEmailComplete',
+    name: 'ConfirmEmailComplete',
+    component: () => import('../views/LoginAndRegister/ConfirmEmailComplete')
   },
 
   {
-    path: '/setPassword',
-    name: 'setPassword',
-    component: () => import('../views/LoginAndRegister/SetPassword')
+    path: '/ResetPassword',
+    name: 'ResetPassword',
+    component: () => import('../views/LoginAndRegister/ResetPassword')
   },
   {
-    path: '/setPasswordComplete',
-    name: 'setPasswordComplete',
-    component: () => import('../views/LoginAndRegister/SetPasswordComplete')
+    path: '/ResetPasswordComplete',
+    name: 'ResetPasswordComplete',
+    component: () => import('../views/LoginAndRegister/ResetPasswordComplete')
   },
 
   {

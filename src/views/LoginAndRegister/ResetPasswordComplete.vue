@@ -27,7 +27,7 @@
 
       <div class="content18"
            style="padding-bottom: 24px;"
-      ><span @click="$router.push('/forgetPasswordConfirmEmail')">Passwort vergessen?</span></div>
+      ><span @click="$router.push('/ConfirmEmail')">Passwort vergessen?</span></div>
 
         <ValetButton
             button-text="Anmelden"
@@ -54,7 +54,7 @@ import {refreshHeader} from "@/main";
 import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
-  name: "SetPasswordComplete",
+  name: "ResetPasswordComplete",
   components: {ValetInputTextField,ValetButton,ValetSnackBar},
   data() {
     return {

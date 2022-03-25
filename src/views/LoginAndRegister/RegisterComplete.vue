@@ -9,7 +9,7 @@
       :message="message"
       message-width="650px"
       :hint="hint"
-      v-on:clickButton="$router.replace('/login')"
+      v-on:clickButton="$router.replace('/Login')"
       v-on:clickHint="$router.replace('/FAQ')"
   >
     <template v-slot:TextTop>

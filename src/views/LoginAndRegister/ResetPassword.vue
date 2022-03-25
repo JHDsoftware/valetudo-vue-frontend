@@ -51,15 +51,20 @@ import ValetSnackBar from "@/components/ValetSnackBar";
 import {resetPassword} from "../../api/customerService";
 
 export default {
-  name: "SetPassword",
+  name: "ResetPassword",
   components: {ValetInputTextField,ValetButton,ValetSnackBar},
+  mounted() {
+    this.uuid = this.$route.path.split('uuid=')[1]
+    this.token = this.uuid
+  },
   data() {
     return {
+      uuid: null,
       snackbar: false,
       snackbarText: '',
       password: null,
       newPassword: null,
-      token: localStorage.getItem('token')
+      token: null,
     }
   },
   methods:{
@@ -71,7 +76,7 @@ export default {
       } else {
         const res = await resetPassword({token:this.token, newPassword:this.password})
         if (res.code === 200) {
-          await this.$router.push('/SetPasswordComplete')
+          await this.$router.push('/ResetPasswordComplete')
         } else {
           this.snackbar = true
           this.snackbarText = "Ein Fehler war erschienen."

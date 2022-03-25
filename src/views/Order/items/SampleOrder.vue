@@ -484,8 +484,9 @@ export default {
     },
 
     handelClose() {
-      this.dialogLiferAdress = Object.assign({},this.defaultAddressForm)
-      this.dialogRechnungAdress = Object.assign({},this.defaultAddressForm)
+      this.dialogLiferAdress = false
+      this.dialogRechnungAdress = false
+
     },
 
     async placeAndPaySampleOrder(id) {

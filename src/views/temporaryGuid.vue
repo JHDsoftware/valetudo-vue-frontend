@@ -16,7 +16,7 @@
         </v-list-item>
 
         <v-list-item>
-          <div @click="$router.push('/login')" style="border-bottom: 1px solid grey">Login</div>
+          <div @click="$router.push('/Login')" style="border-bottom: 1px solid grey">Login</div>
         </v-list-item>
 
         <v-list-item>
@@ -24,7 +24,7 @@
         </v-list-item>
 
         <v-list-item>
-          <div @click="$router.push('/forgetPasswordConfirmEmail')" style="border-bottom: 1px solid grey">ForgetPasswordConfirmEmail</div>
+          <div @click="$router.push('/ConfirmEmail')" style="border-bottom: 1px solid grey">ForgetPasswordConfirmEmail</div>
         </v-list-item>
 
         <v-list-item>
@@ -32,7 +32,7 @@
         </v-list-item>
 
         <v-list-item>
-          <div @click="$router.push('/forgetPasswordComplete')" style="border-bottom: 1px solid grey">ForgetPasswordComplete</div>
+          <div @click="$router.push('/ConfirmEmailComplete')" style="border-bottom: 1px solid grey">ForgetPasswordComplete</div>
         </v-list-item>
 
         <v-list-item>

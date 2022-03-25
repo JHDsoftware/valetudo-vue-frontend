@@ -3,15 +3,15 @@
     <v-card width="60%" flat tile>
 
       <PersonDataCard
-        icon="mdi-account"
-        title="Name"
-        @click="handleButtonClick('Name')"
+          icon="mdi-account"
+          title="Name"
+          @click="handleButtonClick('Name')"
       >
         <template v-slot:bodyText>
-          <div>{{dataBody.firstName}}</div>
-          <div>{{dataBody.lastName}}</div>
-          <div>{{dataBody.city}}</div>
-          <div>{{dataBody.phone}}</div>
+          <div>{{ dataBody.firstName }}</div>
+          <div>{{ dataBody.lastName }}</div>
+          <div>{{ dataBody.city }}</div>
+          <div>{{ dataBody.phone }}</div>
         </template>
       </PersonDataCard>
 
@@ -21,7 +21,7 @@
           @click="handleButtonClick('E-Mail')"
       >
         <template v-slot:bodyText>
-          <div>{{dataBody.userName}}</div>
+          <div>{{ dataBody.userName }}</div>
         </template>
       </PersonDataCard>
 
@@ -41,12 +41,12 @@
           @click="handleButtonClick('Lieferaddresse')"
       >
         <template v-slot:bodyText>
-          <div>{{dataBody.firstName}}</div>
-          <div>{{dataBody.lastName}}</div>
-          <div>{{dataBody.city}}</div>
-          <div>{{dataBody.deliveryAddress}}</div>
-          <div>{{dataBody.zipCode}}</div>
-          <div>{{dataBody.country}}</div>
+          <div>{{ dataBody.firstName }}</div>
+          <div>{{ dataBody.lastName }}</div>
+          <div>{{ dataBody.city }}</div>
+          <div>{{ dataBody.deliveryAddress }}</div>
+          <div>{{ dataBody.zipCode }}</div>
+          <div>{{ dataBody.country }}</div>
         </template>
       </PersonDataCard>
 
@@ -56,44 +56,18 @@
           @click="handleButtonClick('Rechnungsadresse')"
       >
         <template v-slot:bodyText>
-          <div>{{dataBody.firstName}}</div>
-          <div>{{dataBody.lastName}}</div>
-          <div>{{dataBody.city}}</div>
-          <div>{{dataBody.billingAddress}}</div>
-          <div>{{dataBody.zipCode}}</div>
-          <div>{{dataBody.country}}</div>
+          <div>{{ dataBody.firstName }}</div>
+          <div>{{ dataBody.lastName }}</div>
+          <div>{{ dataBody.city }}</div>
+          <div>{{ dataBody.billingAddress }}</div>
+          <div>{{ dataBody.zipCode }}</div>
+          <div>{{ dataBody.country }}</div>
         </template>
       </PersonDataCard>
 
-
-<!--      <template v-for="(items,i) in personData">-->
-<!--        <v-card :key="'data'+i" flat tile>-->
-<!--          <div-->
-<!--              style="display: grid; grid-template-columns: 60px auto 300px;  min-height: 100px"-->
-<!--              :style="i < personData.length-1 ? {'border-bottom': '1px solid #BFB8B1'}: {}"-->
-<!--              class="py-4">-->
-<!--            <div class="contentText">-->
-<!--              <v-icon>{{ items.icon }}</v-icon>-->
-<!--            </div>-->
-
-<!--            <div class="contentText">-->
-<!--              <div class="mb-2 v-caption">{{ items.title }}</div>-->
-<!--              <template v-for="(item,j) in items.data">-->
-<!--                <div :key="'item'+j">-->
-<!--                  {{ item }}-->
-<!--                </div>-->
-<!--              </template>-->
-<!--            </div>-->
-
-<!--            <div>-->
-<!--              <ValetButton buttonText="Bearbeiten" @click="handleButtonClick(items)"/>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </v-card>-->
-<!--      </template>-->
     </v-card>
 
-    <v-dialog v-model="dialogBearbeit" width="35vw" persistent >
+    <v-dialog v-model="dialogBearbeit" width="35vw" persistent>
       <v-card tile flat>
         <v-icon large style="position: absolute; right: 34px; top: 34px" @click="dialogClose()">mdi-close
         </v-icon>
@@ -146,8 +120,10 @@
           <div class="d-flex justify-center">
             <v-card style="width: 540px; margin-bottom: 60px" flat tile>
               <ValetInputTextField title="Passwort*" width-input="540px" type="password" v-model="currentPassword"/>
-              <ValetInputTextField :title="'Neues Passwort*'+ hintText " type="password" width-input="540px" v-model="newPassword"/>
-              <ValetInputTextField title="Passwort bestätigen*" width-input="540px" type="password" v-model="confirmNewPassword"/>
+              <ValetInputTextField :title="'Neues Passwort*'+ hintText " type="password" width-input="540px"
+                                   v-model="newPassword"/>
+              <ValetInputTextField title="Passwort bestätigen*" width-input="540px" type="password"
+                                   v-model="confirmNewPassword"/>
               <ValetButton buttonText="Speichern"
                            style="grid-column: 1/3; margin-top: 24px"
                            @click="dialogSpeichern"></ValetButton>
@@ -221,18 +197,20 @@
 
 import ValetButton from '@/components/ValetButton'
 import ValetInputTextField from "@/components/ValetInputTextField";
-import {customerMe, resetPassword} from "@/api/customerService";
-import {customerChangeName, customerLogin} from "../../../api/customerService";
-import {refreshHeader} from "../../../main";
+import {customerMe} from "@/api/customerService";
+import {
+  customerChangeEmail,
+  customerChangeName,
+  customerChangePassword
+} from "../../../api/customerService";
 import PersonDataCard from "../../../fragments/PersonDataCard";
 import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
   name: "OrderPersonData",
-  components: {PersonDataCard, ValetInputTextField, ValetButton,ValetSnackBar},
-  watch: {
-  },
-  computed:{
+  components: {PersonDataCard, ValetInputTextField, ValetButton, ValetSnackBar},
+  watch: {},
+  computed: {
     dTextData() {
       return this.dText.data
     },
@@ -262,7 +240,7 @@ export default {
       },
       requireRule: [v => !!v || 'Name is required'],
       dataBody: {
-        id:'-1',
+        id: '-1',
         userName: 'test@gmai.com',
         firstName: 'Liqiong',
         lastName: 'Wang',
@@ -284,8 +262,8 @@ export default {
       if (res.code != 200) {
         return null
       }
-      this.dataBody = Object.assign(this.dataBody,res.data)
-      this.currentEmail=JSON.parse(JSON.stringify(this.dataBody.userName))
+      this.dataBody = Object.assign(this.dataBody, res.data)
+      this.currentEmail = JSON.parse(JSON.stringify(this.dataBody.userName))
     },
     handleButtonClick(text) {
       this.dialogBearbeit = true
@@ -294,130 +272,225 @@ export default {
     async dialogSpeichern() {
 
       try {
-        if (this.dialogTitle === 'Name') {
-          if (this.dataBody.firstName
-              && this.dataBody.lastName
-              && this.dataBody.city) {
-
-            const res = await customerChangeName(this.dataBody.id, this.dataBody)
-            if(res.code === 200) {
-              console.log("change res", res)
+        switch (this.dialogTitle) {
+          case 'Name':
+            if (this.dataBody.firstName
+                && this.dataBody.lastName
+                && this.dataBody.city) {
+              const res = await customerChangeName(this.dataBody.id, this.dataBody)
+              if (res.code === 200) {
+                console.log("change res", res)
+              }
+              this.dialogBearbeit = false
             }
-            this.dialogBearbeit = false
-          }
-        } else if (this.dialogTitle === 'E-Mail') {
-          if (this.email
-              && this.confirmEmail
-              && this.password) {
+            break;
 
-            if(this.email === this.confirmEmail){
-              if (this.email && this.password) {
-                const res = await customerLogin(this.email, this.password)
-                // console.log(res.data.tokenValue)
+          case 'E-Mail':
+            if (this.email
+                && this.confirmEmail
+                && this.password) {
+
+              if (this.email === this.confirmEmail) {
+
+                const res = await customerChangeEmail({email: this.email})
                 if (res.code === 200) {
-                  localStorage.setItem('token', res.data.tokenValue)
-                  localStorage.setItem('id',res.data.loginId)
-                  refreshHeader()
-
-                  this.dataBody.userName=this.email
-                  const res = await customerChangeName(this.dataBody.id, this.dataBody)
-                  if(res.code === 200) {
-                    console.log("change res", res)
-                  }
-
+                  await this.$router.replace('/Login')
                 } else {
                   this.snackbar = true
                   this.snackbarText = "Passwort ist falsch"
                 }
               }
+
+              this.dialogBearbeit = false
             }
+            break
 
-            this.dialogBearbeit = false
-          }
+          case 'Dein Passwort':
+            if (this.newPassword === this.confirmNewPassword) {
+              const resChangePassword = await customerChangePassword({
+                oldPassword: this.currentPassword,
+                newPassword: this.newPassword
+              })
 
-
-          }else if(this.dialogTitle == 'Dein Passwort'){
-
-          if(this.newPassword === this.confirmNewPassword){
-            if (this.currentEmail && this.currentPassword) {
-              const res = await customerLogin(this.currentEmail, this.currentPassword)
-              // console.log(res.data.tokenValue)
-              if (res.code === 200) {
-                localStorage.setItem('token', res.data.tokenValue)
-                localStorage.setItem('id',res.data.loginId)
-                refreshHeader()
-
-                const resRestPassword = await resetPassword({token:res.data.tokenValue, newPassword:this.newPassword})
-                if (resRestPassword.code === 200) {
-                  await this.$router.push('/SetPasswordComplete')
-                } else {
-                  this.snackbar = true
-                  this.snackbarText = "Ein Fehler war erschienen."
-                }
-                // this.snackbar = true
-                // this.snackbarText = "Password erfolgreich zurückgesetzt"
-
-                this.dialogBearbeit = false
-
+              if (resChangePassword.code === 200) {
+                await this.$router.push('/Login')
               } else {
                 this.snackbar = true
-                this.snackbarText = "Konto oder Passwort ist falsch"
-                this.$router.replace('/OrderIndex/OrderPersonData')
+                this.snackbarText = "Ein Fehler war erschienen."
               }
+              // this.snackbar = true
+              // this.snackbarText = "Password erfolgreich zurückgesetzt"
+
+              this.dialogBearbeit = false
+
+
+            } else {
+              this.snackbar = true
+              this.snackbarText = "Die beide Password sind nicht gleich. "
             }
+            this.snackbar = false
+            break
 
+          case 'Lieferaddresse':
+            if (this.dataBody.firstName
+                && this.dataBody.lastName
+                && this.dataBody.billingAddress
+                && this.dataBody.zipCode && this.dataBody.city) {
 
-          }else{
-            this.snackbar=true
-            this.snackbarText="Die beide Password sind nicht gleich. "
-          }
-          this.snackbar=false
+              this.dataBody.deliveryAddress =
+                  this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
 
+              // await this.customerEditMe(this.dataBody)
 
+              const res = await customerChangeName(this.dataBody.id, this.dataBody)
+              if (res.code === 200) {
+                console.log("change res", res)
+              }
 
-        } else if (this.dialogTitle == 'Lieferaddresse') {
-
-          if (this.dataBody.firstName
-              && this.dataBody.lastName
-              && this.dataBody.billingAddress
-              && this.dataBody.zipCode && this.dataBody.city) {
-
-            this.dataBody.deliveryAddress =
-                this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
-
-            // await this.customerEditMe(this.dataBody)
-
-            const res = await customerChangeName(this.dataBody.id, this.dataBody)
-            if(res.code === 200) {
-              console.log("change res", res)
+              this.dialogBearbeit = false
             }
+            break
 
+          case 'Rechnungsadresse':
+            if (this.dataBody.firstName
+                && this.dataBody.lastName
+                && this.dataBody.billingAddress
+                && this.dataBody.zipCode && this.dataBody.city) {
+
+              this.dataBody.billingAddress =
+                  this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
+
+              // await this.customerEditMe(this.dataBody)
+              const res = await customerChangeName(this.dataBody.id, this.dataBody)
+              if (res.code === 200) {
+                console.log("change res", res)
+              }
+
+              this.dialogBearbeit = false
+            }
+            break
+
+          default:
             this.dialogBearbeit = false
-          }
 
-        } else if (this.dialogTitle == 'Rechnungsadresse') {
-
-          if (this.dataBody.firstName
-              && this.dataBody.lastName
-              && this.dataBody.billingAddress
-              && this.dataBody.zipCode && this.dataBody.city) {
-
-            this.dataBody.billingAddress =
-                this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
-
-            // await this.customerEditMe(this.dataBody)
-            const res = await customerChangeName(this.dataBody.id, this.dataBody)
-            if(res.code === 200) {
-              console.log("change res", res)
-            }
-
-            this.dialogBearbeit = false
-          }
-
-        } else {
-          this.dialogBearbeit = true
         }
         this.dText = {}
+
+        // if (this.dialogTitle === 'Name') {
+        //   if (this.dataBody.firstName
+        //       && this.dataBody.lastName
+        //       && this.dataBody.city) {
+        //
+        //     const res = await customerChangeName(this.dataBody.id, this.dataBody)
+        //     if (res.code === 200) {
+        //       console.log("change res", res)
+        //     }
+        //     this.dialogBearbeit = false
+        //   }
+        // } else if (this.dialogTitle === 'E-Mail') {
+        //   if (this.email
+        //       && this.confirmEmail
+        //       && this.password) {
+        //
+        //     if (this.email === this.confirmEmail) {
+        //       if (this.email && this.password) {
+        //         const res = await customerLogin(this.email, this.password)
+        //         // console.log(res.data.tokenValue)
+        //         if (res.code === 200) {
+        //           localStorage.setItem('token', res.data.tokenValue)
+        //           localStorage.setItem('id', res.data.loginId)
+        //           refreshHeader()
+        //
+        //           this.dataBody.userName = this.email
+        //           const res = await customerChangeName(this.dataBody.id, this.dataBody)
+        //           if (res.code === 200) {
+        //             console.log("change res", res)
+        //           }
+        //
+        //         } else {
+        //           this.snackbar = true
+        //           this.snackbarText = "Passwort ist falsch"
+        //         }
+        //       }
+        //     }
+        //
+        //     this.dialogBearbeit = false
+        //   }
+        //
+        //
+        // } else if (this.dialogTitle == 'Dein Passwort') {
+        //
+        //
+        //   if (this.newPassword === this.confirmNewPassword) {
+        //
+        //
+        //     const resChangePassword = await customerChangePassword({
+        //       oldPassword: this.currentPassword,
+        //       newPassword: this.newPassword
+        //     })
+        //
+        //     if (resChangePassword.code === 200) {
+        //       await this.$router.push('/ResetPasswordComplete')
+        //     } else {
+        //       this.snackbar = true
+        //       this.snackbarText = "Ein Fehler war erschienen."
+        //     }
+        //     // this.snackbar = true
+        //     // this.snackbarText = "Password erfolgreich zurückgesetzt"
+        //
+        //     this.dialogBearbeit = false
+        //
+        //
+        //   } else {
+        //     this.snackbar = true
+        //     this.snackbarText = "Die beide Password sind nicht gleich. "
+        //   }
+        //   this.snackbar = false
+        //
+        //
+        // } else if (this.dialogTitle == 'Lieferaddresse') {
+        //
+        //   if (this.dataBody.firstName
+        //       && this.dataBody.lastName
+        //       && this.dataBody.billingAddress
+        //       && this.dataBody.zipCode && this.dataBody.city) {
+        //
+        //     this.dataBody.deliveryAddress =
+        //         this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
+        //
+        //     // await this.customerEditMe(this.dataBody)
+        //
+        //     const res = await customerChangeName(this.dataBody.id, this.dataBody)
+        //     if (res.code === 200) {
+        //       console.log("change res", res)
+        //     }
+        //
+        //     this.dialogBearbeit = false
+        //   }
+        //
+        // } else if (this.dialogTitle == 'Rechnungsadresse') {
+        //
+        //   if (this.dataBody.firstName
+        //       && this.dataBody.lastName
+        //       && this.dataBody.billingAddress
+        //       && this.dataBody.zipCode && this.dataBody.city) {
+        //
+        //     this.dataBody.billingAddress =
+        //         this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
+        //
+        //     // await this.customerEditMe(this.dataBody)
+        //     const res = await customerChangeName(this.dataBody.id, this.dataBody)
+        //     if (res.code === 200) {
+        //       console.log("change res", res)
+        //     }
+        //
+        //     this.dialogBearbeit = false
+        //   }
+        //
+        // } else {
+        //   this.dialogBearbeit = true
+        // }
+        // this.dText = {}
       } catch (e) {
         console.log(e)
       }

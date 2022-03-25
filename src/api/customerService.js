@@ -22,7 +22,7 @@ export async function customerConfirmRegister (uuid) {
 }
 
 export async function customerLogin (userName, password) {
-  return (await hillo.post('/customer/login', {userName, password}))
+  return (await hillo.post('/customer/Login', {userName, password}))
 }
 
 export async function customerMe () {
@@ -35,6 +35,14 @@ export async function customerEditMe(data) {
 
 export async function customerChangeName(id,data){
   return await hillo.post(`/changeName/${id}`,data)
+}
+
+export async function customerChangePassword({oldPassword, newPassword}){
+  return await hillo.post('/customer/changePassword', {oldPassword, newPassword})
+}
+
+export async function customerChangeEmail(email) {
+  return await hillo.post('/customer/changeEmail',email)
 }
 
 export async function customerInit (customer, weddingDate, likeAndHate, imgs) {

@@ -38,7 +38,7 @@ export default {
   methods:{
     next(){
       localStorage.setItem('token',null)
-      this.$router.replace('/SetPassword')
+      this.$router.replace('/ResetPassword')
     }
   }
 }

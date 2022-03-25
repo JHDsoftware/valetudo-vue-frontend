@@ -8,15 +8,16 @@
       </div>
       <div style="position: fixed;right: 63px;top:22px" class="d-flex">
 
-        <template v-if="showLoginRegister">
+        <template v-if="!hideLoginStatus">
 
           <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
         </template>
 
-        <template v-if="$route.path.indexOf(hideKontoPath)>=0 ">
+        <template v-if="!hideKontStatus">
           <div class="flatButton text-decoration-none"
                @click="checkToken"
-               style="margin-left: 32px">Konto</div>
+               style="margin-left: 32px">Konto
+          </div>
         </template>
 
       </div>
@@ -33,31 +34,58 @@
 <script>
 
 export default {
-  data(){
-    return {
-      showLoginRegister: true,
-      hideKontoPath: ['/', '/login','/ConfirmEmail']
+
+  mounted() {
+    if (this.$route.path == '/')
+      this.$router.replace('/')
+  },
+
+  computed: {
+    routePath() {
+      return this.$route.path
+    },
+    hideKontStatus() {
+      const path = ['/', '/registerComplete', '/FAQ', '/Login', '/ConfirmEmail', '/ResetPassword']
+
+      return path.indexOf(this.routePath) >= 0
+    },
+    hideLoginStatus() {
+      const path = ['/OrderIndex/Entwurf',
+        '/OrderIndex/OrderPersonData',
+        '/OrderIndex/OrderBestellung',
+        '/OrderIndex/FAQ',
+        '/OrderIndex/KontaktUns']
+
+      if (this.routePath.match('/SampleOrder') || this.routePath.match('/edit')) {
+        return true
+      }
+
+      return path.indexOf(this.routePath) >= 0
     }
+  },
+  data() {
+    return {}
 
   },
 
-  methods:{
-    checkToken(){
+  methods: {
+    checkToken() {
       const token = localStorage.getItem('token')
-      if(token){
+      if (token) {
         this.$router.replace('/OrderIndex/OrderPersonData')
       }
-    }
+    },
+
   }
 }
 </script>
 <style>
 
-.appHeaderValetudo{
+.appHeaderValetudo {
   color: #CCC6BB
 }
 
-.appHeaderMyDress{
+.appHeaderMyDress {
   /*font-family: Oranienbaum;*/
   font-style: normal;
   font-weight: normal;
@@ -137,9 +165,11 @@ export default {
 .inputRow.long {
   width: 409px;
 }
+
 .inputRow.longX {
   width: 562px;
 }
+
 .textInput {
   border-radius: 0;
   height: 60px;
@@ -158,13 +188,14 @@ export default {
   letter-spacing: -0.011em;
   color: #4C4C4C;
 }
-.positionCenter{
+
+.positionCenter {
   display: flex;
   justify-content: center;
   align-content: center;
 }
 
-.buttonText{
+.buttonText {
   /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
@@ -177,12 +208,12 @@ export default {
   margin-top: 22px;
 }
 
-.text24{
+.text24 {
   font-size: 24px;
   line-height: 34px;
 }
 
-.text36{
+.text36 {
   font-size: 36px;
   line-height: 52px;
   /* identical to box height */

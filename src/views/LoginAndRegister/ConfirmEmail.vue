@@ -63,7 +63,7 @@ export default {
         const res = await customerForgetPassword(this.email)
         console.log(res)
         if (res.code == 200) {
-          this.$router.push('/forgetPasswordComplete')
+          this.$router.push('/ConfirmEmailComplete')
         } else {
           this.$router.replace('/')
         }
