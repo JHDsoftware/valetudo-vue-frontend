@@ -1,7 +1,7 @@
 <template>
   <div >
     <v-simple-table>
-      <thead style="height: 90px;background: #e0ddd6;color:  #6F6154;">
+      <thead style="height: 90px;background: #e0ddd6;">
       <tr >
         <th style="font-size: 18px">Bestellnummber</th>
         <th style="font-size: 18px">Bestelldatum</th>
@@ -99,14 +99,10 @@ export default {
 
 <style scoped>
 
-td, th {
-  text-align: center !important;
-  border-bottom: 1px solid #817163 !important;
-
-}
-
 th {
   border-bottom: 1px solid #817163 !important;
+
+  border-right: 2px solid #e0ddd6 !important;
   /*font-family: Gill Sans Nova;*/
   font-style: normal;
   font-weight: 600;
@@ -116,8 +112,16 @@ th {
 
   text-align: center;
 
-  color: #6F6154;
-  box-shadow: 0px 4px 4px rgba(204, 198, 187, 0.85);
+  /*color: #6F6154;*/
+  color: #e0ddd6;
+  /*box-shadow: 0px 4px 4px rgba(204, 198, 187, 0.85);*/
+  /*box-shadow: 2px 4px 4px #e0ddd6;*/
+}
+
+td, th {
+  text-align: center !important;
+  /*border-bottom: 1px solid #817163 !important;*/
+
 }
 
 td {
@@ -128,7 +132,7 @@ td {
 
   text-align: center;
 
-  color: #4C4C4C;
+  /*color: #4C4C4C;*/
   height: 120px !important;
 }
 
