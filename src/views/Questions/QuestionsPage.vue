@@ -143,6 +143,16 @@
                 ></v-textarea>
 
               </div>
+
+              <div class="my-2 d-flex flex-wrap" style="width: 568px">
+                <v-card v-for="(item,i) in multiFiles" :key="'file'+i" class="pa-2 d-flex align-center" style="width: 142px;" flat>
+                  <div style="; white-space:nowrap; text-overflow: ellipsis; overflow: hidden ">
+                    {{item.name}}
+                  </div>
+                  <v-icon @click="removeFile(i)" style="color: #E0DDD6">mdi-close-circle</v-icon>
+                </v-card>
+              </div>
+
               <div class="" style="width: 568px;">
                 <template>
                   <v-file-input
@@ -150,21 +160,22 @@
                       class="hochladenText pa-0 ma-0"
                       placeholder="Hier Bilder hochladen"
                       hide-details
-
                       @change="handleFileMulti"
                   >
-                    <template v-slot:selection="{ text }">
-                      <v-chip
-                          small
-                          label
-                          color="primary"
-                      >
-                        {{ text }}
-                      </v-chip>
-                    </template>
+<!--                    <template #selection>-->
+<!--                      <v-chip-->
+<!--                          small-->
+<!--                          label-->
+<!--                          color="primary"-->
+<!--                      >-->
+<!--                        {{ text }}-->
+<!--                      </v-chip>-->
+
+<!--                    </template>-->
                   </v-file-input>
                 </template>
               </div>
+
             </div>
           </v-stepper-content>
         </v-stepper-items>
@@ -214,7 +225,8 @@
 
 <script>
 
-import ValetButton from "../../components/ValetButton";
+import ValetButton from "../../components/ValetButton"
+import _ from 'lodash'
 
 export default {
   name: "QuestionsPage",
@@ -253,7 +265,13 @@ export default {
   },
   methods: {
     handleFileMulti(files){
-      console.log("files", files)
+     this.multiFiles = _.uniqBy(this.multiFiles.concat(files), 'name')
+      // console.log("files", this.multiFiles)
+    },
+    removeFile(i){
+      this.multiFiles.splice(i, 1)
+      // console.log("this.multiFiles", this.multiFiles)
+      // this.multiFiles
     },
     handelNext() {
       if (this.isReady) {
@@ -274,10 +292,7 @@ export default {
         this.e1 = val
       }
     },
-    // handelInput(){
-    //   this.isReady = true
-    //   this.budget=this.$event.target.value
-    // },
+
     save(date) {
       this.isReady = true
       this.$refs.menu.save(date)
