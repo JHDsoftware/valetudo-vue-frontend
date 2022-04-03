@@ -54,19 +54,15 @@ export default {
   methods: {
     async createNewDesign () {
 
-    // ?? {code: -1, message: 'The return value is null'}
       const res = await createNewDesign(this.name)
-      alert(res.message)
+      // alert(res.message)
       console.log("res createDesign", res)
 
       if(res){
         if(res.customer){
-
              await this.$router.push({
               path: '/edit/' + res.customer.id
             })
-
-           
         }
       }
      else {

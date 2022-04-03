@@ -257,7 +257,7 @@ export default {
     isReady() {
       if(this.e1 === 1 && this.date) {return  true}
       else if(this.e1 === 2 && this.budget) {return  true}
-      else if(this.e1 === 3 && this.areaText) {return true}
+      else if(this.e1 === 3 && (this.areaText || this.multiFiles.length>0)) {return true}
       else {return  false}
       // console.log("e1", this.e1, 'budget', this.budget)
     }
@@ -276,9 +276,9 @@ export default {
     handelNext() {
       if (this.isReady) {
         this.e1++
-
       }
       if (this.e1 === 4) {
+        
         this.$router.push('/CreateNewDress')
       }
     },

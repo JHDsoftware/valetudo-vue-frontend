@@ -11,10 +11,15 @@
                   v-slot="{active}"
                   >
 
-            <div class="navItem"
+            <div v-if="item.to !='/'"
+                class="navItem"
                 :style="active ? {'color': '#817163', 'border-bottom': '3px solid #817163'}: {}"
                  @click="$router.push(item.to); orderNav=i">{{ item.title }} </div>
 
+            <div v-else
+                 class="navItem"
+                 :style="active ? {'color': '#817163', 'border-bottom': '3px solid #817163'}: {}"
+                 @click="abmeldenDialog=true; orderNav=i">{{ item.title }} </div>
 
           </v-item>
         </v-item-group>
@@ -22,6 +27,17 @@
 
       </div>
     </div>
+
+    <v-dialog v-model="abmeldenDialog" width="40%">
+      <v-card class="pa-2">
+        <v-card-title style="font-weight: bold; font-size: xx-large">Sie würden abmelden?</v-card-title>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn tile class="primary" @click="$router.replace('/')">Ja</v-btn>
+          <v-btn tile class="red white--text" @click="abmeldenDialog=false">Nein</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
 
 
@@ -36,6 +52,7 @@ export default {
   name: "OrderNavigationDrawer",
   data: function () {
     return {
+      abmeldenDialog: false,
       orderNav: 0,
       menuRouter: [
         {

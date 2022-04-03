@@ -65,19 +65,25 @@ export default {
   methods: {
     async login() {
 
-      if (this.loginEmail && this.loginPassword) {
-        const res = await customerLogin(this.loginEmail, this.loginPassword)
-        // console.log(res.data.tokenValue)
-        if (res.code === 200) {
-          localStorage.setItem('token', res.data.tokenValue)
-          localStorage.setItem('id',res.data.loginId)
+      try{
+        if (this.loginEmail && this.loginPassword) {
+          const res = await customerLogin(this.loginEmail, this.loginPassword)
+          // console.log(res.data.tokenValue)
+          if (res.code === 200) {
+            localStorage.setItem('token', res.data.tokenValue)
+            localStorage.setItem('id',res.data.loginId)
 
-          refreshHeader()
-          this.$router.replace('/OrderIndex')
-        } else {
-          this.snackbar = true
-          this.snackbarText = "Konto oder Passwort ist falsch"
+            refreshHeader()
+            this.$router.replace('/OrderIndex')
+          } else {
+            this.snackbar = true
+            this.snackbarText = "Konto oder Passwort ist falsch"
+          }
         }
+      }
+      catch(e){
+        this.snackbar=true
+        this.snackbarText="Email ist noch nicht aktiviert."
       }
 
 
