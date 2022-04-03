@@ -197,12 +197,12 @@
 
 import ValetButton from '@/components/ValetButton'
 import ValetInputTextField from "@/components/ValetInputTextField";
-import {customerMe} from "@/api/customerService";
+import { customerEditMe, customerMe } from "@/api/customerService"
 import {
   customerChangeEmail,
   customerChangeName,
   customerChangePassword
-} from "../../../api/customerService";
+} from "@/api/customerService";
 import PersonDataCard from "../../../fragments/PersonDataCard";
 import ValetSnackBar from "@/components/ValetSnackBar";
 
@@ -259,7 +259,7 @@ export default {
 
     async getPersonData() {
       const res = await customerMe()
-      if (res.code != 200) {
+      if (res.code !== 200) {
         return null
       }
       this.dataBody = Object.assign(this.dataBody, res.data)
@@ -277,7 +277,7 @@ export default {
             if (this.dataBody.firstName
                 && this.dataBody.lastName
                 && this.dataBody.city) {
-              const res = await customerChangeName(this.dataBody.id, this.dataBody)
+              const res = await customerEditMe(this.dataBody)
               if (res.code === 200) {
                 console.log("change res", res)
               }

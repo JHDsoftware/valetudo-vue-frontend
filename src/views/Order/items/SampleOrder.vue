@@ -455,7 +455,7 @@ export default {
       }
     },
     async adressConfirm() {
-      const res = Object.entries(this.deliveryAddressForm).filter(i => i[0] != 'addressLine2')
+      const res = Object.entries(this.deliveryAddressForm).filter(i => i[0] !== 'addressLine2')
       // await customerEditMe(Object.assign(this.dataBody, this.deliveryAddressForm))
 
       const isNoEmpty = res.every(i => { return i[1] ? true : false })
@@ -512,7 +512,7 @@ export default {
       } else {
         switch (this.payMethodValue) {
           case 0:
-            (await payNewByPaypal(this.dataBody))
+            (await payNewByPaypal(this.amount))
             break;
           default:
             (await payNewByBilling(this.dataBody))
