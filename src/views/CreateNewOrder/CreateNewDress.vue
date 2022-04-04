@@ -59,14 +59,14 @@ export default {
       console.log("res createDesign", res)
 
       if(res){
-        if(res.customer){
+        if(res){
              await this.$router.push({
-              path: '/edit/' + res.customer.id
+              path: '/edit/' + res.id
             })
         }
       }
      else {
-       
+
        await this.$router.push("/OrderIndex/Entwurf")
       }
 
