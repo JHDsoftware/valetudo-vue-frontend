@@ -23,8 +23,8 @@
               </div>
             </div>
 
-            <template v-if="myDressList.length<1">
-              <div @click="$router.push('/createNewDress')" >
+            <template v-if="listCount.currentCount<1">
+              <div @click="$router.push('/createNewDress')">
                 <div class="dressContainer d-flex justify-center align-center">
                   <div class="noContent" style="width: 260px; font-size: 24px">
                     <div class="bigHint">Entwirf Dein Traumkleid kostenlos</div>
@@ -41,8 +41,8 @@
               </div>
             </template>
 
-            <template v-if="myDressList.length<2">
-              <div @click="$router.push('/createNewDress')" >
+            <template v-if="listCount.currentCount<2">
+              <div @click="$router.push('/createNewDress')">
                 <div class="dressContainer d-flex justify-center align-center">
                   <div class="noContent" style="width: 260px; font-size: 24px">
                     <div class="bigHint">Entwirf Dein zweites Brautkleid kostenlos</div>
@@ -58,7 +58,6 @@
                 </div>
               </div>
             </template>
-
 
             <div>
               <div @click="$router.push({path: '/SampleOrder/' + '-1'})"
@@ -84,8 +83,8 @@
            style="display: grid; grid-template-columns: repeat(2,1fr);height: calc(100vh - 60px);overflow: hidden">
         <div style="background: rgba(204, 198, 187, 0.85);padding-top: 40px;position: relative">
           <div @click="$router.push('/edit/'+ dress.id)">
-          <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id"
-                         :refreshCounter="dress.id" ></dress-display>
+            <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id"
+                           :refreshCounter="dress.id"></dress-display>
           </div>
           <div style="height: 50px; width: 50px; position: absolute; z-index: 2; top: 30px; left:28px"
                @click="dress=null">
@@ -116,13 +115,14 @@
 
             <v-card flat>
               <v-card-title style="font-size: 24px; margin-bottom: 8px"> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle style="font-size: 18px">Musterbox für <span style="font-size: 24px; font-weight: bold">29,99 €</span> . Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
+              <v-card-subtitle style="font-size: 18px">Musterbox für <span style="font-size: 24px; font-weight: bold">29,99 €</span>
+                . Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
                 sowie
                 ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
               </v-card-subtitle>
               <v-card-actions>
                 <v-btn tile
-                    height="60"
+                       height="60"
                        elevation="0"
                        color="#817163"
                        class="white--text"
@@ -164,7 +164,8 @@
 
             <v-card flat>
               <v-card-title style="font-size: 24px; margin-bottom: 8px">Termin vereinbaren</v-card-title>
-              <v-card-subtitle style="font-size: 18px">Wenn Du weitere Hilfe von einem Experten benötigst, um Dein endgültiges Kleid zu
+              <v-card-subtitle style="font-size: 18px">Wenn Du weitere Hilfe von einem Experten benötigst, um Dein
+                endgültiges Kleid zu
                 entwerfen, oder wenn Du Designerkleider in unserem Showroom anprobieren möchtest, dann kannst Du gerne
                 einen Termin vereinbaren.
 
@@ -186,7 +187,7 @@
                 width="660px"
       >
 
-        <v-card flat style="padding: 61px 59px 60px 59px" >
+        <v-card flat style="padding: 61px 59px 60px 59px">
           <div style="position: absolute; right: 34px; top: 34px">
             <v-icon x-large @click="showKontakt=false">mdi-close</v-icon>
           </div>
@@ -296,7 +297,7 @@
 
 <script>
 import DressDisplay from "../../../views/DressDisplay"
-import {deleteDress, getMyDesign} from '../../../api/dressDesginService'
+import {deleteDress, getMyDesign,myListCount} from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
@@ -305,7 +306,6 @@ import {customerMe} from "../../../api/customerService";
 
 export default {
   name: "Entwurf",
-  // components: {ValetInputTextField, DressDisplay, },
   components: {DressDisplay, ValetInputTextField, ValetButton},
   data: function () {
     return {
@@ -328,16 +328,29 @@ export default {
         city: null,
         phone: null,
         message: null,
+      },
+      listCount:{
+        currentCount: null,
+        maxDesign: null,
+        maxFree: null,
       }
+
 
     }
   },
   async mounted() {
+    this.listCount = Object.assign(({},await myListCount()).data)
     await this.loadDressList()
     await this.getPersonData()
+
   },
   methods: {
 
+    // async init() {
+    //   console.log("myListCount",await myListCount())
+
+    //
+    // },
     toOrderPage(id) {
       this.$router.push({path: '/SampleOrder/' + id})
     },
@@ -372,7 +385,7 @@ export default {
       if (res.code != 200) {
         return null
       }
-      this.personData = Object.assign( this.personData, res.data)
+      this.personData = Object.assign(this.personData, res.data)
       // console.log("res",res)
       // this.personData.firstName = res.data.firstName
       // this.personData.lastName = res.data.lastName
