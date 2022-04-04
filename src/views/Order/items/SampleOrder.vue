@@ -2,7 +2,7 @@
   <div style="height: calc(100vh - 60px);overflow: hidden">
     <div style="margin-top: 70px;" class="d-flex justify-center flex-wrap">
       <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">
-        <span v-if="id!==-1">Musterbox</span>
+        <span v-if="id != -1">Musterbox</span>
         <span v-else>Entwurf</span>
         bestellen
       </div>
@@ -39,16 +39,16 @@
               <div>
                 <div class="unterTitle24">ARTIKEL</div>
                 <div>
-                  <div class="unterTitle36" v-if="id!==-1">Musterbox</div>
+                  <div class="unterTitle36" v-if="id != -1">Musterbox</div>
                   <div class="unterTitle36" v-else>Neuer Entwurf</div>
 
-                  <div class="unterTitle18" v-if="id!==-1">(Inkl. Versandkosten)</div>
+                  <div class="unterTitle18" v-if="id != -1">(Inkl. Versandkosten)</div>
                   <div class="unterTitle18" v-else>(Keine Versandkosten)</div>
                 </div>
               </div>
 
               <div class="d-flex flex-column align-center">
-                <div class="unterTitle24" v-if="id!==-1">BRAUTKLEID</div>
+                <div class="unterTitle24" v-if="id != -1">BRAUTKLEID</div>
                 <div class="unterTitle36">{{ productInfo && productInfo.name }}</div>
               </div>
 
@@ -175,7 +175,7 @@
                         </div>
 
                       </v-item>
-                      <v-item #default="{active,toggle}" v-if="id!==-1">
+                      <v-item #default="{active,toggle}" v-if="id != -1">
                         <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
                           <div class="notion"></div>
                           <div class="ml-3 flex-grow-1">
@@ -428,27 +428,8 @@ export default {
           city: '',
           stateOrProvice: ''
         }
-
       },
 
-      // deliveryAddress: {
-      //   firstName: '',
-      //   lastName: '',
-      //   addressLine1: '',
-      //   addressLine2: '',
-      //   postCode: '',
-      //   city: '',
-      //   country: 'Germany'
-      // },
-      // billingAddress: {
-      //   firstName: '',
-      //   lastName: '',
-      //   addressLine1: '',
-      //   addressLine2: '',
-      //   postCode: '',
-      //   city: '',
-      //   country: 'Germany'
-      // },
       defaultAddress: {
         id: null,
         firstName: '',
@@ -472,12 +453,29 @@ export default {
     }
 
     this.dataBody = Object.assign(this.dataBody, res.data)
+    console.log('this.dataBody', this.dataBody)
 
     if (!this.dataBody.billingAddress) {
-      this.dataBody.billingAddress = Object.assign({}, this.defaultAddress)
+      this.dataBody.billingAddress = Object.assign({},
+          {
+            firstName: this.dataBody.firstName,
+            lastName: this.dataBody.lastName,
+            postCode: this.dataBody.postCode,
+            city: this.dataBody.city,
+            stateOrProvice: this.dataBody.stateOrProvice,
+            country: this.dataBody.country
+          })
     }
     if (!this.dataBody.deliveryAddress) {
-      this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
+      this.dataBody.deliveryAddress = Object.assign({},
+          {
+        firstName: this.dataBody.firstName,
+        lastName: this.dataBody.lastName,
+        postCode: this.dataBody.postCode,
+        city: this.dataBody.city,
+        stateOrProvice: this.dataBody.stateOrProvice,
+        country: this.dataBody.country
+      })
     }
 
     console.log('this.dataBody', this.dataBody)
@@ -544,7 +542,10 @@ export default {
     },
 
     async tryToPaySampleOrder () {
-      if (this.id === -1) {
+      if (this.id != -1) {
+        await this.placeAndPaySampleOrder(this.id)
+
+      } else {
         let res = null
         switch (this.payMethodValue) {
           case 0:
@@ -559,8 +560,6 @@ export default {
               await this.$router.replace('/SampleOrderComplete')
             }
         }
-      } else {
-        await this.placeAndPaySampleOrder(this.id)
       }
     }
 

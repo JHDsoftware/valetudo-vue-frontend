@@ -25,54 +25,23 @@
 
             <template v-if="listCount.currentCount<1">
               <div @click="$router.push('/createNewDress')">
-                <div class="dressContainer d-flex justify-center align-center">
-                  <div class="noContent" style="width: 260px; font-size: 24px">
-                    <div class="bigHint">Entwirf Dein Traumkleid kostenlos</div>
-                    <v-btn block
-                           tile
-                           style="text-transform: none; "
-                           height="52px"
-                           color="#e0ddd6"
-                           class="mt-4"
-                           elevation="0">Los geht's
-                    </v-btn>
-                  </div>
-                </div>
+                <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
               </div>
             </template>
 
             <template v-if="listCount.currentCount<2">
               <div @click="$router.push('/createNewDress')">
-                <div class="dressContainer d-flex justify-center align-center">
-                  <div class="noContent" style="width: 260px; font-size: 24px">
-                    <div class="bigHint">Entwirf Dein zweites Brautkleid kostenlos</div>
-                    <v-btn block
-                           tile
-                           style="text-transform: none; "
-                           height="52px"
-                           color="#e0ddd6"
-                           class="mt-4"
-                           elevation="0">Los geht's
-                    </v-btn>
-                  </div>
-                </div>
+                <entwurf-card
+                    title="Entwirf Dein zweites Brautkleid kostenlos"/>
               </div>
             </template>
 
-            <div>
-              <div @click="$router.push({path: '/SampleOrder/' + '-1'})"
-                   class="dressContainer d-flex justify-center align-center">
-                <div class="noContent" style="font-size: 24px">
-                  <v-container class="bigHint" style="width: 240px">Entwirf mehr Brautkleid für 19.90 €</v-container>
-                  <v-btn block
-                         tile
-                         style="text-transform: none; "
-                         height="52px"
-                         color="#e0ddd6"
-                         elevation="0">Los geht's
-                  </v-btn>
-                </div>
-              </div>
+
+
+            <div @click="$router.push({path: '/SampleOrder/' + '-1'})" >
+              <entwurf-card
+                  title="Entwirf mehr Brautkleid für 19.90 €"
+                  />
             </div>
 
           </div>
@@ -303,10 +272,11 @@ import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
 import {views} from '../../../api/dressDisplayRule'
 import {customerMe} from "../../../api/customerService";
+import EntwurfCard from "@/fragments/EntwurfCard";
 
 export default {
   name: "Entwurf",
-  components: {DressDisplay, ValetInputTextField, ValetButton},
+  components: {EntwurfCard, DressDisplay, ValetInputTextField, ValetButton},
   data: function () {
     return {
       myDressList: [],
@@ -340,6 +310,7 @@ export default {
   },
   async mounted() {
     this.listCount = Object.assign(({},await myListCount()).data)
+    console.log('listCount', this.listCount)
     await this.loadDressList()
     await this.getPersonData()
 

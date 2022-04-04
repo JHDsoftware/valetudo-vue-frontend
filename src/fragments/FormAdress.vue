@@ -28,15 +28,23 @@
                          v-model="localForm.addressLine1"
                          style="grid-column: 1/3"/>
     <ValetInputTextField title="Zusätzliche Adresse"
-                         width-input="540px"
+                         width-input="266px"
                          :customHeight="customHeight"
                          :useRule="false"
                          v-model="localForm.addressLine2"
-                         style="grid-column: 1/3"/>
+                         />
+
     <ValetInputTextField title="PLZ*"
                          width-input="266px"
                          :customHeight="customHeight"
                          v-model="localForm.postCode"/>
+
+    <ValetInputTextField title="Staat oder Provinz*"
+                         width-input="266px"
+                         :customHeight="customHeight"
+                         v-model="localForm.stateOrProvice"
+                        />
+
     <ValetInputTextField title="Stadt*"
                          :customHeight="customHeight"
                          width-input="266px"
@@ -53,15 +61,16 @@
 import ValetInputTextField from '../components/ValetInputTextField'
 import ValetButton from '../components/ValetButton'
 
-const defaultForm = {
-  firstName: '',
-  lastName: '',
-  addressLine1: '',
-  addressLine2: '',
-  postCode: '',
-  city: '',
-  country: 'Germany'
-}
+// const defaultForm = {
+//   firstName: '',
+//   lastName: '',
+//   addressLine1: '',
+//   addressLine2: '',
+//   postCode: '',
+//   city: '',
+//   stateOrProvice:'',
+//   country: 'Germany'
+// }
 
 export default {
   components: {ValetInputTextField, ValetButton},
@@ -74,10 +83,6 @@ export default {
     buttonText: {
       type: String,
       default: 'Speichern'
-    },
-    form: {
-      // type: Object,
-      // default: () => {}
     },
     value:{
       type: Object,
@@ -105,11 +110,11 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      localForm: Object.assign({}, defaultForm, this.value)
-    }
-  },
+  // data () {
+  //   return {
+  //     localForm: Object.assign({}, defaultForm, this.value)
+  //   }
+  // },
   methods:{
     handelClose() {
       this.$emit('closeButton')
