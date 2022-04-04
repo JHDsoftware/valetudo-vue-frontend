@@ -65,15 +65,16 @@ export default {
       return [iconStatus, buttonText]
     },
     handleZahlen(i){
-      if(i.paymentStatus === 'Success'){
-        this.$router.push('/OrderIndex/KontaktUns')
-      }else {
+      if(i.paymentStatus === 'NotApplicable'){
         this.$router.push({
           path: '/SampleOrder/'+i.id,
           query: {
             data: 3
           }
         })
+
+      }else {
+        this.$router.push('/OrderIndex/KontaktUns')
       }
 
     },

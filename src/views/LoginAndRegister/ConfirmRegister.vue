@@ -44,10 +44,10 @@ import ValetInputTextField from "../../components/ValetInputTextField";
 import ValetButton from "../../components/ValetButton";
 import ValetSnackBar from "@/components/ValetSnackBar";
 import hillo from "hillo";
-import {GlobalSetting} from '@/GlobalSetting'
+// import {GlobalSetting} from '@/GlobalSetting'
 
 export default {
-  name: "LoginPage",
+  name: "ConfirmRegister",
   components: {ValetInputTextField, ValetButton,ValetSnackBar},
   data: function () {
     return {
@@ -64,26 +64,20 @@ export default {
       },
     }
   },
-  mounted() {
+
+  async mounted() {
     this.init()
-
-    },
-
+  },
   methods: {
     async init() {
-      if (this.$route.path.indexOf('/customer/confirmRegister?') >= 0) {
-        const currentPath = this.$route.path.split('/customer/confirmRegister?')
-        // console.log("currentPath", currentPath)
-        const newUrl = GlobalSetting + '/customer/confirmRegister?' + currentPath[1]
-        await hillo.get(newUrl)
-      }
-      if (this.$route.path.indexOf('/customer/confirmChangeEmail?') >= 0) {
-        const currentPath = this.$route.path.split('/customer/confirmRegister?')
-        // console.log("currentPath", currentPath)
-        const newUrl = GlobalSetting + '/customer/confirmChangeEmail?' + currentPath[1]
-        await hillo.get(newUrl)
-      }
+      // const currentPath = this.$route.path.split('/customer/confirmRegister?')
+      const currentPath = this.$route.path.split('/customer/confirmChangeEmail?')
+      console.log("currentPath", currentPath)
 
+      // GlobalSetting
+      // const newUrl = 'http://3.124.147.27:8080/customer/confirmRegister?' + currentPath[1]
+      const newUrl = 'http://3.124.147.27:8080/customer/confirmChangeEmail?' + currentPath[1]
+      await hillo.get(newUrl)
     },
     async login() {
 
@@ -132,3 +126,5 @@ export default {
 }
 
 </style>
+
+

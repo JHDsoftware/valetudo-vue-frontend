@@ -45,7 +45,8 @@ export default {
       return this.$route.path
     },
     hideKontStatus() {
-      const path = ['/', '/registerComplete', '/FAQ', '/Login', '/ConfirmEmail', '/ResetPassword']
+      const path = ['/', '/registerComplete', '/FAQ',
+        '/Login', '/ConfirmEmail', '/ResetPassword','/customer/confirmRegister']
 
       return path.indexOf(this.routePath) >= 0
     },
