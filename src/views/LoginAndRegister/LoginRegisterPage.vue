@@ -236,7 +236,7 @@ export default {
 
     },
     filter(value, index, arr) {
-      return arr[value] ? true : false
+      return !!arr[value]
     }
   }
 }
