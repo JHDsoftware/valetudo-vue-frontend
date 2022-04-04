@@ -20,7 +20,7 @@
         <td style="font-size: 24px">{{ i.type }}</td>
         <td style="font-size: 24px">{{ i.name ?i.name: '-' }}</td>
         <td style="font-size: 24px">{{ i.quantity }}</td>
-        <td style="font-size: 24px">{{ i.totalPrice.toFixed(2).replace('.', ',') + " €" }}</td>
+        <td style="font-size: 24px">{{ i.price.toFixed(2).replace('.', ',') + " €" }}</td>
         <td><v-icon x-large> {{ i.paymentStatusIcon }} </v-icon></td>
         <td style="width: 266px"><valet-button :button-text="i.buttonText"
                           @click="handleZahlen(i)"></valet-button></td>
@@ -87,8 +87,8 @@ export default {
       const myDesign = (await myListComplete()).data ?? []
       // console.log("myDesign",myDesign)
       this.items = myDesign.map(i => {
-        i.bId = i.id.toString().padStart(4, '0')
-        i.time = dayjs(i.completedAt).format('YYYY-MM-DD')
+        i.bId = i.dressDesign.id.toString().padStart(4, '0')
+        i.time = dayjs(i.localDateTime).format('YYYY-MM-DD')
         i.type = 'MusterBox'
         i.quantity = i.quantity || 1
         i.paymentStatusIcon = this.paymentStatus(i.paymentStatus)[0]

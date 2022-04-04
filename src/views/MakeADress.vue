@@ -135,20 +135,23 @@ color: #817163;">
           <template v-else>
             <div
                 style="display: grid;grid-template-columns: repeat(3,272px);grid-template-rows: min-content;background: white;padding:60px;grid-gap: 16px;height: 100%;">
-              <div @click="jumpTo('https://www.valetudo.co/collections/handmade-schleier-birdcage/products/stickerei-hochzeit-schleier-personalisiert-handarbeit-massgefertigter-schleier-mit-handgestickter-buchstaben-valetudo-berlin')" class="d-flex align-center justify-center">
+              <div
+                  @click="jumpTo(
+                      'https://www.valetudo.co/collections/handmade-schleier-birdcage/products/stickerei-hochzeit-schleier-personalisiert-handarbeit-massgefertigter-schleier-mit-handgestickter-buchstaben-valetudo-berlin')"
+                  class="d-flex align-center justify-center pointerMouse">
                 <div style="text-align: center">
                   <v-img width="272px" src="@/assets/uiFramework/1.png"></v-img>
                   <div>Stickerei Hochzeit Schleier</div>
                 </div>
               </div>
-              <div @click="jumpTo('https://www.valetudo.co/products/birdcage-schleier-maiglockchen-french-vintage-valetudo-berlin')" class="d-flex align-center justify-center">
+              <div @click="jumpTo('https://www.valetudo.co/products/birdcage-schleier-maiglockchen-french-vintage-valetudo-berlin')" class="d-flex align-center justify-center pointerMouse">
                 <div style="text-align: center">
                   <v-img width="272px" src="@/assets/uiFramework/2.png"></v-img>
                   <div>Birdcage Schleier</div>
                 </div>
               </div>
               <div @click="jumpTo('https://www.valetudo.co/products/haarband-verformbar-valetudo-berlin')"
-                   class="d-flex align-center justify-center">
+                   class="d-flex align-center justify-center pointerMouse">
                 <div style="text-align: center">
                   <v-img width="272px" src="@/assets/uiFramework/3.png"></v-img>
                   <div>HAARBAND verformbar</div>
