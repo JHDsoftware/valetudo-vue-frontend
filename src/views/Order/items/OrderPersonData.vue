@@ -44,30 +44,30 @@
           <div>{{ dataBody.firstName }}</div>
           <div>{{ dataBody.lastName }}</div>
           <div>{{ dataBody.city }}</div>
-          <div>{{ dataBody.deliveryAddress }}</div>
-          <div>{{ dataBody.zipCode }}</div>
+          <div>{{ dataBody.deliveryAddress.addressLine1 }}</div>
+          <div>{{ dataBody.deliveryAddress.postCode }}</div>
           <div>{{ dataBody.country }}</div>
         </template>
       </PersonDataCard>
 
       <PersonDataCard
           icon="mdi-home"
-          title="Rechnungsadresse"
-          @click="handleButtonClick('Rechnungsadresse')"
+          title="Rechnungsaddresse"
+          @click="handleButtonClick('Rechnungsaddresse')"
       >
         <template v-slot:bodyText>
           <div>{{ dataBody.firstName }}</div>
           <div>{{ dataBody.lastName }}</div>
           <div>{{ dataBody.city }}</div>
-          <div>{{ dataBody.billingAddress }}</div>
-          <div>{{ dataBody.zipCode }}</div>
+          <div>{{ dataBody.billingAddress.addressLine1 }}</div>
+          <div>{{ dataBody.billingAddress.postCode }}</div>
           <div>{{ dataBody.country }}</div>
         </template>
       </PersonDataCard>
 
     </v-card>
 
-    <v-dialog v-model="dialogBearbeit" width="35vw" persistent>
+    <v-dialog v-model="dialogBearbeit" width="640px" persistent>
       <v-card tile flat>
         <v-icon large style="position: absolute; right: 34px; top: 34px" @click="dialogClose()">mdi-close
         </v-icon>
@@ -76,7 +76,7 @@
         </div>
 
         <template v-if="dialogTitle === 'Name'">
-          <div class="d-flex justify-center">
+          <div class="d-flex justify-center mx-2">
             <v-card
                 style="display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 8px; width: 540px; margin-bottom: 60px"
                 flat tile>
@@ -144,11 +144,12 @@
               <ValetInputTextField title="Name*"
 
                                    width-input="266px" v-model="dataBody.lastName"/>
-              <ValetInputTextField title="Adresse*" width-input="540px" v-model="dataBody.deliveryAddress"
+              <ValetInputTextField title="Adresse*" width-input="540px" v-model="dataBody.deliveryAddress.addressLine1"
                                    style="grid-column: 1/3"/>
-              <ValetInputTextField title="Zusätzliche Adresse" width-input="540px" v-model="zusatzAdress"
+              <ValetInputTextField title="Zusätzliche Adresse" width-input="540px"
+                                   v-model="dataBody.deliveryAddress.addressLine2"
                                    style="grid-column: 1/3"/>
-              <ValetInputTextField title="PLZ*" width-input="266px" v-model="dataBody.zipCode"/>
+              <ValetInputTextField title="PLZ*" width-input="266px" v-model="dataBody.deliveryAddress.postCode"/>
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dataBody.city"/>
               <div class="mt-1">{{ dataBody.country }}</div>
               <ValetButton buttonText="Speichern"
@@ -159,7 +160,7 @@
           </div>
         </template>
 
-        <template v-if="dialogTitle === 'Rechnungsadresse'">
+        <template v-if="dialogTitle === 'Rechnungsaddresse'">
           <div class="d-flex justify-center">
             <v-card
                 style="display: grid; grid-template-columns: repeat(2,1fr); grid-column-gap: 8px; width: 540px; margin-bottom: 60px"
@@ -167,11 +168,12 @@
 
               <ValetInputTextField title="Vorname*" width-input="266px" v-model="dataBody.firstName"/>
               <ValetInputTextField title="Name*" width-input="266px" v-model="dataBody.lastName"/>
-              <ValetInputTextField title="Adresse*" width-input="540px" v-model="dataBody.billingAddress"
+              <ValetInputTextField title="Adresse*" width-input="540px" v-model="dataBody.billingAddress.addressLine1"
                                    style="grid-column: 1/3"/>
-              <ValetInputTextField title="Zusätzliche Adresse" width-input="540px" v-model="zusatzAdress"
+              <ValetInputTextField title="Zusätzliche Adresse" width-input="540px"
+                                   v-model="dataBody.billingAddress.addressLine2"
                                    style="grid-column: 1/3"/>
-              <ValetInputTextField title="PLZ*" width-input="266px" v-model="dataBody.zipCode"/>
+              <ValetInputTextField title="PLZ*" width-input="266px" v-model="dataBody.billingAddress.postCode"/>
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dataBody.city"/>
               <div class="mt-1">{{ dataBody.country }}</div>
               <ValetButton buttonText="Speichern"
@@ -197,11 +199,11 @@
 
 import ValetButton from '@/components/ValetButton'
 import ValetInputTextField from "@/components/ValetInputTextField";
-import {customerMe} from "@/api/customerService";
+import {customerMe, customerUploadDressOrderAddress} from "@/api/customerService";
 import {
   customerChangeEmail,
-  customerChangeName,
-  customerChangePassword
+  customerChangePassword,
+  customerEditMe
 } from "../../../api/customerService";
 import PersonDataCard from "../../../fragments/PersonDataCard";
 import ValetSnackBar from "@/components/ValetSnackBar";
@@ -211,9 +213,9 @@ export default {
   components: {PersonDataCard, ValetInputTextField, ValetButton, ValetSnackBar},
   watch: {},
   computed: {
-    dTextData() {
-      return this.dText.data
-    },
+    // dTextData() {
+    //   return this.dText.data
+    // },
   },
   mounted() {
     this.getPersonData()
@@ -232,13 +234,17 @@ export default {
       confirmEmail: null,
       email: null,
       hintText: '<span style="font-size: 12px; line-height: 17px; padding-left: 5px"> Bitte mindestens 8 Zahlen oder Zeichen</span>',
-      zusatzAdress: null,
+      // addressLine2: null,
       dText: {},
       dialogBearbeit: false,
       rules: {
         required: (value) => (value && Boolean(value)) || 'Required'
       },
       requireRule: [v => !!v || 'Name is required'],
+
+      noDeliveryAddress: true,
+      noBillingAddress: true,
+
       dataBody: {
         id: '-1',
         userName: 'test@gmai.com',
@@ -246,12 +252,41 @@ export default {
         lastName: 'Wang',
         city: 'Berlin',
         phone: '01578963222',
-        deliveryAddress: 'Teltower Damm 227B, 14177 Berlin, Germany',
-        billingAddress: 'Teltower Damm 227B, 14177 Berlin, Germany',
-        zipCode: '',
-        country: 'Germany'
-      },
+        postCode: '',
+        country: 'Germany',
 
+        deliveryAddress: {
+          id: null,
+          firstName: '',
+          lastName: '',
+          addressLine1: '',
+          addressLine2: '',
+          postCode: '',
+          city: '',
+          stateOrProvice: 'NRW'
+        },
+        billingAddress: {
+          id: null,
+          firstName: '',
+          lastName: '',
+          addressLine1: '',
+          addressLine2: '',
+          postCode: '',
+          city: '',
+          stateOrProvice: 'NRW'
+        },
+
+      },
+      defaultAddress: {
+        id: null,
+        firstName: '',
+        lastName: '',
+        addressLine1: '',
+        addressLine2: '',
+        postCode: '',
+        city: '',
+        stateOrProvice: 'NRW'
+      },
     }
   },
 
@@ -263,6 +298,14 @@ export default {
         return null
       }
       this.dataBody = Object.assign(this.dataBody, res.data)
+
+      if (!this.dataBody.billingAddress) {
+        this.dataBody.billingAddress = Object.assign({}, this.defaultAddress)
+      }
+      if (!this.dataBody.deliveryAddress) {
+        this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
+      }
+
       this.currentEmail = JSON.parse(JSON.stringify(this.dataBody.userName))
     },
     handleButtonClick(text) {
@@ -272,14 +315,21 @@ export default {
     async dialogSpeichern() {
 
       try {
+        console.log("this.dialogTitle", this.dialogTitle)
+
         switch (this.dialogTitle) {
           case 'Name':
             if (this.dataBody.firstName
                 && this.dataBody.lastName
                 && this.dataBody.city) {
-              const res = await customerChangeName(this.dataBody.id, this.dataBody)
+              const res = await customerEditMe(this.dataBody)
+
+              // const res = await customerChangeName(this.dataBody.id, {name: this.dataBody.lastName})
               if (res.code === 200) {
                 console.log("change res", res)
+              } else {
+                this.snackbar = true
+                this.snackbarText = res.message
               }
               this.dialogBearbeit = false
             }
@@ -297,7 +347,7 @@ export default {
                   await this.$router.replace('/Login')
                 } else {
                   this.snackbar = true
-                  this.snackbarText = "Passwort ist falsch"
+                  this.snackbarText = res.message
                 }
               }
 
@@ -306,6 +356,13 @@ export default {
             break
 
           case 'Dein Passwort':
+
+            if(this.newPassword.length<8){
+              this.snackbar=true
+              this.snackbarText='Bitte mindestens 8 Zahlen oder Zeichen'
+              return null
+            }
+
             if (this.newPassword === this.confirmNewPassword) {
               const resChangePassword = await customerChangePassword({
                 oldPassword: this.currentPassword,
@@ -316,10 +373,9 @@ export default {
                 await this.$router.push('/Login')
               } else {
                 this.snackbar = true
-                this.snackbarText = "Ein Fehler war erschienen."
+                this.snackbarText = resChangePassword.message
               }
-              // this.snackbar = true
-              // this.snackbarText = "Password erfolgreich zurückgesetzt"
+
 
               this.dialogBearbeit = false
 
@@ -332,39 +388,97 @@ export default {
             break
 
           case 'Lieferaddresse':
+
+            if (this.dataBody.deliveryAddress == undefined || !this.dataBody.deliveryAddress) {
+              this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
+            }
+
             if (this.dataBody.firstName
                 && this.dataBody.lastName
-                && this.dataBody.billingAddress
-                && this.dataBody.zipCode && this.dataBody.city) {
+                && this.dataBody.deliveryAddress.addressLine1
+                && this.dataBody.deliveryAddress.postCode && this.dataBody.city) {
 
-              this.dataBody.deliveryAddress =
-                  this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
 
-              // await this.customerEditMe(this.dataBody)
-
-              const res = await customerChangeName(this.dataBody.id, this.dataBody)
-              if (res.code === 200) {
-                console.log("change res", res)
+              const data = {
+                ...this.dataBody.deliveryAddress,
+                firstName: this.dataBody.firstName,
+                lastName: this.dataBody.lastName,
+                city: this.dataBody.city
               }
+
+              // console.log("data", data)
+
+              const uploadAddress = await customerUploadDressOrderAddress(data)
+
+              if (uploadAddress.code === 200) {
+                // deliveryAddressId = uploadAddress.data.id
+                console.log('uploadAddress', uploadAddress)
+                const res = await customerEditMe({...this.dataBody, deliveryAddressId: uploadAddress.data.id})
+                if (res.code === 200) {
+                  console.log("change res", res)
+                } else {
+                  this.snackbar = true
+                  this.snackbarText = res.message
+                }
+              } else {
+                this.snackbar = true
+                this.snackbarText = uploadAddress.message
+              }
+
 
               this.dialogBearbeit = false
             }
             break
 
-          case 'Rechnungsadresse':
+          case 'Rechnungsaddresse':
+
+
+            if (this.dataBody.billingAddress == undefined || !this.dataBody.billingAddress) {
+              this.dataBody.billingAddress = Object.assign({}, this.defaultAddress)
+            }
+            console.log("this.dataBody", this.dataBody)
+
             if (this.dataBody.firstName
                 && this.dataBody.lastName
-                && this.dataBody.billingAddress
-                && this.dataBody.zipCode && this.dataBody.city) {
+                && this.dataBody.billingAddress.addressLine1
+                && this.dataBody.billingAddress.postCode && this.dataBody.city) {
 
-              this.dataBody.billingAddress =
-                  this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
-
-              // await this.customerEditMe(this.dataBody)
-              const res = await customerChangeName(this.dataBody.id, this.dataBody)
-              if (res.code === 200) {
-                console.log("change res", res)
+              const data = {
+                ...this.dataBody.billingAddress,
+                firstName: this.dataBody.firstName,
+                lastName: this.dataBody.lastName,
+                city: this.dataBody.city
               }
+              // console.log("this.data", this.data)
+
+              const uploadAddress = await customerUploadDressOrderAddress(data)
+              if (uploadAddress.code === 200) {
+                // console.log('uploadAddress', uploadAddress)
+                const res = await customerEditMe({...this.dataBody, billingAddressId: uploadAddress.data.id})
+                if (res.code === 200) {
+                  console.log("change res", res)
+                } else {
+                  this.snackbar = true
+                  this.snackbarText = res.message
+                }
+              } else {
+                this.snackbar = true
+                this.snackbarText = uploadAddress.message
+              }
+
+              // if (uploadAddress.code === 200) {
+              //   const res = await customerEditMe({...this.dataBody, billingAddressId: uploadAddress.data.id})
+              //
+              //   if (res.code === 200) {
+              //     console.log("change res", res)
+              //   } else {
+              //     this.snackbar = true
+              //     this.snackbarText = res.message
+              //   }
+              // } else {
+              //   this.snackbar = true
+              //   this.snackbarText = uploadAddress.message
+              // }
 
               this.dialogBearbeit = false
             }
@@ -376,121 +490,7 @@ export default {
         }
         this.dText = {}
 
-        // if (this.dialogTitle === 'Name') {
-        //   if (this.dataBody.firstName
-        //       && this.dataBody.lastName
-        //       && this.dataBody.city) {
-        //
-        //     const res = await customerChangeName(this.dataBody.id, this.dataBody)
-        //     if (res.code === 200) {
-        //       console.log("change res", res)
-        //     }
-        //     this.dialogBearbeit = false
-        //   }
-        // } else if (this.dialogTitle === 'E-Mail') {
-        //   if (this.email
-        //       && this.confirmEmail
-        //       && this.password) {
-        //
-        //     if (this.email === this.confirmEmail) {
-        //       if (this.email && this.password) {
-        //         const res = await customerLogin(this.email, this.password)
-        //         // console.log(res.data.tokenValue)
-        //         if (res.code === 200) {
-        //           localStorage.setItem('token', res.data.tokenValue)
-        //           localStorage.setItem('id', res.data.loginId)
-        //           refreshHeader()
-        //
-        //           this.dataBody.userName = this.email
-        //           const res = await customerChangeName(this.dataBody.id, this.dataBody)
-        //           if (res.code === 200) {
-        //             console.log("change res", res)
-        //           }
-        //
-        //         } else {
-        //           this.snackbar = true
-        //           this.snackbarText = "Passwort ist falsch"
-        //         }
-        //       }
-        //     }
-        //
-        //     this.dialogBearbeit = false
-        //   }
-        //
-        //
-        // } else if (this.dialogTitle == 'Dein Passwort') {
-        //
-        //
-        //   if (this.newPassword === this.confirmNewPassword) {
-        //
-        //
-        //     const resChangePassword = await customerChangePassword({
-        //       oldPassword: this.currentPassword,
-        //       newPassword: this.newPassword
-        //     })
-        //
-        //     if (resChangePassword.code === 200) {
-        //       await this.$router.push('/ResetPasswordComplete')
-        //     } else {
-        //       this.snackbar = true
-        //       this.snackbarText = "Ein Fehler war erschienen."
-        //     }
-        //     // this.snackbar = true
-        //     // this.snackbarText = "Password erfolgreich zurückgesetzt"
-        //
-        //     this.dialogBearbeit = false
-        //
-        //
-        //   } else {
-        //     this.snackbar = true
-        //     this.snackbarText = "Die beide Password sind nicht gleich. "
-        //   }
-        //   this.snackbar = false
-        //
-        //
-        // } else if (this.dialogTitle == 'Lieferaddresse') {
-        //
-        //   if (this.dataBody.firstName
-        //       && this.dataBody.lastName
-        //       && this.dataBody.billingAddress
-        //       && this.dataBody.zipCode && this.dataBody.city) {
-        //
-        //     this.dataBody.deliveryAddress =
-        //         this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
-        //
-        //     // await this.customerEditMe(this.dataBody)
-        //
-        //     const res = await customerChangeName(this.dataBody.id, this.dataBody)
-        //     if (res.code === 200) {
-        //       console.log("change res", res)
-        //     }
-        //
-        //     this.dialogBearbeit = false
-        //   }
-        //
-        // } else if (this.dialogTitle == 'Rechnungsadresse') {
-        //
-        //   if (this.dataBody.firstName
-        //       && this.dataBody.lastName
-        //       && this.dataBody.billingAddress
-        //       && this.dataBody.zipCode && this.dataBody.city) {
-        //
-        //     this.dataBody.billingAddress =
-        //         this.dataBody.address + ',' + this.dataBody.zipCode + ',' + this.dataBody.city
-        //
-        //     // await this.customerEditMe(this.dataBody)
-        //     const res = await customerChangeName(this.dataBody.id, this.dataBody)
-        //     if (res.code === 200) {
-        //       console.log("change res", res)
-        //     }
-        //
-        //     this.dialogBearbeit = false
-        //   }
-        //
-        // } else {
-        //   this.dialogBearbeit = true
-        // }
-        // this.dText = {}
+
       } catch (e) {
         console.log(e)
       }
@@ -499,7 +499,7 @@ export default {
     },
     dialogClose() {
       this.dialogBearbeit = false
-      this.dTextData = {}
+      // this.dTextData = {}
     },
     validate() {
       this.$refs.form.validate()

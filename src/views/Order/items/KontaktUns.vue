@@ -57,6 +57,7 @@ export default {
         firstName: null,
         lastName: null,
         userName: null,
+        email: null,
         phone: null,
         message: null
       },
@@ -65,7 +66,8 @@ export default {
         lastName: null,
         userName: null,
         phone: null,
-        message: null
+        message: null,
+        email: null,
       }
 
 
@@ -81,10 +83,17 @@ export default {
         return null
       }
       this.personData = Object.assign(this.personData, res.data)
+      this.personData.email = res.data.userName
       console.log("this.personData",this.personData)
 
     },
     async send() {
+      if(!this.personData.message){
+        this.snackbar=true
+        this.snackbarText="Bitte die entsprechende Nachrichten eingeben"
+        return null
+      }
+
       const res = await contactUsAdd(this.personData)
       console.log("send", res)
 
@@ -92,12 +101,12 @@ export default {
 
         this.snackbar=true,
         this.snackbarText= "Erfolgreich geschicket!"
-        this.personData.message = ""
-        // this.$router.push("/OrderIndex/Entwurf")
+        this.personData.message = null
+
       }
       else {
         this.snackbar=true,
-        this.snackbarText= "Erfolgreich geschicket!"
+        this.snackbarText= res.message
         // this.message.warning("Error, bitte ausloggen und versuchen Sie noch mal.")
       }
     },

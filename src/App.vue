@@ -55,7 +55,8 @@ export default {
         '/OrderIndex/OrderBestellung',
         '/OrderIndex/FAQ',
         '/OrderIndex/KontaktUns',
-        '/questionspage'
+        '/questionspage',
+          '/CreateNewDress'
       ]
 
       if (this.routePath.match('/SampleOrder') || this.routePath.match('/edit')) {

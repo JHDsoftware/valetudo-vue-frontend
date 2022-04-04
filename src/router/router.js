@@ -44,6 +44,11 @@ const routes = [
     component: () => import('../views/Order/items/SampleOrder.vue')
   },
   {
+    path: '/SampleOrderComplete',
+    name: 'SampleOrderComplete',
+    component:()=> import('../views/Order/items/SampleOrderComplete')
+  },
+  {
     path: '/OrderIndex',
     // name: 'OrderIndex',
     redirect: '/OrderIndex/Entwurf',

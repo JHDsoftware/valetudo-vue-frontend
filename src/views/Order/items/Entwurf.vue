@@ -364,21 +364,22 @@ export default {
       }
     },
     async loadDressList() {
-      this.myDressList = await getMyDesign()
-      console.log(this.myDressList)
+      this.myDressList = await getMyDesign() ?? []
+      // console.log("xxxx myDressList",this.myDressList)
     },
     async getPersonData() {
       const res = await customerMe()
       if (res.code != 200) {
         return null
       }
-      console.log("res",res)
+      this.personData = Object.assign( this.personData, res.data)
+      // console.log("res",res)
+      // this.personData.firstName = res.data.firstName
+      // this.personData.lastName = res.data.lastName
+      // this.personData.phone = res.data.phone
+      // this.personData.city = res.data.city
 
-      this.personData.firstName = res.data.firstName
-      this.personData.lastName = res.data.lastName
       this.personData.email = res.data.userName
-      this.personData.phone = res.data.phone
-      this.personData.city = res.data.city
 
     },
   },

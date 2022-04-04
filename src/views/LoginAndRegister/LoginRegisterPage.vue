@@ -88,6 +88,8 @@
         </div>
         <ValetInputTextField
             :use-title="false"
+            :use-rule="true"
+            :rules="[v=> v.length>7 || 'Bitte mindestens 8 Zahlen oder Zeichen']"
             v-model="password"
             width-input="540px"
             type="password"
@@ -136,7 +138,7 @@
 
 <script>
 import {refreshHeader} from '../../main'
-import {customerLogin, customerRegister} from '../../api/customerService'
+import {customerLogin, customerRegister, customerCheckEmailRegistered} from '../../api/customerService'
 import ValetInputTextField from "../../components/ValetInputTextField";
 import ValetButton from "../../components/ValetButton";
 import ValetSnackBar from "../../components/ValetSnackBar";
@@ -183,7 +185,8 @@ export default {
           this.$router.push('/OrderIndex')
         } else {
           this.snackbar = true
-          this.snackbarText = "Konto oder Passwort ist falsch"
+          // this.snackbarText = "Konto oder Passwort ist falsch"
+          this.snackbarText = res.message
         }
 
       }
@@ -200,10 +203,24 @@ export default {
         // phone: this.phone
       }
 
+      const checkEmailRes = await customerCheckEmailRegistered(this.email)
+
+      //Registered=1 NotConfirmed=2 NotUsed=3
+      if(checkEmailRes.data == 1) {
+        this.snackbar = true
+        this.snackbarText = "Die Email ist schon registered!"
+        return null
+      }
+
       if (this.passwordRepeat != this.password) {
         this.snackbar = true
         this.snackbarText = "Die beide Password sind nicht gleich"
-      } else {
+      } else if(this.password.length < 8){
+        this.snackbar = true
+        this.snackbarText = "Bitte mindestens 8 Zahlen oder Zeichen"
+      }else
+
+      {
         if (Object.values(data).every((i) => i ? true : false)) {
           data.phone = this.phone
           const res = await customerRegister(data)

@@ -69,7 +69,7 @@ export default {
         this.$router.push('/OrderIndex/KontaktUns')
       }else {
         this.$router.push({
-          path: '/OrderIndex/KontaktUns',
+          path: '/SampleOrder/'+i.id,
           query: {
             data: 3
           }
@@ -78,7 +78,9 @@ export default {
 
     },
     async init() {
-      this.items = (await getMyDesign()).filter(i => i.designCompleted).map(i => {
+      const myDesign = (await getMyDesign()) ?? []
+      console.log("myDesign",myDesign)
+      this.items = myDesign.filter(i => i.designCompleted).map(i => {
         i.bId = i.id.toString().padStart(4, '0')
         i.time = dayjs(i.completedAt).format('YYYY-MM-DD')
         i.type = 'MusterBox'
@@ -90,7 +92,7 @@ export default {
       })
 
 
-      console.log(this.items)
+      console.log("this.items",this.items)
 
     }
   }

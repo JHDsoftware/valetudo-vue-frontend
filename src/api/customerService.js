@@ -33,8 +33,8 @@ export async function customerEditMe(data) {
   return await hillo.post('/customer/editMe',data)
 }
 
-export async function customerChangeName(id,data){
-  return await hillo.post(`/changeName/${id}`,data)
+export async function customerUploadDressOrderAddress(data){
+  return await hillo.post('/customer/uploadDressOrderAddress', data)
 }
 
 export async function customerChangePassword({oldPassword, newPassword}){
@@ -60,4 +60,8 @@ export async function contactUsUpdate (id, data) {
 
 export async function contactUsAdd (data) {
   return await hillo.post('/contactUs/add', data)
+}
+
+export async function customerChangeName(id,data){
+  return await hillo.post(`/dressDesign/changeName/${id}`,data)
 }

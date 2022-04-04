@@ -11,7 +11,7 @@
       <v-stepper
           color="#817163"
           alt-labels
-          style="width: 646px; font-size: 24px" flat v-model="anzahlStep">
+          style="width: 646px; font-size: 24px; border: 2px solid white" flat v-model="anzahlStep">
         <v-stepper-header>
           <template v-for="(item,i) in stepHeaders">
             <v-stepper-step
@@ -79,7 +79,7 @@
             <template v-if="showEditAdress">
               <FormAdress title="Lieferadresse"
                           style="font-size: 24px; padding-bottom: 8px;"
-                          v-model="deliveryAddressForm"
+                          v-model="dataBody.deliveryAddress"
                           button-text="Speichern und weiter"
                           @click="adressConfirm"/>
 
@@ -93,7 +93,7 @@
                           style="padding-right:20px; margin-bottom: 90px">
                     <div style="font-size: 24px;">
                       <div class="font-weight-bold"> Lieferadresse</div>
-                      <template v-for="(item,j) in deliveryAddressForm">
+                      <template v-for="(item,j) in dataBody.deliveryAddress">
                         <div :key="'item'+j">
                           {{ item }}
                         </div>
@@ -107,7 +107,7 @@
                           tile>
                     <div style="font-size: 24px; ">
                       <div class="font-weight-bold">Rechnungsadresse</div>
-                      <template v-for="(item,j) in billingAddressForm">
+                      <template v-for="(item,j) in dataBody.billingAddress">
                         <div :key="'item'+j">
                           {{ item }}
                         </div>
@@ -215,10 +215,10 @@
 
                       <div style="font-size: 24px; padding-top: 8px">
 
-                        <div>{{ deliveryAddressForm.firstName }} {{ deliveryAddressForm.lastName }}</div>
-                        <div>{{ deliveryAddressForm.addressLine1 }}</div>
-                        <div>{{ deliveryAddressForm.postCode }} {{ deliveryAddressForm.city }}</div>
-                        <div>{{ deliveryAddressForm.country }}</div>
+                        <div>{{ dataBody.deliveryAddress.firstName }} {{ dataBody.deliveryAddress.lastName }}</div>
+                        <div>{{ dataBody.deliveryAddress.addressLine1 }}</div>
+                        <div>{{ dataBody.deliveryAddress.postCode }} {{ dataBody.deliveryAddress.city }}</div>
+                        <div>{{ dataBody.deliveryAddress.country }}</div>
                       </div>
 
                       <div class="d-flex justify-space-between unterTitle24"
@@ -298,7 +298,7 @@
                 <v-card class="text-center" flat>
                   <ValetButton style="width: 540px"
                                button-text="Bestellung Ansehen"
-                               @click="this.$router.replace('/OrderIndex/Entwurf')"/>
+                               @click="$router.replace('/OrderIndex/Entwurf')"/>
 
                 </v-card>
               </div>
@@ -319,7 +319,7 @@
               @closeButton="handelClose"
               @click="handelClose"
               title="Lieferadresse ändern"
-              v-model="deliveryAddressForm"
+              v-model="dataBody.deliveryAddress"
               :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
 
         </div>
@@ -334,7 +334,7 @@
             @closeButton="handelClose"
             @click="handelClose"
             use-close
-            v-model="billingAddressForm"
+            v-model="dataBody.billingAddress"
             title="Rechnungsadresse ändern"
             :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
       </div>
@@ -356,7 +356,6 @@ import {
 } from '../../../api/dressDesginService'
 import {customerEditMe, customerMe} from "@/api/customerService"
 
-
 export default {
   name: "SampleOrder",
   components: {FormAdress, ValetButton, ValetSnackBar},
@@ -373,29 +372,13 @@ export default {
     id: {},
     status: {}
   },
-  async mounted() {
-    this.productInfo = await loadDesign(this.id)
-    this.token = localStorage.getItem('token')
-    this.dataBody = (await customerMe()).data ?? []
-    const defaultData = {
-      firstName: this.dataBody.firstName,
-      lastName: this.dataBody.lastName,
-      addressLine1: this.dataBody.addressLine1,
-      addressLine2: this.dataBody.addressLine2,
-      postCode: this.dataBody.postCode,
-      city: this.dataBody.city,
-      country: 'Germany'
-    }
-    this.deliveryAddressForm = Object.assign(this.deliveryAddressForm, defaultData)
-    this.billingAddressForm = Object.assign(this.billingAddressForm, defaultData)
-  },
-  watch: {},
+
   data() {
     return {
       payStatus: true,
       payMethodValue: 0,
       token: null,
-      dataBody: [],
+
       snackBar: false,
       snackbarText: "Alle erforderliche Field soll ausgeführt werden.",
       amount: '1',
@@ -417,36 +400,96 @@ export default {
         {title: 'Zahlung', value: 3},
         {title: 'Fertig', value: 4}],
 
-      deliveryAddressForm: {
+      dataBody: {
+        id: '-1',
+        userName: 'test@gmai.com',
+        firstName: 'test',
+        lastName: 'test',
+        city: 'Berlin',
+        phone: '01578963222',
+        postCode: '',
+        country: 'Germany',
+
+        deliveryAddress: {
+          id: null,
+          firstName: '',
+          lastName: '',
+          addressLine1: '',
+          addressLine2: '',
+          postCode: '',
+          city: '',
+          stateOrProvice: ''
+        },
+        billingAddress: {
+          id: null,
+          firstName: '',
+          lastName: '',
+          addressLine1: '',
+          addressLine2: '',
+          postCode: '',
+          city: '',
+          stateOrProvice: ''
+        },
+
+      },
+
+      // deliveryAddress: {
+      //   firstName: '',
+      //   lastName: '',
+      //   addressLine1: '',
+      //   addressLine2: '',
+      //   postCode: '',
+      //   city: '',
+      //   country: 'Germany'
+      // },
+      // billingAddress: {
+      //   firstName: '',
+      //   lastName: '',
+      //   addressLine1: '',
+      //   addressLine2: '',
+      //   postCode: '',
+      //   city: '',
+      //   country: 'Germany'
+      // },
+      defaultAddress: {
+        id: null,
         firstName: '',
         lastName: '',
         addressLine1: '',
         addressLine2: '',
         postCode: '',
         city: '',
+        stateOrProvice: '',
         country: 'Germany'
       },
-      billingAddressForm: {
-        firstName: '',
-        lastName: '',
-        addressLine1: '',
-        addressLine2: '',
-        postCode: '',
-        city: '',
-        country: 'Germany'
-      },
-      defaultAddressForm:{
-        firstName: '',
-        lastName: '',
-        addressLine1: '',
-        addressLine2: '',
-        postCode: '',
-        city: '',
-        country: 'Germany'
-      }
 
     }
   },
+  async mounted() {
+    this.productInfo = await loadDesign(this.id)
+    this.token = localStorage.getItem('token')
+    // this.dataBody = (await customerMe()).data ?? []
+
+    const res = await customerMe()
+    if (res.code != 200) {
+      return null
+    }
+
+    this.dataBody = Object.assign(this.dataBody, res.data)
+
+    if (!this.dataBody.billingAddress) {
+      this.dataBody.billingAddress = Object.assign({}, this.defaultAddress)
+    }
+    if (!this.dataBody.deliveryAddress) {
+      this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
+    }
+    //
+    // this.deliveryAddress = this.dataBody.deliveryAddress
+    // this.billingAddress = this.dataBody.billingAddress
+
+    console.log('this.dataBody', this.dataBody)
+  },
+
   methods: {
 
     handleReturn(i) {
@@ -455,31 +498,33 @@ export default {
       }
     },
     async adressConfirm() {
-      const res = Object.entries(this.deliveryAddressForm).filter(i => i[0] != 'addressLine2')
-      // await customerEditMe(Object.assign(this.dataBody, this.deliveryAddressForm))
 
-      const isNoEmpty = res.every(i => { return i[1] ? true : false })
+      const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] != 'addressLine2' && i[0] != 'stateOrProvice')
+
+
+      console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
+      const isNoEmpty = res.every(i => {
+        return i[1] ? true : false
+      })
       if (isNoEmpty) {
         this.showEditAdress = false
       } else {
         this.snackBar = true
       }
 
-      this.billingAddressForm = Object.assign({}, this.deliveryAddressForm)
     },
     async confirm() {
 
       if (this.anzahlStep === 2) {
 
-        this.dataBody = Object.assign(this.dataBody,this.deliveryAddressForm)
-        this.dataBody.deliveryAddress = this.deliveryAddressForm.addressLine1
-        this.dataBody.billingAddress = this.billingAddressForm.addressLine1
-        console.log("dataBody", this.dataBody)
+        // this.dataBody = Object.assign(this.dataBody,this.deliveryAddress)
+        // this.dataBody.deliveryAddress = this.deliveryAddress.addressLine1
+        // this.dataBody.billingAddress = this.billingAddress.addressLine1
+        // console.log("dataBody", this.dataBody)
         await customerEditMe(this.dataBody)
       }
 
       this.anzahlStep = this.anzahlStep + 1
-
 
     },
 
@@ -490,33 +535,40 @@ export default {
     },
 
     async placeAndPaySampleOrder(id) {
-      await placeSampleOrder(id, parseInt(this.amount), this.deliveryAddressForm, this.billingAddressForm)
+      await placeSampleOrder(id, parseInt(this.amount), this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
         case 0:
-          return (await paySampleOrder(id))
+          location.href = await paySampleOrder(id)
+          break
         case 1:
-          return (await paySampleOrderAdvance(id))
+          if ((await paySampleOrderAdvance(id)).code == 200) {
+            await this.$router.replace('/SampleOrderComplete')
+          }
+          break
         default:
-          return (await paySampleOrderBilling(id))
+          if ((await paySampleOrderBilling(id)).code == 200) {
+            await this.$router.replace('/SampleOrderComplete')
+          }
       }
 
     },
 
     async tryToPaySampleOrder() {
-      if (this.id != -1) {
-        // console.log(this.id, '要支付的订单ID')
-        // await placeAndPaySampleOrder(this.id)
+      if (this.id == -1) {
 
-        await this.placeAndPaySampleOrder(this.id)
-      } else {
-        switch (this.payMethodValue) {
+        switch (this.payMethodValue){
           case 0:
-            (await payNewByPaypal(this.dataBody))
-            break;
+            await payNewByPaypal({amount: parseInt(this.amount)})
+            break
           default:
-            (await payNewByBilling(this.dataBody))
+            if((await payNewByBilling({amount: parseInt(this.amount)})).code == 200){
+              await this.$router.replace('/SampleOrderComplete')
+            }
         }
+
+      } else {
+        await this.placeAndPaySampleOrder(this.id)
       }
 
 
