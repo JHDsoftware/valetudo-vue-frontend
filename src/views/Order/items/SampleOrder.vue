@@ -97,7 +97,7 @@
                         </div>
                       </template>
                       <div style="position: absolute; right: 16px; top: 16px">
-                        <v-icon @click="dialogLiferAdress=true">mdi-pencil-plus</v-icon>
+                        <v-icon @click="editLieferadresse">mdi-pencil-plus</v-icon>
                       </div>
                     </div>
                   </v-card>
@@ -216,6 +216,7 @@
                         <div>{{ dataBody.deliveryAddress.firstName }} {{ dataBody.deliveryAddress.lastName }}</div>
                         <div>{{ dataBody.deliveryAddress.addressLine1 }}</div>
                         <div>{{ dataBody.deliveryAddress.postCode }} {{ dataBody.deliveryAddress.city }}</div>
+                        <div>{{ dataBody.deliveryAddress.stateOrProvice }}</div>
                         <div>{{ dataBody.deliveryAddress.country }}</div>
                       </div>
 
@@ -315,10 +316,11 @@
           <FormAdress
               use-close
               @closeButton="handelClose"
-              @click="handelClose"
+              :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"
               title="Lieferadresse ändern"
               v-model="dataBody.deliveryAddress"
-              :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
+              @click="handelClose"
+          />
 
         </div>
       </div>
@@ -430,6 +432,26 @@ export default {
         }
       },
 
+      billingAddress: {
+        id: null,
+        firstName: '',
+        lastName: '',
+        addressLine1: '',
+        addressLine2: '',
+        postCode: '',
+        city: '',
+        stateOrProvice: ''
+      },
+      deliveryAddress: {
+        id: null,
+        firstName: '',
+        lastName: '',
+        addressLine1: '',
+        addressLine2: '',
+        postCode: '',
+        city: '',
+        stateOrProvice: ''
+      },
       defaultAddress: {
         id: null,
         firstName: '',
@@ -466,6 +488,7 @@ export default {
             country: this.dataBody.country
           })
     }
+
     if (!this.dataBody.deliveryAddress) {
       this.dataBody.deliveryAddress = Object.assign({},
           {
@@ -483,17 +506,16 @@ export default {
 
   methods: {
 
-    handleReturn (i) {
+    handleReturn(i) {
       if (this.anzahlStep > (i + 1)) {
         this.anzahlStep = (i + 1)
       }
     },
-    async adressConfirm () {
+    async adressConfirm() {
 
-      const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2' && i[0] !== 'stateOrProvice')
+      const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2')
 
-
-      console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
+      // console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
       const isNoEmpty = res.every(i => {
         return !!i[1]
       })
@@ -504,7 +526,8 @@ export default {
       }
 
     },
-    async confirm () {
+
+    async confirm() {
 
       if (this.anzahlStep === 2) {
 
@@ -515,13 +538,19 @@ export default {
 
     },
 
-    handelClose () {
-      this.dialogLiferAdress = false
+    handelClose() {
+      if(this.deliveryAddress != this.dataBody.deliveryAddress){
+        this.dataBody.deliveryAddress = Object.assign({}, this.deliveryAddress)
+
+
+        this.dialogLiferAdress = false
+      }
+
       this.dialogRechnungAdress = false
 
     },
 
-    async placeAndPaySampleOrder (id) {
+    async placeAndPaySampleOrder(id) {
       await placeSampleOrder(id, this.amount, this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
@@ -541,7 +570,7 @@ export default {
 
     },
 
-    async tryToPaySampleOrder () {
+    async tryToPaySampleOrder() {
       if (this.id != -1) {
         await this.placeAndPaySampleOrder(this.id)
 
@@ -561,9 +590,14 @@ export default {
             }
         }
       }
-    }
+    },
 
+    editLieferadresse() {
+      this.dialogLiferAdress = true
+      this.deliveryAddress = Object.assign({},this.dataBody.deliveryAddress)
+    }
   }
+
 }
 </script>
 

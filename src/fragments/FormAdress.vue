@@ -39,7 +39,7 @@
                          :customHeight="customHeight"
                          v-model="localForm.postCode"/>
 
-    <ValetInputTextField title="Staat oder Provinz*"
+    <ValetInputTextField title="Staat/Provinz*"
                          width-input="266px"
                          :customHeight="customHeight"
                          v-model="localForm.stateOrProvice"

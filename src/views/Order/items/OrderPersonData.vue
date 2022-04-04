@@ -146,9 +146,17 @@
                                    width-input="266px" v-model="dataBody.lastName"/>
               <ValetInputTextField title="Adresse*" width-input="540px" v-model="dataBody.deliveryAddress.addressLine1"
                                    style="grid-column: 1/3"/>
-              <ValetInputTextField title="Zusätzliche Adresse" width-input="540px"
+
+              <ValetInputTextField title="Zusätzliche Adresse" width-input="266px"
                                    v-model="dataBody.deliveryAddress.addressLine2"
-                                   style="grid-column: 1/3"/>
+                                   :useRule="false"
+                                   />
+
+              <ValetInputTextField title="Staat/Provinz*"
+                                   width-input="266px"
+                                   v-model="dataBody.deliveryAddress.stateOrProvice"/>
+
+
               <ValetInputTextField title="PLZ*" width-input="266px" v-model="dataBody.deliveryAddress.postCode"/>
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dataBody.city"/>
               <div class="mt-1">{{ dataBody.country }}</div>
@@ -170,9 +178,16 @@
               <ValetInputTextField title="Name*" width-input="266px" v-model="dataBody.lastName"/>
               <ValetInputTextField title="Adresse*" width-input="540px" v-model="dataBody.billingAddress.addressLine1"
                                    style="grid-column: 1/3"/>
-              <ValetInputTextField title="Zusätzliche Adresse" width-input="540px"
+
+              <ValetInputTextField title="Zusätzliche Adresse" width-input="266px"
                                    v-model="dataBody.billingAddress.addressLine2"
-                                   style="grid-column: 1/3"/>
+                                   :useRule="false"
+              />
+
+              <ValetInputTextField title="Staat/Provinz*"
+                                   width-input="266px"
+                                   v-model="dataBody.billingAddress.stateOrProvice"/>
+
               <ValetInputTextField title="PLZ*" width-input="266px" v-model="dataBody.billingAddress.postCode"/>
               <ValetInputTextField title="Stadt*" width-input="266px" v-model="dataBody.city"/>
               <div class="mt-1">{{ dataBody.country }}</div>
@@ -207,6 +222,7 @@ import {
 } from "../../../api/customerService";
 import PersonDataCard from "../../../fragments/PersonDataCard";
 import ValetSnackBar from "@/components/ValetSnackBar";
+import {updateAddress} from '@/model/Order'
 
 export default {
   name: "OrderPersonData",
@@ -389,15 +405,19 @@ export default {
 
           case 'Lieferaddresse':
 
-            if (this.dataBody.deliveryAddress == undefined || !this.dataBody.deliveryAddress) {
-              this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
-            }
+            // if (this.dataBody.deliveryAddress == undefined || !this.dataBody.deliveryAddress) {
+            //   this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
+            // }
+
+            // if (this.dataBody.firstName
+            //     && this.dataBody.lastName
+            //     && this.dataBody.deliveryAddress.addressLine1
+            //     && this.dataBody.deliveryAddress.postCode && this.dataBody.city) {
 
             if (this.dataBody.firstName
                 && this.dataBody.lastName
                 && this.dataBody.deliveryAddress.addressLine1
                 && this.dataBody.deliveryAddress.postCode && this.dataBody.city) {
-
 
               const data = {
                 ...this.dataBody.deliveryAddress,
@@ -408,22 +428,26 @@ export default {
 
               // console.log("data", data)
 
-              const uploadAddress = await customerUploadDressOrderAddress(data)
+              // const uploadAddress = await customerUploadDressOrderAddress(data)
+              //
+              // if (uploadAddress.code === 200) {
+              //   // deliveryAddressId = uploadAddress.data.id
+              //   console.log('uploadAddress', uploadAddress)
+              //   const res = await customerEditMe({...this.dataBody, deliveryAddressId: uploadAddress.data.id})
+              //   if (res.code === 200) {
+              //     console.log("change res", res)
+              //   } else {
+              //     this.snackbar = true
+              //     this.snackbarText = res.message
+              //   }
+              // } else {
+              //   this.snackbar = true
+              //   this.snackbarText = uploadAddress.message
+              // }
 
-              if (uploadAddress.code === 200) {
-                // deliveryAddressId = uploadAddress.data.id
-                console.log('uploadAddress', uploadAddress)
-                const res = await customerEditMe({...this.dataBody, deliveryAddressId: uploadAddress.data.id})
-                if (res.code === 200) {
-                  console.log("change res", res)
-                } else {
-                  this.snackbar = true
-                  this.snackbarText = res.message
-                }
-              } else {
-                this.snackbar = true
-                this.snackbarText = uploadAddress.message
-              }
+              const res = await updateAddress(this.dataBody, data, 'deliveryAddress')
+              this.snackbar = res.snackbar
+              this.snackbarText = res.snackbarText
 
 
               this.dialogBearbeit = false
