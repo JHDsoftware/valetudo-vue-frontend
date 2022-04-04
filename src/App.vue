@@ -226,6 +226,9 @@ export default {
 
 }
 
+.pointerMouse{
+  cursor: pointer;
+}
 
 </style>
 
