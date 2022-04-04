@@ -41,8 +41,8 @@ import {
   sleevesSelection,
   stripSelection,
   topSelection, views
-} from '../api/dressDisplayRule'
-import { loadDesign } from '../api/dressDesginService'
+} from '@/api/dressDisplayRule'
+import { loadDesign } from '@/api/dressDesginService' 
 
 export default {
   name: "DressDisplay",
