@@ -16,7 +16,7 @@ const defaultAddress = {
   stateOrProvice: 'NRW'
 }
 
-export async function placeAndPaySampleOrder(id){
+export async function placeAndPaySampleOrder (id) {
   await placeSampleOrder(id)
   return (await paySampleOrder(id))
 }
@@ -31,11 +31,12 @@ export async function placeSampleOrder (id, quantity = 1, deliveryAddress = defa
 export async function paySampleOrder (id) {
   return (await hillo.post('/dressDesign/paySampleOrder/' + `${id}`)).data
 }
-export async function paySampleOrderBilling(id) {
+
+export async function paySampleOrderBilling (id) {
   return (await hillo.post(`/dressDesign/paySampleOrderBilling/${id}`))
 }
 
-export async function paySampleOrderAdvance(id){
+export async function paySampleOrderAdvance (id) {
   return (await hillo.post(`/dressDesign/paySampleOrderAdvance/${id}`))
 }
 
@@ -44,11 +45,12 @@ export async function loadDesign (id) {
 }
 
 // 无订单ID
-export async function payNewByPaypal (data) {
-  return (await hillo.post('/dressDesign/createNewByPaypal',data)).data
+export async function payNewByPaypal (amount) {
+  return (await hillo.post('/dressDesign/createNewByPaypal', {amount})).data
 }
-export async function payNewByBilling(data) {
-  return (await hillo.post(`/dressDesign/createNewByBilling`,data))
+
+export async function payNewByBilling (amount) {
+  return (await hillo.post(`/dressDesign/createNewByBilling`, {amount}))
 }
 
 export async function createNewDesign (name) {
@@ -67,6 +69,6 @@ export async function deleteDress (id) {
   return (await hillo.post(`/dressDesign/setHidden/${id}`)).data
 }
 
-export async function paypalCapture(PayerID, token) {
+export async function paypalCapture (PayerID, token) {
   return (await hillo.get(`/dressDesign/paypal/capture?PayerID=${PayerID}&token=${token}`))
 }

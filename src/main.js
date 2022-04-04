@@ -3,6 +3,8 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router/router'
 import hillo from 'hillo'
+import IKUtils from 'innerken-js-utils'
+import { customerConfirmRegister } from '@/api/customerService'
 
 export function getToken () {
   console.log(localStorage.getItem('token'))
@@ -14,9 +16,9 @@ Vue.config.productionTip = false
 
 
 Vue.filter('priceDisplay',
-    function (price){
-  return parseFloat(price).toFixed(2).replace('.',',')
-})
+  function (price) {
+    return parseFloat(price).toFixed(2).replace('.', ',')
+  })
 
 
 hillo.initial('http://3.124.147.27:8080')
@@ -36,8 +38,13 @@ export function refreshHeader () {
   }
 }
 
+const uuid = IKUtils.getQueryString('uuid')
+if (uuid) {
+  customerConfirmRegister(uuid).then(() => router.push('/Login'))
+}
 
 refreshHeader()
+
 
 new Vue({
   vuetify,

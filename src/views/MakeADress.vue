@@ -1,7 +1,8 @@
 <template>
   <div style="display: grid;grid-template-columns: 50% 50%;overflow: hidden">
     <template v-if="finished">
-      <div style="position:absolute;top: 0;left: 0;width: 100vw;height: calc(100vh - 60px);background: center / cover" :style="{
+      <div style="position:absolute;top: 0;left: 0;width: 100vw;height: calc(100vh - 60px);background: center / cover"
+           :style="{
 backgroundImage:'url('+require('@/assets/image/frameUI/completeBackground.png')+')'}"
       >
         <div style="width: 100%;height: 100%;position: relative">
@@ -47,9 +48,12 @@ word-wrap: break-word;
 margin-top: 51px;
 
 color: #817163;">
-              Nice piece! Do you want to make it ture? In Valetudo, you can find personal consultant (free of charge for the first appoinement), you can also order samples of lace and fabrics online. That would be our pleasuere to realize your dream dress with you!
+              Nice piece! Do you want to make it ture? In Valetudo, you can find personal consultant (free of charge for
+              the first appoinement), you can also order samples of lace and fabrics online. That would be our pleasuere
+              to realize your dream dress with you!
             </div>
-            <valet-button @click="$router.push('/OrderIndex/Entwurf')" style="margin-top: 51px" button-text="Check your dress in your account">
+            <valet-button @click="$router.push('/OrderIndex/Entwurf')" style="margin-top: 51px"
+                          button-text="Check your dress in your account">
             </valet-button>
           </div>
         </div>
@@ -61,8 +65,11 @@ color: #817163;">
     <template v-else>
       <v-sheet
           class="px-8"
-          style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9;">
-        <dress-display v-if="!dressLoading" :refresh-counter="refreshCounter" :dress-id="dressId" :current-view="currentView" style="height: 100%"/>
+          style="height: calc(100vh - 60px);border-right: 1px solid #817163;display: flex;
+          justify-content: center;padding-top: 44px;position: relative;background: #CCC6BBD9;"
+      >
+        <dress-display v-if="!dressLoading" :refresh-counter="refreshCounter" :dress-id="dressId"
+                       :current-view="currentView" style="height: 100%"/>
         <div style="position: absolute;right: 46px;bottom: 8px; z-index: 100">
           <div class="roundFab">
             <v-img :src="require('@/assets/image/frameUI/zoom-in.png')"></v-img>
@@ -73,7 +80,7 @@ color: #817163;">
         </div>
 
       </v-sheet>
-      <v-card color="#e0ddd6" class="d-flex flex-column">
+      <v-card color="#E0DDD6" class="d-flex flex-column">
         <v-card elevation="8" height="60px">
           <div style="width: 100%">
             <v-item-group mandatory v-model="currentTab">
@@ -88,42 +95,71 @@ color: #817163;">
           </div>
         </v-card>
         <div style="height: calc(100vh - 60px - 64px - 60px);overflow-y: scroll">
-          <v-expansion-panels style="margin-top: 2px" accordion mandatory>
-            <v-expansion-panel
-                class="panel"
-                active-class="active"
-                v-for="(item) in availableSelections"
-                :key="currentTab+''+item.dressPartCategory.code"
-            >
-              <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
-                  item.dressPartCategory.name
-                }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-item-group mandatory>
-                  <div style="display: grid;grid-template-columns: repeat(7,1fr)">
-                    <template v-for="option in item.filteredPart">
-                      <v-item :key="option.code+option.id" v-slot="{active,toggle}">
-                        <div class="weddingItem"
-                             @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
-                             :class="active?' active':''">
-                          <div style="text-align: center">
-                            <img style="height: 116px"
-                                 :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'+item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
-                                 alt=""/>
-                            <div class="option-label" style="width: 100%">{{ option.name }}</div>
-                          </div>
+          <template v-if="currentTab<2">
+            <v-expansion-panels style="margin-top: 2px" accordion mandatory>
+              <v-expansion-panel
+                  class="panel"
+                  active-class="active"
+                  v-for="(item) in availableSelections"
+                  :key="currentTab+''+item.dressPartCategory.code"
+              >
+                <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
+                    item.dressPartCategory.name
+                  }}
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-item-group mandatory>
+                    <div style="display: grid;grid-template-columns: repeat(7,1fr)">
+                      <template v-for="option in item.filteredPart">
+                        <v-item :key="option.code+option.id" v-slot="{active,toggle}">
+                          <div class="weddingItem"
+                               @click="selectPart(item.dressPartCategory.code,option.code,option.id,toggle,currentTab)"
+                               :class="active?' active':''">
+                            <div style="text-align: center">
+                              <img style="height: 116px"
+                                   :src="require('@/assets/image/ui/'+parts[currentTab].path+'/'
+                                 +item.dressPartCategory.code+'/'+item.dressPartCategory.code+option.code+'.png')"
+                                   alt=""/>
+                              <div class="option-label" style="width: 100%">{{ option.name }}</div>
+                            </div>
 
-                        </div>
-                      </v-item>
-                    </template>
-                  </div>
-                </v-item-group>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+                          </div>
+                        </v-item>
+                      </template>
+                    </div>
+                  </v-item-group>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </template>
+          <template v-else>
+            <div
+                style="display: grid;grid-template-columns: repeat(3,272px);grid-template-rows: min-content;background: white;padding:60px;grid-gap: 16px;height: 100%;">
+              <div class="d-flex align-center justify-center">
+                <div style="text-align: center">
+                  <v-img width="272px" src="@/assets/uiFramework/1.png"></v-img>
+                  <div>Stickerei Hochzeit Schleier</div>
+                </div>
+              </div>
+              <div class="d-flex align-center justify-center">
+                <div style="text-align: center">
+                  <v-img width="272px" src="@/assets/uiFramework/2.png"></v-img>
+                  <div>Birdcage Schleier</div>
+                </div>
+              </div>
+              <div @click="jumpTo('https://www.valetudo.co/products/haarband-verformbar-valetudo-berlin')"
+                   class="d-flex align-center justify-center">
+                <div style="text-align: center">
+                  <v-img width="272px" src="@/assets/uiFramework/3.png"></v-img>
+                  <div>HAARBAND verformbar</div>
+                </div>
+              </div>
+            </div>
+          </template>
+
         </div>
-        <v-sheet style="position: absolute;width:100%;bottom:0;z-index:1;display: grid;grid-template-columns: 50% 50%">
+        <v-sheet style="position: absolute;width:100%;bottom:0;z-index:1;
+        display: grid;grid-template-columns: 50% 50%">
           <v-btn height="60px" block elevation="0" tile color="#817163" dark>
             <v-icon left>mdi-arrow-left-top-bold</v-icon>
             Revoke
@@ -241,7 +277,7 @@ export default {
       currentInfo: {},
       currentTab: 0,
       currentView: views[0],
-      dressLoading:false,
+      dressLoading: false,
       remoteSelections: [],
       parts: parts,
       selectedPart: {},
@@ -251,9 +287,9 @@ export default {
       showDressFinishConfirm: null,
       showLoading: null,
       refreshCounter: 0,
-      finished:false,
-      dressName:"",
-      dressDate:""
+      finished: false,
+      dressName: "",
+      dressDate: ""
     }
   },
   computed: {
@@ -271,10 +307,10 @@ export default {
     async finishDesign () {
       this.showLoading = true
       try {
-        const {name,completedAt}=await setDressComplete(this.dressId)
-        this.dressName=name
-        this.dressDate=dayjs(completedAt).format('DD. MMM. YYYY')
-        this.finished=true
+        const {name, completedAt} = await setDressComplete(this.dressId)
+        this.dressName = name
+        this.dressDate = dayjs(completedAt).format('DD. MMM. YYYY')
+        this.finished = true
       } catch (e) {
         console.log(e)
       } finally {
@@ -289,11 +325,11 @@ export default {
       console.log("------>")
     },
     changeView () {
-      this.dressLoading=true
+      this.dressLoading = true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
-      setTimeout(()=>{
-        this.dressLoading=false
-      },400)
+      setTimeout(() => {
+        this.dressLoading = false
+      }, 400)
     },
     async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
       this.logSelectedParts()
@@ -315,6 +351,9 @@ export default {
       if (toggle) {
         toggle()
       }
+    },
+    jumpTo (url) {
+      window.location.href = url
     }
   },
   async mounted () {

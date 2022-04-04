@@ -194,34 +194,33 @@ export default {
     },
     async register() {
 
-      const data = {
-        email: this.email,
-        password: this.password,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        city: this.city,
-        // phone: this.phone
-      }
+
 
       const checkEmailRes = await customerCheckEmailRegistered(this.email)
 
       //Registered=1 NotConfirmed=2 NotUsed=3
-      if(checkEmailRes.data == 1) {
+      if(checkEmailRes.data === 1) {
         this.snackbar = true
         this.snackbarText = "Die Email ist schon registered!"
         return null
       }
 
-      if (this.passwordRepeat != this.password) {
+      if (this.passwordRepeat !== this.password) {
         this.snackbar = true
         this.snackbarText = "Die beide Password sind nicht gleich"
       } else if(this.password.length < 8){
         this.snackbar = true
         this.snackbarText = "Bitte mindestens 8 Zahlen oder Zeichen"
-      }else
-
-      {
-        if (Object.values(data).every((i) => i ? true : false)) {
+      }else {
+        const data = {
+          email: this.email,
+          password: this.password,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          city: this.city,
+          // phone: this.phone
+        }
+        if (Object.values(data).every((i) => !!i)) {
           data.phone = this.phone
           const res = await customerRegister(data)
 

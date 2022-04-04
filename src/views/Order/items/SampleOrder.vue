@@ -1,13 +1,11 @@
 <template>
   <div style="height: calc(100vh - 60px);overflow: hidden">
     <div style="margin-top: 70px;" class="d-flex justify-center flex-wrap">
-
       <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">
-        <span v-if="id!=-1">Musterbox</span>
+        <span v-if="id!==-1">Musterbox</span>
         <span v-else>Entwurf</span>
         bestellen
       </div>
-
       <v-stepper
           color="#817163"
           alt-labels
@@ -41,16 +39,16 @@
               <div>
                 <div class="unterTitle24">ARTIKEL</div>
                 <div>
-                  <div class="unterTitle36" v-if="id!=-1">Musterbox</div>
+                  <div class="unterTitle36" v-if="id!==-1">Musterbox</div>
                   <div class="unterTitle36" v-else>Neuer Entwurf</div>
 
-                  <div class="unterTitle18" v-if="id!=-1">(Inkl. Versandkosten)</div>
+                  <div class="unterTitle18" v-if="id!==-1">(Inkl. Versandkosten)</div>
                   <div class="unterTitle18" v-else>(Keine Versandkosten)</div>
                 </div>
               </div>
 
               <div class="d-flex flex-column align-center">
-                <div class="unterTitle24" v-if="id!=-1">BRAUTKLEID</div>
+                <div class="unterTitle24" v-if="id!==-1">BRAUTKLEID</div>
                 <div class="unterTitle36">{{ productInfo && productInfo.name }}</div>
               </div>
 
@@ -177,7 +175,7 @@
                         </div>
 
                       </v-item>
-                      <v-item #default="{active,toggle}" v-if="id!=-1">
+                      <v-item #default="{active,toggle}" v-if="id!==-1">
                         <div class="d-flex align-baseline mt-2" @click="toggle" :class="active?'active':''">
                           <div class="notion"></div>
                           <div class="ml-3 flex-grow-1">
@@ -346,7 +344,7 @@
 
 <script>
 import ValetButton from "../../../components/ValetButton"
-import ValetSnackBar from "@/components/ValetSnackBar";
+import ValetSnackBar from "@/components/ValetSnackBar"
 import FormAdress from "../../../fragments/FormAdress"
 import {
   loadDesign, payNewByBilling, payNewByPaypal,
@@ -354,17 +352,17 @@ import {
   paySampleOrderAdvance, paySampleOrderBilling,
   placeSampleOrder
 } from '../../../api/dressDesginService'
-import {customerEditMe, customerMe} from "@/api/customerService"
+import { customerEditMe, customerMe } from "@/api/customerService"
 
 export default {
   name: "SampleOrder",
   components: {FormAdress, ValetButton, ValetSnackBar},
   computed: {
 
-    price() {
+    price () {
       return (this.amount ?? 1) * 29.99
     },
-    versandPrice() {
+    versandPrice () {
       return 0.00
     }
   },
@@ -373,7 +371,7 @@ export default {
     status: {}
   },
 
-  data() {
+  data () {
     return {
       payStatus: true,
       payMethodValue: 0,
@@ -429,7 +427,7 @@ export default {
           postCode: '',
           city: '',
           stateOrProvice: ''
-        },
+        }
 
       },
 
@@ -461,17 +459,15 @@ export default {
         city: '',
         stateOrProvice: '',
         country: 'Germany'
-      },
+      }
 
     }
   },
-  async mounted() {
+  async mounted () {
     this.productInfo = await loadDesign(this.id)
     this.token = localStorage.getItem('token')
-    // this.dataBody = (await customerMe()).data ?? []
-
     const res = await customerMe()
-    if (res.code != 200) {
+    if (res.code !== 200) {
       return null
     }
 
@@ -483,28 +479,25 @@ export default {
     if (!this.dataBody.deliveryAddress) {
       this.dataBody.deliveryAddress = Object.assign({}, this.defaultAddress)
     }
-    //
-    // this.deliveryAddress = this.dataBody.deliveryAddress
-    // this.billingAddress = this.dataBody.billingAddress
 
     console.log('this.dataBody', this.dataBody)
   },
 
   methods: {
 
-    handleReturn(i) {
+    handleReturn (i) {
       if (this.anzahlStep > (i + 1)) {
         this.anzahlStep = (i + 1)
       }
     },
-    async adressConfirm() {
+    async adressConfirm () {
 
-      const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] != 'addressLine2' && i[0] != 'stateOrProvice')
+      const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2' && i[0] !== 'stateOrProvice')
 
 
       console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
       const isNoEmpty = res.every(i => {
-        return i[1] ? true : false
+        return !!i[1]
       })
       if (isNoEmpty) {
         this.showEditAdress = false
@@ -513,14 +506,10 @@ export default {
       }
 
     },
-    async confirm() {
+    async confirm () {
 
       if (this.anzahlStep === 2) {
 
-        // this.dataBody = Object.assign(this.dataBody,this.deliveryAddress)
-        // this.dataBody.deliveryAddress = this.deliveryAddress.addressLine1
-        // this.dataBody.billingAddress = this.billingAddress.addressLine1
-        // console.log("dataBody", this.dataBody)
         await customerEditMe(this.dataBody)
       }
 
@@ -528,51 +517,52 @@ export default {
 
     },
 
-    handelClose() {
+    handelClose () {
       this.dialogLiferAdress = false
       this.dialogRechnungAdress = false
 
     },
 
-    async placeAndPaySampleOrder(id) {
-      await placeSampleOrder(id, parseInt(this.amount), this.deliveryAddress, this.billingAddress)
+    async placeAndPaySampleOrder (id) {
+      await placeSampleOrder(id, this.amount, this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
         case 0:
-          location.href = await paySampleOrder(id)
+          location.href = (await paySampleOrder(id)).data
           break
         case 1:
-          if ((await paySampleOrderAdvance(id)).code == 200) {
+          if ((await paySampleOrderAdvance(id)).code === 200) {
             await this.$router.replace('/SampleOrderComplete')
           }
           break
         default:
-          if ((await paySampleOrderBilling(id)).code == 200) {
+          if ((await paySampleOrderBilling(id)).code === 200) {
             await this.$router.replace('/SampleOrderComplete')
           }
       }
 
     },
 
-    async tryToPaySampleOrder() {
-      if (this.id == -1) {
-
-        switch (this.payMethodValue){
+    async tryToPaySampleOrder () {
+      if (this.id === -1) {
+        let res = null
+        switch (this.payMethodValue) {
           case 0:
-            await payNewByPaypal({amount: parseInt(this.amount)})
+            res = await payNewByPaypal(this.amount)
+            if (res) {
+              console.log(res)
+              // window.location = res.data
+            }
             break
           default:
-            if((await payNewByBilling({amount: parseInt(this.amount)})).code == 200){
+            if ((await payNewByBilling(this.amount)).code === 200) {
               await this.$router.replace('/SampleOrderComplete')
             }
         }
-
       } else {
         await this.placeAndPaySampleOrder(this.id)
       }
-
-
-    },
+    }
 
   }
 }
