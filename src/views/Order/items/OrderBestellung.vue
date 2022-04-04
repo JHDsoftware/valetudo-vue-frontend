@@ -33,7 +33,7 @@
 
 <script>
 import { orderBestellungHeader } from '@/model/Order'
-import { getMyDesign } from '../../../api/dressDesginService'
+import {  myListComplete } from '../../../api/dressDesginService'
 import dayjs from 'dayjs'
 import ValetButton from '../../../components/ValetButton'
 
@@ -45,6 +45,7 @@ export default {
     return {
       headers: orderBestellungHeader,
       items: [],
+      // listComplete: []
     }
   },
   mounted () {
@@ -79,9 +80,13 @@ export default {
 
     },
     async init() {
-      const myDesign = (await getMyDesign()) ?? []
-      console.log("myDesign",myDesign)
-      this.items = myDesign.filter(i => i.designCompleted).map(i => {
+
+      // this.items = (await myListComplete()).data
+      // console.log("myListComplete",await myListComplete())
+
+      const myDesign = (await myListComplete()).data ?? []
+      // console.log("myDesign",myDesign)
+      this.items = myDesign.map(i => {
         i.bId = i.id.toString().padStart(4, '0')
         i.time = dayjs(i.completedAt).format('YYYY-MM-DD')
         i.type = 'MusterBox'

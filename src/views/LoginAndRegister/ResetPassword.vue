@@ -24,15 +24,7 @@
         <div style="margin-top: 24px">
         <ValetButton buttonText="Bestätigen" @click="handle"/>
         </div>
-<!--          <v-btn class="buttonText"-->
-<!--                 style="color: white;-->
-<!--                        height: 60px;-->
-<!--                        background-color: #817163;-->
-<!--                        margin-top: 23px;-->
-<!--                        width: 581px;-->
-<!--                            "-->
-<!--                 @click="handle"-->
-<!--                >Bestätigen</v-btn>-->
+
       </div>
     </div>
 
@@ -70,6 +62,13 @@ export default {
   methods:{
 
     async handle() {
+
+      if(this.password.length<8){
+        this.snackbar = true
+        this.snackbarText = "Password muss 8 Zahlen or Character"
+        return null
+      }
+
       if (this.password != this.newPassword) {
         this.snackbar = true
         this.snackbarText = "Die beide Password sind nicht gleich"

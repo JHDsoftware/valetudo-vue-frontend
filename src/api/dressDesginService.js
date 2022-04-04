@@ -70,3 +70,11 @@ export async function deleteDress (id) {
 export async function paypalCapture(PayerID, token) {
   return (await hillo.get(`/dressDesign/paypal/capture?PayerID=${PayerID}&token=${token}`))
 }
+
+export async function myListCount(){
+  return (await hillo.post('/dressDesign/myListCount'))
+}
+
+export async function myListComplete(){
+  return (await hillo.post('/dressDesign/myListComplete'))
+}
