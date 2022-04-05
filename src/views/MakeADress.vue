@@ -103,11 +103,19 @@ color: #817163;">
                   v-for="(item) in availableSelections"
                   :key="currentTab+''+item.dressPartCategory.code"
               >
-                <v-expansion-panel-header>{{ item.dressPartCategory.code }}.{{
+                <v-expansion-panel-header>
+                  <template>{{ item.dressPartCategory.code }}.{{
                     item.dressPartCategory.name
-                  }}
+                    }}</template>
+
                 </v-expansion-panel-header>
-                <v-expansion-panel-content>
+                <v-expansion-panel-content style="position: relative">
+                  <template v-if="currentTab===1&&item.dressPartCategory.code==='G'">
+                    <v-btn @click="showExampleLength=true" elevation="0" tile color="#E0DDD6" style="position: absolute;right: 64px;top: -48px;color: #817163;
+">
+                      Check the specific length of each type!
+                    </v-btn>
+                  </template>
                   <v-item-group mandatory>
                     <div style="display: grid;grid-template-columns: repeat(7,1fr)">
                       <template v-for="option in item.filteredPart">
@@ -222,6 +230,16 @@ height: 81px;color:#817163" color="#e0ddd6">Yes, I am done!
           </div>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="showExampleLength">
+        <div style="position: relative">
+          <v-img :src="require('@/assets/uiFramework/exampleLengthImage.png')"></v-img>
+          <v-btn x-large icon style="position: absolute;right: 16px;top: 16px">
+            <v-icon x-large @click="showExampleLength=false" >mdi-close</v-icon>
+
+          </v-btn>
+
+        </div>
+      </v-dialog>
       <v-dialog width="738px" v-model="showLoading">
         <v-card height="405px" class="d-flex align-center justify-center">
           <p style="font-family: Gill Sans Nova;
@@ -291,6 +309,8 @@ export default {
 
       showDressFinishConfirm: null,
       showLoading: null,
+      showExampleLength: null,
+
       refreshCounter: 0,
       finished: false,
       dressName: "",
@@ -360,7 +380,7 @@ export default {
         if (['J'].includes(fatherCode)) {
           delete this.selectedPart['0/I']
           delete this.selectedPart['0/G']
-        }else if(['I','G'].includes(fatherCode)){
+        } else if (['I', 'G'].includes(fatherCode)) {
           delete this.selectedPart['0/J']
         }
       }
