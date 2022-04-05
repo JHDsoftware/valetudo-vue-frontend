@@ -76,7 +76,7 @@ export default {
     checkToken() {
       const token = localStorage.getItem('token')
       if (token) {
-        this.$router.replace('/OrderIndex/OrderPersonData')
+        this.$router.replace('/OrderIndex/Entwurf')
       }
     },
 

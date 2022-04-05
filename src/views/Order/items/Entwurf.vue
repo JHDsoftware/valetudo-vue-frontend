@@ -11,7 +11,7 @@
                                :refresh-counter="item.id"
                                :dress-id="item.id"
                 ></dress-display>
-                <v-img @click.stop="confirmDeleteDialog=true;targetDeleteId=item.id"
+                <v-img @click.stop="deleteEntwurf(item)"
                        style="position:absolute;top: 20px;right: 23px;z-index: 2" width="30px"
                        :src="require('@/assets/image/frameUI/delete.png')"></v-img>
               </div>
@@ -51,7 +51,7 @@
       <div v-else
            style="display: grid; grid-template-columns: repeat(2,1fr);height: calc(100vh - 60px);overflow: hidden">
         <div style="background: rgba(204, 198, 187, 0.85);padding-top: 40px;position: relative">
-          <div @click="$router.push('/edit/'+ dress.id)">
+          <div @click="dressEdit(dress)">
             <dress-display v-if="!dressLoading" :current-view="currentView" :dress-id="dress.id"
                            :refreshCounter="dress.id"></dress-display>
           </div>
@@ -315,6 +315,9 @@ export default {
     await this.getPersonData()
 
   },
+  computed:{
+
+  },
   methods: {
 
     // async init() {
@@ -322,6 +325,17 @@ export default {
 
     //
     // },
+    dressEdit(dress){
+      if(!dress.designCompleted){
+        this.$router.push('/edit/'+ dress.id)
+      }
+    },
+    deleteEntwurf(item){
+      if(item.designCompleted){
+        this.confirmDeleteDialog=true;
+        this.targetDeleteId=item.id
+      }
+    },
     toOrderPage(id) {
       this.$router.push({path: '/SampleOrder/' + id})
     },
