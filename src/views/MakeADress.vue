@@ -105,8 +105,9 @@ color: #817163;">
               >
                 <v-expansion-panel-header>
                   <template>{{ item.dressPartCategory.code }}.{{
-                    item.dressPartCategory.name
-                    }}</template>
+                      item.dressPartCategory.name
+                    }}
+                  </template>
 
                 </v-expansion-panel-header>
                 <v-expansion-panel-content style="position: relative">
@@ -177,7 +178,7 @@ color: #817163;">
             <v-icon left>mdi-arrow-left-top-bold</v-icon>
             Revoke
           </v-btn>
-          <v-btn @click="showDressFinishConfirm=true" height="60px" block elevation="0" tile color="#817163" dark>
+          <v-btn @click="okToFinish" height="60px" block elevation="0" tile color="#817163" dark>
             <v-icon left>mdi-check-circle-outline</v-icon>
             Finish Design
           </v-btn>
@@ -201,8 +202,7 @@ align-items: center;
 text-align: center;
 letter-spacing: -0.011em;
 
-color: #817163;">We offer two drawings for free,<br>
-              and the third one costs 19,99 €</p>
+color: #817163;">{{ confirmTitle }}</p>
           </div>
           <p style="font-family: Gill Sans Nova;
 font-style: normal;
@@ -217,15 +217,15 @@ text-align: center;
 letter-spacing: -0.011em;
 
 color: #817163;" class="mt-6">
-            Are you sure to finish your drawing?
+            {{ confirmContent }}
           </p>
           <div class="d-flex mt-16">
             <v-btn @click="showDressFinishConfirm=false" elevation="0" tile style="width: 327px;
-height: 81px;color:#817163" color="#e0ddd6">No, not yet
+height: 81px;color:#817163" color="#e0ddd6">Nein
             </v-btn>
             <v-spacer style="width: 14px"></v-spacer>
-            <v-btn @click="finishDesign" elevation="0" tile style="width: 327px;
-height: 81px;color:#817163" color="#e0ddd6">Yes, I am done!
+            <v-btn @click="successCallback" elevation="0" tile style="width: 327px;
+height: 81px;color:#817163" color="#e0ddd6">Ja
             </v-btn>
           </div>
         </v-card>
@@ -234,7 +234,7 @@ height: 81px;color:#817163" color="#e0ddd6">Yes, I am done!
         <div style="position: relative">
           <v-img :src="require('@/assets/uiFramework/exampleLengthImage.png')"></v-img>
           <v-btn x-large icon style="position: absolute;right: 16px;top: 16px">
-            <v-icon x-large @click="showExampleLength=false" >mdi-close</v-icon>
+            <v-icon x-large @click="showExampleLength=false">mdi-close</v-icon>
 
           </v-btn>
 
@@ -314,7 +314,12 @@ export default {
       refreshCounter: 0,
       finished: false,
       dressName: "",
-      dressDate: ""
+      dressDate: "",
+
+      confirmTitle: "",
+      confirmContent: "",
+      successCallback: () => {
+      }
     }
   },
   computed: {
@@ -349,6 +354,29 @@ export default {
       }
       console.log("------>")
     },
+    showConfirm (title, content, ok) {
+      this.confirmContent = content
+      this.confirmTitle = title
+      this.successCallback = () => {
+        ok()
+        this.showDressFinishConfirm = false
+      }
+      this.showDressFinishConfirm = true
+    },
+    okToFinish () {
+      this.showConfirm('Wir bieten zwei Zeichnungen kostenlos an,\n' +
+          'und das dritte kostet 19,99 €', 'Wollen Sie es fertigstellen?', this.finishDesign)
+    },
+    okToChange (rest) {
+      this.showConfirm('Wenn Sie den primären vorderen Miederausschnitt ändern, geht das vorherige Design verloren, da dies die Grundlage des Kleiddesigns ist', 'Wollen Sie es ändern?', rest)
+    },
+    needAMeetingD () {
+      this.showConfirm('Unterstoff mit Spitze ist eine spezielle Technik. Wenn Sie damit ein Kleid entwerfen möchten, vereinbaren Sie bitte einen Termin mit uns.', 'Möchten Sie einen Termin buchen?')
+    },
+    needAMeetingF () {
+      this.showConfirm('Rüschen des Oberteils ist eine spezielle Technik. Wenn Sie damit ein Kleid entwerfen möchten, vereinbaren Sie bitte einen Termin mit uns.', 'Möchten Sie einen Termin buchen?')
+    },
+
     changeView () {
       this.setView(this.currentView === views[0] ? 1 : 0)
     },
@@ -385,28 +413,46 @@ export default {
         }
       }
     },
+    async beforeChange (fatherCode, callback, justPass = false) {
+      if (!justPass && fatherCode === 'B' && Object.keys(this.selectedPart).filter(k => !k.includes('B')).length > 0) {
+        this.okToChange(callback)
+      } else {
+        callback()
+      }
+    },
     async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
-      this.logSelectedParts()
-      if (removeFatherKey) {
-        for (const key of Object.keys(this.selectedPart).filter(k => {
-          const [t, fCode] = k.split('/')
-          return parseInt(t) === tab && fCode > fatherCode
-        })) {
-          delete this.selectedPart[key]
+      await this.beforeChange(fatherCode, async () => {
+        if (fatherCode === 'D' && partCode === 'c') {
+          this.needAMeetingD()
+          return
         }
-      }
-      this.$set(this.selectedPart, tab + '/' + fatherCode, {
-        partId, partCode
-      })
-      this.shouldCancelOther(fatherCode, tab)
-      const currentPart = Object.values(this.selectedPart).map(p => p.partId)
-      this.currentMask = await refreshCurrentPartInfo(currentPart)
-      await updateMyDesignParts(this.dressId, currentPart)
-      this.shouldChangeView(fatherCode, tab)
-      this.refreshCounter++
-      if (toggle) {
-        toggle()
-      }
+        if (fatherCode === 'F' && partCode === 'c') {
+          this.needAMeetingF()
+          return
+        }
+        this.logSelectedParts()
+        if (removeFatherKey) {
+          for (const key of Object.keys(this.selectedPart).filter(k => {
+            const [t, fCode] = k.split('/')
+            return parseInt(t) === tab && fCode > fatherCode
+          })) {
+            delete this.selectedPart[key]
+          }
+        }
+        this.$set(this.selectedPart, tab + '/' + fatherCode, {
+          partId, partCode
+        })
+        this.shouldCancelOther(fatherCode, tab)
+        const currentPart = Object.values(this.selectedPart).map(p => p.partId)
+        this.currentMask = await refreshCurrentPartInfo(currentPart)
+        await updateMyDesignParts(this.dressId, currentPart)
+        this.shouldChangeView(fatherCode, tab)
+        this.refreshCounter++
+        if (toggle) {
+          toggle()
+        }
+      },!removeFatherKey)
+
     },
     jumpTo (url) {
       window.location.href = url
