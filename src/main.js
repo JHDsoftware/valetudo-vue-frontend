@@ -20,8 +20,7 @@ Vue.filter('priceDisplay',
     return parseFloat(price).toFixed(2).replace('.', ',')
   })
 
-
-hillo.initial('http://localhost:8080')
+hillo.initial('http://3.124.147.27:8080')
 
 export function refreshHeader () {
   hillo.axios.defaults.headers.common = {
