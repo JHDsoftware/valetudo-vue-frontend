@@ -29,12 +29,12 @@
     </div>
 
     <v-dialog v-model="abmeldenDialog" width="40%">
-      <v-card class="pa-2">
+      <v-card tile class="pa-2">
         <v-card-title style="font-weight: bold; font-size: xx-large">Sie würden abmelden?</v-card-title>
         <v-card-actions>
           <v-spacer/>
           <v-btn tile class="primary" @click="$router.replace('/')">Ja</v-btn>
-          <v-btn tile class="red white--text" @click="abmeldenDialog=false">Nein</v-btn>
+          <v-btn tile class="" @click="abmeldenDialog=false">Nein</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

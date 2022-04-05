@@ -30,13 +30,13 @@
             </div>
 
             <template v-if="listCount.currentCount<1">
-              <div @click="$router.push('/createNewDress')">
+              <div @click="$router.push('/createNewDress/0')">
                 <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
               </div>
             </template>
 
             <template v-if="listCount.currentCount<2">
-              <div @click="$router.push('/createNewDress')">
+              <div @click="$router.push('/createNewDress/0')">
                 <entwurf-card
                     title="Entwirf Dein zweites Brautkleid kostenlos"/>
               </div>

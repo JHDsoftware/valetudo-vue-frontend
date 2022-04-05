@@ -363,7 +363,7 @@ export default {
   computed: {
 
     price () {
-      return (this.amount ?? 1) * 29.99
+      return (this.amount ?? 1) * (parseInt(this.id===-1)?19.99:29.99)
     },
     versandPrice () {
       return 0.00

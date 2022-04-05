@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     async createNewDesign () {
-      if(this.id){
+      if(this.id!=='0'){
        await changeDressName(this.id,this.name)
         await this.$router.push({
           path: '/edit/' + this.id
