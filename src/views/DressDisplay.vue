@@ -1,10 +1,10 @@
 <template>
   <div class="imgContainer" style="width: 100%;position: relative;">
-    <v-img class="partImg model"  width="92.97%"
+    <v-img contain class="partImg model"  width="92.97%"
            :src="'/model/'+(isFrontView?'frontModel.png':'backModel.png')">
     </v-img>
 
-    <v-img style="z-index: 2" class="partImg top" width="92.97%"
+    <v-img contain style="z-index: 2" class="partImg top" width="92.97%"
            :src="require('@/assets/image/images/'+currentDisplayTopVariant)">
       <template v-slot:placeholder>
         <v-row
@@ -19,12 +19,13 @@
         </v-row>
       </template>
     </v-img>
+    <div class="partImg skirt" style="overflow: hidden;height: 160%">
+      <img width="100%" :src="require('@/assets/image/images/'+displaySkirtPart)">
+    </div>
 
-    <v-img class="partImg skirt" width="100%"
-           :src="require('@/assets/image/images/'+displaySkirtPart)"></v-img>
-    <v-img class="partImg sleeve" width="92.97%" v-if="displaySleevePart"
+    <v-img contain class="partImg sleeve" width="92.97%" v-if="displaySleevePart"
            :src="require('@/assets/image/images/'+displaySleevePart)"></v-img>
-    <v-img style="z-index: 1" class="partImg strip" width="92.97%" v-if="displayStripPart"
+    <v-img contain style="z-index: 1" class="partImg strip" width="92.97%" v-if="displayStripPart"
            :src="require('@/assets/image/images/'+displayStripPart)"></v-img>
   </div>
 </template>
@@ -42,7 +43,7 @@ import {
   stripSelection,
   topSelection, views
 } from '@/api/dressDisplayRule'
-import { loadDesign } from '@/api/dressDesginService' 
+import { loadDesign } from '@/api/dressDesginService'
 
 export default {
   name: "DressDisplay",
@@ -80,6 +81,7 @@ export default {
     displaySkirtPart () {
       const skirtParts = this.filterPartsWithMask(skirtSelection, 1)
       if (skirtParts.length > 0) {
+        console.log(skirtParts)
         const def = this.findDefaultPartInImageSet('Skirt', skirtParts)
         return (def?.join('-') ?? defaultSkirt) + ".png"
       } else {

@@ -1,7 +1,7 @@
 //CustomerController
 import hillo from 'hillo'
 
-const redirectUrl = 'http://localhost:8080/#/registerComplete'
+const redirectUrl = 'http://localhost:8081/#/registerComplete'
 
 export async function customerRegister (registerData) {
   return await hillo.post('/customer/register', registerData, {
@@ -69,6 +69,6 @@ export async function contactUsAdd (data) {
   return await hillo.post('/contactUs/add', data)
 }
 
-export async function customerChangeName (id, data) {
-  return await hillo.post(`/dressDesign/changeName/${id}`, data)
+export async function changeDressName (id, name) {
+  return await hillo.post(`/dressDesign/changeName/${id}`, {name})
 }

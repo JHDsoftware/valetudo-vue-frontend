@@ -14,17 +14,18 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="i in items" :key="i.bId">
+      <tr v-for="i in items" :key="i.bId+ i.localDateTime">
         <td style="font-size: 24px">{{ i.bId }}</td>
         <td style="font-size: 24px">{{ i.time }}</td>
-        <td style="font-size: 24px">{{ i.type }}</td>
+        <td style="font-size: 24px">{{ i.orderType==='Design'?'Entwurf':'MusterBox' }}</td>
         <td style="font-size: 24px">{{ i.name ? i.name : '-' }}</td>
         <td style="font-size: 24px">{{ i.quantity }}</td>
         <td style="font-size: 24px">{{ i.price.toFixed(2).replace('.', ',') + " €" }}</td>
         <td>
           <v-icon x-large
                   :color="i.paymentStatusIcon==='mdi-close-circle'?'grey':''">
-            {{ i.paymentStatusIcon }}</v-icon>
+            {{ i.paymentStatusIcon }}
+          </v-icon>
         </td>
         <td style="width: 266px">
           <valet-button :button-text="i.buttonText"
@@ -91,6 +92,7 @@ export default {
       // console.log("myDesign",myDesign)
       this.items = myDesign.map(i => {
         i.bId = i.dressDesign.id.toString().padStart(4, '0')
+        i.name = i.dressDesign.name
         i.time = dayjs(i.localDateTime).format('YYYY-MM-DD')
         i.type = 'MusterBox'
         i.quantity = i.quantity || 1
@@ -99,6 +101,7 @@ export default {
 
         return i
       })
+      this.items.reverse()
 
 
       console.log("this.items", this.items)

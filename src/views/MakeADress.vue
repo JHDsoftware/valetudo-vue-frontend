@@ -144,7 +144,9 @@ color: #817163;">
                   <div>Stickerei Hochzeit Schleier</div>
                 </div>
               </div>
-              <div @click="jumpTo('https://www.valetudo.co/products/birdcage-schleier-maiglockchen-french-vintage-valetudo-berlin')" class="d-flex align-center justify-center pointerMouse">
+              <div
+                  @click="jumpTo('https://www.valetudo.co/products/birdcage-schleier-maiglockchen-french-vintage-valetudo-berlin')"
+                  class="d-flex align-center justify-center pointerMouse">
                 <div style="text-align: center">
                   <v-img width="272px" src="@/assets/uiFramework/2.png"></v-img>
                   <div>Birdcage Schleier</div>
@@ -163,7 +165,7 @@ color: #817163;">
         </div>
         <v-sheet style="position: absolute;width:100%;bottom:0;z-index:1;
         display: grid;grid-template-columns: 50% 50%">
-          <v-btn height="60px" block elevation="0" tile color="#817163" dark>
+          <v-btn @click="initial" height="60px" block elevation="0" tile color="#817163" dark>
             <v-icon left>mdi-arrow-left-top-bold</v-icon>
             Revoke
           </v-btn>
@@ -328,11 +330,40 @@ export default {
       console.log("------>")
     },
     changeView () {
+      this.setView(this.currentView === views[0] ? 1 : 0)
+    },
+    setView (index) {
       this.dressLoading = true
-      this.currentView = views[this.currentView === views[0] ? 1 : 0]
+      this.currentView = views[index]
       setTimeout(() => {
         this.dressLoading = false
       }, 400)
+    },
+    shouldChangeView (fatherCode, tab) {
+      let targetView = null
+      if (tab === 0) {
+        if (['K', 'L'].includes(fatherCode)) {
+          targetView = 1
+        }
+      } else {
+        if (['L', 'M'].includes(fatherCode)) {
+          targetView = 1
+        }
+      }
+      if (targetView && views[targetView] !== this.currentView) {
+        this.setView(targetView)
+      }
+    },
+    shouldCancelOther (fatherCode, tab) {
+      console.log(this.selectedPart)
+      if (tab === 0) {
+        if (['J'].includes(fatherCode)) {
+          delete this.selectedPart['0/I']
+          delete this.selectedPart['0/G']
+        }else if(['I','G'].includes(fatherCode)){
+          delete this.selectedPart['0/J']
+        }
+      }
     },
     async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
       this.logSelectedParts()
@@ -347,9 +378,11 @@ export default {
       this.$set(this.selectedPart, tab + '/' + fatherCode, {
         partId, partCode
       })
+      this.shouldCancelOther(fatherCode, tab)
       const currentPart = Object.values(this.selectedPart).map(p => p.partId)
       this.currentMask = await refreshCurrentPartInfo(currentPart)
       await updateMyDesignParts(this.dressId, currentPart)
+      this.shouldChangeView(fatherCode, tab)
       this.refreshCounter++
       if (toggle) {
         toggle()
@@ -357,6 +390,10 @@ export default {
     },
     jumpTo (url) {
       window.location.href = url
+    },
+    async initial () {
+      await this.selectPart('B', '1', 1, null, 0)
+      await this.selectPart('B', '1', 61, null, 1)
     }
   },
   async mounted () {
@@ -375,8 +412,7 @@ export default {
         await this.selectPart(p.dressPartCategory.code, p.code, p.id, null, tab, false)
       }
     } else {
-      await this.selectPart('B', '1', 1, null, 0)
-      await this.selectPart('B', '1', 61, null, 1)
+      this.initial()
     }
     this.loading = false
 

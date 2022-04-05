@@ -42,10 +42,14 @@
 
 <script>
 
-import { createNewDesign } from '../../api/dressDesginService'
+import { createNewDesign } from '@/api/dressDesginService'
+import { changeDressName } from '@/api/customerService'
 
 export default {
   name: "CreateNewDress",
+  props:{
+    id:{}
+  },
   data: function () {
     return {
       name: null
@@ -53,25 +57,32 @@ export default {
   },
   methods: {
     async createNewDesign () {
+      if(this.id){
+       await changeDressName(this.id,this.name)
+        await this.$router.push({
+          path: '/edit/' + this.id
+        })
+      }else {
+        const res = await createNewDesign(this.name)
+        // alert(res.message)
+        console.log("res createDesign", res)
 
-      const res = await createNewDesign(this.name)
-      // alert(res.message)
-      console.log("res createDesign", res)
-
-      if(res){
         if(res){
-             await this.$router.push({
+          if(res){
+            await this.$router.push({
               path: '/edit/' + res.id
             })
+          }
         }
+        else {
+
+          await this.$router.push("/OrderIndex/Entwurf")
+        }
+
+
       }
-     else {
-
-       await this.$router.push("/OrderIndex/Entwurf")
       }
 
-
-    }
   }
 }
 </script>

@@ -582,9 +582,8 @@ export default {
     },
 
     async tryToPaySampleOrder () {
-      if (this.id !== -1) {
+      if (parseInt(this.id) !== -1) {
         await this.placeAndPaySampleOrder(this.id)
-
       } else {
         let res = null
         switch (this.payMethodValue) {

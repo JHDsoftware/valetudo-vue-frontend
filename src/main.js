@@ -21,7 +21,7 @@ Vue.filter('priceDisplay',
   })
 
 
-hillo.initial('http://3.124.147.27:8080')
+hillo.initial('http://localhost:8080')
 
 export function refreshHeader () {
   hillo.axios.defaults.headers.common = {
@@ -51,3 +51,6 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
+if (localStorage.getItem('token')) {
+  router.push('/OrderIndex')
+}

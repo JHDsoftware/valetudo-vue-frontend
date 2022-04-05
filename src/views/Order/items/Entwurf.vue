@@ -5,22 +5,28 @@
         <div class="pageContent d-flex justify-center" style="width: 100%">
           <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
             <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList"
-                 @click="dress=item">
-              <div class="dressContainer hasContent d-flex align-center" style="position: relative;">
-                <dress-display style="height: 390px;width: 125%;position: absolute;left: -12.5%;top: 24px"
-                               :refresh-counter="item.id"
-                               :dress-id="item.id"
-                ></dress-display>
-                <v-img @click.stop="deleteEntwurf(item)"
-                       style="position:absolute;top: 20px;right: 23px;z-index: 2" width="30px"
-                       :src="require('@/assets/image/frameUI/delete.png')"></v-img>
-              </div>
-              <div class="d-flex flex-column align-center">
-                <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>
-                <div v-if="item.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by
-                  {{ dayjs(item.completedAt).format('DD. MMM. YYYY') }}
+                 @click="cardClick(item)">
+              <template v-if="item.name!=='neuer Entwurf'">
+                <div class="dressContainer hasContent d-flex align-center" style="position: relative;">
+                  <dress-display style="height: 390px;width: 125%;position: absolute;left: -12.5%;top: 24px"
+                                 :refresh-counter="item.id"
+                                 :dress-id="item.id"
+                  ></dress-display>
+                  <v-img @click.stop="deleteEntwurf(item)"
+                         style="position:absolute;top: 20px;right: 23px;z-index: 2" width="30px"
+                         :src="require('@/assets/image/frameUI/delete.png')"></v-img>
                 </div>
-              </div>
+                <div class="d-flex flex-column align-center">
+                  <div style="margin-top: 38px;" class="dressName">{{ item.name }}</div>
+                  <div v-if="item.completedAt" style="margin-top: 18px" class="dressCreateTime">Created by
+                    {{ dayjs(item.completedAt).format('DD. MMM. YYYY') }}
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <entwurf-card @click="cardClick(item)" title="Deine Entwurf Bearbeit"/>
+              </template>
+
             </div>
 
             <template v-if="listCount.currentCount<1">
@@ -37,11 +43,10 @@
             </template>
 
 
-
-            <div @click="$router.push({path: '/SampleOrder/' + '-1'})" >
+            <div @click="$router.push({path: '/SampleOrder/' + '-1'})">
               <entwurf-card
                   title="Entwirf mehr Brautkleid für 19.90 €"
-                  />
+              />
             </div>
 
           </div>
@@ -266,13 +271,13 @@
 
 <script>
 import DressDisplay from "../../../views/DressDisplay"
-import {deleteDress, getMyDesign,myListCount} from '../../../api/dressDesginService'
+import { deleteDress, getMyDesign, myListCount } from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
-import {views} from '../../../api/dressDisplayRule'
-import {customerMe} from "../../../api/customerService";
-import EntwurfCard from "@/fragments/EntwurfCard";
+import { views } from '../../../api/dressDisplayRule'
+import { customerMe } from "../../../api/customerService"
+import EntwurfCard from "@/fragments/EntwurfCard"
 
 export default {
   name: "Entwurf",
@@ -297,27 +302,25 @@ export default {
         email: null,
         city: null,
         phone: null,
-        message: null,
+        message: null
       },
-      listCount:{
+      listCount: {
         currentCount: null,
         maxDesign: null,
-        maxFree: null,
+        maxFree: null
       }
 
 
     }
   },
-  async mounted() {
-    this.listCount = Object.assign(({},await myListCount()).data)
+  async mounted () {
+    this.listCount = Object.assign(({}, await myListCount()).data)
     console.log('listCount', this.listCount)
     await this.loadDressList()
     await this.getPersonData()
 
   },
-  computed:{
-
-  },
+  computed: {},
   methods: {
 
     // async init() {
@@ -325,21 +328,21 @@ export default {
 
     //
     // },
-    dressEdit(dress){
-      if(!dress.designCompleted){
-        this.$router.push('/edit/'+ dress.id)
+    dressEdit (dress) {
+      if (!dress.designCompleted) {
+        this.$router.push('/edit/' + dress.id)
       }
     },
-    deleteEntwurf(item){
-      if(item.designCompleted){
-        this.confirmDeleteDialog=true;
-        this.targetDeleteId=item.id
+    deleteEntwurf (item) {
+      if (item.designCompleted) {
+        this.confirmDeleteDialog = true
+        this.targetDeleteId = item.id
       }
     },
-    toOrderPage(id) {
+    toOrderPage (id) {
       this.$router.push({path: '/SampleOrder/' + id})
     },
-    showPriceQuestionDialog() {
+    showPriceQuestionDialog () {
       this.showKontakt = false
       this.showCompleteTip = true
 
@@ -347,25 +350,33 @@ export default {
         this.showCompleteTip = false
       }, 5000)
     },
-    changeView() {
+    changeView () {
       this.dressLoading = true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
       setTimeout(() => {
         this.dressLoading = false
       }, 400)
     },
-    async deleteDress() {
+    async deleteDress () {
       if (this.targetDeleteId) {
         await deleteDress(this.targetDeleteId)
         await this.loadDressList()
         this.confirmDeleteDialog = false
       }
     },
-    async loadDressList() {
+    async loadDressList () {
       this.myDressList = await getMyDesign() ?? []
       // console.log("xxxx myDressList",this.myDressList)
     },
-    async getPersonData() {
+    cardClick (item) {
+      console.log(item)
+      if (item.completedAt) {
+        this.dress = item
+      } else {
+        this.$router.push('/CreateNewDress/' + item.id)
+      }
+    },
+    async getPersonData () {
       const res = await customerMe()
       if (res.code != 200) {
         return null
@@ -379,8 +390,8 @@ export default {
 
       this.personData.email = res.data.userName
 
-    },
-  },
+    }
+  }
 
 
 }

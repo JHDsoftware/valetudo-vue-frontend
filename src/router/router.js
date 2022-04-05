@@ -34,9 +34,10 @@ const routes = [
     component: () => import('../views/LoginAndRegister/Login')
   },
   {
-    path: '/createNewDress',
+    path: '/createNewDress/:id',
     name: 'createNewDress',
-    component: () => import('../views/CreateNewOrder/CreateNewDress')
+    component: () => import('../views/CreateNewOrder/CreateNewDress'),
+    props: true
   },
   {
     path: '/SampleOrder/:id',
