@@ -38,13 +38,13 @@ export const orderBestellungHeader = [
 ]
 
 
-export async function updateAddress(dataBody, address, str = 'deliveryAddress') {
+export async function updateAddress(dataBodyWithAddress, address, str = 'deliveryAddress') {
 
     let snackbar = false
     let snackbarText = ''
-
+    // let dataBody = {}
     let sourceAddress =
-        str === 'BillingsAddress' ? dataBody.billingAddress : dataBody.deliveryAddress
+        str === 'billingAddress' ? dataBodyWithAddress.billingAddress : dataBodyWithAddress.deliveryAddress
 
     if (JSON.stringify(sourceAddress) === JSON.stringify(address)) {
 
@@ -61,14 +61,15 @@ export async function updateAddress(dataBody, address, str = 'deliveryAddress') 
 
     const uploadAddress = await customerUploadDressOrderAddress(address)
     let addressId =
-        str === 'BillingsAddress' ?
+        str === 'billingAddress' ?
             {billingAddressId: uploadAddress.data.id} :
             {deliveryAddressId: uploadAddress.data.id}
 
 
     if (uploadAddress.code === 200) {
 
-        const res = await customerEditMe({...dataBody, ...addressId})
+        const res = await customerEditMe({...dataBodyWithAddress, ...addressId})
+        // dataBody = Object.assign(dataBody, res.data)
         if (res.code != 200) {
             snackbar = true
             snackbarText = res.message

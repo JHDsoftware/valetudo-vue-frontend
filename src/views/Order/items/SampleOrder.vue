@@ -77,7 +77,7 @@
             <template v-if="showEditAdress">
               <FormAdress title="Lieferadresse"
                           style="font-size: 24px; padding-bottom: 8px;"
-                          v-model="dataBody.deliveryAddress"
+                          v-model="deliveryAddress"
                           button-text="Speichern und weiter"
                           @click="adressConfirm"/>
 
@@ -318,7 +318,7 @@
               @closeButton="handelClose"
               :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"
               title="Lieferadresse ändern"
-              v-model="dataBody.deliveryAddress"
+              v-model="deliveryAddress"
               @click="handelClose"
           />
 
@@ -334,7 +334,7 @@
             @closeButton="handelClose"
             @click="handelClose"
             use-close
-            v-model="dataBody.billingAddress"
+            v-model="billingAddress"
             title="Rechnungsadresse ändern"
             :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"/>
       </div>
@@ -355,6 +355,7 @@ import {
   placeSampleOrder
 } from '../../../api/dressDesginService'
 import { customerEditMe, customerMe } from "@/api/customerService"
+import {updateAddress} from "@/model/Order";
 
 export default {
   name: "SampleOrder",
@@ -461,7 +462,7 @@ export default {
         postCode: '',
         city: '',
         stateOrProvice: '',
-        country: 'Germany'
+        // country: 'Germany'
       }
 
     }
@@ -469,43 +470,40 @@ export default {
   async mounted () {
     this.productInfo = await loadDesign(this.id)
     this.token = localStorage.getItem('token')
-    const res = await customerMe()
-    if (res.code !== 200) {
-      return null
-    }
+    await this.getPersonData()
 
-    this.dataBody = Object.assign(this.dataBody, res.data)
-    console.log('this.dataBody', this.dataBody)
-
-    if (!this.dataBody.billingAddress) {
-      this.dataBody.billingAddress = Object.assign({},
-          {
-            firstName: this.dataBody.firstName,
-            lastName: this.dataBody.lastName,
-            postCode: this.dataBody.postCode,
-            city: this.dataBody.city,
-            stateOrProvice: this.dataBody.stateOrProvice,
-            country: this.dataBody.country
-          })
-    }
-
-    if (!this.dataBody.deliveryAddress) {
-      this.dataBody.deliveryAddress = Object.assign({},
-          {
-        firstName: this.dataBody.firstName,
-        lastName: this.dataBody.lastName,
-        postCode: this.dataBody.postCode,
-        city: this.dataBody.city,
-        stateOrProvice: this.dataBody.stateOrProvice,
-        country: this.dataBody.country
-      })
-    }
-
-    console.log('this.dataBody', this.dataBody)
   },
 
   methods: {
 
+    async getPersonData() {
+      const res = await customerMe()
+      if (res.code !== 200) {
+        return null
+      }
+
+      const tempData ={
+        firstName: res.data.firstName,
+        lastName: res.data.lastName,
+        city: res.data.city
+      }
+
+      this.dataBody = res.data
+      // console.log('this.dataBody', this.dataBody)
+
+      if (!this.dataBody.billingAddress) {
+        this.dataBody.billingAddress = Object.assign(this.defaultAddress, tempData)
+
+      }
+      this.billingAddress = Object.assign({}, this.dataBody.billingAddress)
+
+      if (!this.dataBody.deliveryAddress) {
+        this.dataBody.deliveryAddress = Object.assign(this.defaultAddress, tempData)
+      }
+      this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
+
+      console.log('this.dataBody', this.dataBody)
+    },
     handleReturn(i) {
       if (this.anzahlStep > (i + 1)) {
         this.anzahlStep = (i + 1)
@@ -525,6 +523,11 @@ export default {
         this.snackBar = true
       }
 
+      const resUpdate = await updateAddress(this.dataBody, this.deliveryAddress, 'deliveryAddress')
+      this.snackbar = resUpdate.snackbar
+      this.snackbarText = resUpdate.snackbarText
+      await this.getPersonData()
+
     },
 
     async confirm() {
@@ -538,16 +541,23 @@ export default {
 
     },
 
-    handelClose() {
-      if(this.deliveryAddress != this.dataBody.deliveryAddress){
-        this.dataBody.deliveryAddress = Object.assign({}, this.deliveryAddress)
+    async handelClose() {
+      if (JSON.stringify(this.deliveryAddress) != JSON.stringify(this.dataBody.deliveryAddress)) {
+        const resUpdate = await updateAddress(this.dataBody, this.deliveryAddress, 'deliveryAddress')
+        this.snackbar = resUpdate.snackbar
+        this.snackbarText = resUpdate.snackbarText
+        await this.getPersonData()
+      }
 
-
-        this.dialogLiferAdress = false
+      if (JSON.stringify(this.billingAddress) != JSON.stringify(this.dataBody.billingAddress)) {
+        const resUpdate = await updateAddress(this.dataBody, this.billingAddress, 'billingAddress')
+        this.snackbar = resUpdate.snackbar
+        this.snackbarText = resUpdate.snackbarText
+        await this.getPersonData()
       }
 
       this.dialogRechnungAdress = false
-
+      this.dialogLiferAdress = false
     },
 
     async placeAndPaySampleOrder(id) {
