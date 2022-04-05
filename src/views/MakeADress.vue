@@ -387,20 +387,23 @@ export default {
         this.dressLoading = false
       }, 400)
     },
-    shouldChangeView (fatherCode, tab) {
-      let targetView = null
-      if (tab === 0) {
-        if (['K', 'L'].includes(fatherCode)) {
-          targetView = 1
+    shouldChangeView (fatherCode, tab, noChange = false) {
+      if (!noChange) {
+        let targetView = null
+        if (tab === 0) {
+          if (['K', 'L'].includes(fatherCode)) {
+            targetView = 1
+          }
+        } else {
+          if (['L', 'M'].includes(fatherCode)) {
+            targetView = 1
+          }
         }
-      } else {
-        if (['L', 'M'].includes(fatherCode)) {
-          targetView = 1
+        if (targetView && views[targetView] !== this.currentView) {
+          this.setView(targetView)
         }
       }
-      if (targetView && views[targetView] !== this.currentView) {
-        this.setView(targetView)
-      }
+
     },
     shouldCancelOther (fatherCode, tab) {
       console.log(this.selectedPart)
@@ -446,12 +449,12 @@ export default {
         const currentPart = Object.values(this.selectedPart).map(p => p.partId)
         this.currentMask = await refreshCurrentPartInfo(currentPart)
         await updateMyDesignParts(this.dressId, currentPart)
-        this.shouldChangeView(fatherCode, tab)
+        this.shouldChangeView(fatherCode, tab, !removeFatherKey)
         this.refreshCounter++
         if (toggle) {
           toggle()
         }
-      },!removeFatherKey)
+      }, !removeFatherKey)
 
     },
     jumpTo (url) {

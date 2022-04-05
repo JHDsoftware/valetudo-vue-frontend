@@ -1,32 +1,61 @@
 <template>
   <div class="imgContainer" style="width: 100%;position: relative;">
-    <v-img contain class="partImg model"  width="92.97%"
+
+    <v-img contain class="partImg model" width="92.97%"
            :src="'/model/'+(isFrontView?'frontModel.png':'backModel.png')">
     </v-img>
+    <template v-show="!loading">
+      <v-img contain style="z-index: 2" class="partImg top" width="92.97%"
+             :src="require('@/assets/image/images/'+currentDisplayTopVariant)">
+        <template v-slot:placeholder>
+          <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+          >
+            <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+      <div class="partImg skirt" style="height: 160%;z-index: 1">
+        <img width="100%" style="z-index: 1" :src="require('@/assets/image/images/'+displaySkirtPart)">
+      </div>
 
-    <v-img contain style="z-index: 2" class="partImg top" width="92.97%"
-           :src="require('@/assets/image/images/'+currentDisplayTopVariant)">
-      <template v-slot:placeholder>
-        <v-row
-            class="fill-height ma-0"
-            align="center"
-            justify="center"
-        >
-          <v-progress-circular
-              indeterminate
-              color="grey lighten-5"
-          ></v-progress-circular>
-        </v-row>
-      </template>
-    </v-img>
-    <div class="partImg skirt" style="overflow: hidden;height: 160%">
-      <img width="100%" :src="require('@/assets/image/images/'+displaySkirtPart)">
-    </div>
+      <v-img contain class="partImg sleeve" width="92.97%" v-if="displaySleevePart"
+             :src="require('@/assets/image/images/'+displaySleevePart)">
+        <template v-slot:placeholder>
+          <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+          >
+            <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+      <v-img contain style="z-index: 1" class="partImg strip" width="92.97%" v-if="displayStripPart"
+             :src="require('@/assets/image/images/'+displayStripPart)">
+        <template v-slot:placeholder>
+          <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+          >
+            <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+    </template>
 
-    <v-img contain class="partImg sleeve" width="92.97%" v-if="displaySleevePart"
-           :src="require('@/assets/image/images/'+displaySleevePart)"></v-img>
-    <v-img contain style="z-index: 1" class="partImg strip" width="92.97%" v-if="displayStripPart"
-           :src="require('@/assets/image/images/'+displayStripPart)"></v-img>
   </div>
 </template>
 
@@ -52,7 +81,7 @@ export default {
       default: -1
     },
     refreshCounter: {},
-    currentView: {default:views[0]}
+    currentView: {default: views[0]}
   },
   watch: {
     refreshCounter: {
@@ -63,11 +92,11 @@ export default {
     }
   },
   computed: {
-    isFrontView(){
-      return this.currentView===views[0]
+    isFrontView () {
+      return this.currentView === views[0]
     },
     selectedTopParts () {
-      const topMask=this.isFrontView?topSelection:backSelection
+      const topMask = this.isFrontView ? topSelection : backSelection
       return this.filterPartsWithMask(topMask)
     },
     currentDisplayTopVariant () {
@@ -111,7 +140,7 @@ export default {
   data: function () {
     return {
       loading: true,
-      selectedPart: {},
+      selectedPart: {}
 
     }
   },
@@ -130,6 +159,7 @@ export default {
       }).map(s => s[0].split('/')[1] + s[1].partCode).sort().filter(s => !excludeImage.includes(s))
     },
     async loadPart () {
+      this.loading = true
       const info = await loadDesign(this.dressId)
       this.selectedPart = {}
       if (info?.dressParts?.length > 0) {
@@ -142,6 +172,10 @@ export default {
           })
         }
       }
+      setTimeout(()=>{
+        this.loading = false
+      },2000)
+
     }
   }
 }

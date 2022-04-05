@@ -373,7 +373,11 @@ export default {
       if (item.completedAt) {
         this.dress = item
       } else {
-        this.$router.push('/CreateNewDress/' + item.id)
+        if (item.name === 'neuer Entwurf') {
+          this.$router.push('/CreateNewDress/' + item.id)
+        } else {
+          this.$router.push('/edit/' + item.id)
+        }
       }
     },
     async getPersonData () {
