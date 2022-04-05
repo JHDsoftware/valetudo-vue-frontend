@@ -355,7 +355,7 @@ import {
   placeSampleOrder
 } from '../../../api/dressDesginService'
 import { customerEditMe, customerMe } from "@/api/customerService"
-import {updateAddress} from "@/model/Order";
+import { updateAddress } from "@/model/Order"
 
 export default {
   name: "SampleOrder",
@@ -461,7 +461,7 @@ export default {
         addressLine2: '',
         postCode: '',
         city: '',
-        stateOrProvice: '',
+        stateOrProvice: ''
         // country: 'Germany'
       }
 
@@ -476,13 +476,13 @@ export default {
 
   methods: {
 
-    async getPersonData() {
+    async getPersonData () {
       const res = await customerMe()
       if (res.code !== 200) {
         return null
       }
 
-      const tempData ={
+      const tempData = {
         firstName: res.data.firstName,
         lastName: res.data.lastName,
         city: res.data.city
@@ -504,12 +504,12 @@ export default {
 
       console.log('this.dataBody', this.dataBody)
     },
-    handleReturn(i) {
+    handleReturn (i) {
       if (this.anzahlStep > (i + 1)) {
         this.anzahlStep = (i + 1)
       }
     },
-    async adressConfirm() {
+    async adressConfirm () {
 
       const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2')
 
@@ -530,7 +530,7 @@ export default {
 
     },
 
-    async confirm() {
+    async confirm () {
 
       if (this.anzahlStep === 2) {
 
@@ -541,15 +541,15 @@ export default {
 
     },
 
-    async handelClose() {
-      if (JSON.stringify(this.deliveryAddress) != JSON.stringify(this.dataBody.deliveryAddress)) {
+    async handelClose () {
+      if (JSON.stringify(this.deliveryAddress) !== JSON.stringify(this.dataBody.deliveryAddress)) {
         const resUpdate = await updateAddress(this.dataBody, this.deliveryAddress, 'deliveryAddress')
         this.snackbar = resUpdate.snackbar
         this.snackbarText = resUpdate.snackbarText
         await this.getPersonData()
       }
 
-      if (JSON.stringify(this.billingAddress) != JSON.stringify(this.dataBody.billingAddress)) {
+      if (JSON.stringify(this.billingAddress) !== JSON.stringify(this.dataBody.billingAddress)) {
         const resUpdate = await updateAddress(this.dataBody, this.billingAddress, 'billingAddress')
         this.snackbar = resUpdate.snackbar
         this.snackbarText = resUpdate.snackbarText
@@ -560,12 +560,13 @@ export default {
       this.dialogLiferAdress = false
     },
 
-    async placeAndPaySampleOrder(id) {
+    async placeAndPaySampleOrder (id) {
       await placeSampleOrder(id, this.amount, this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
         case 0:
-          location.href = (await paySampleOrder(id)).data
+          // eslint-disable-next-line no-case-declarations
+          location.href = (await paySampleOrder(id))
           break
         case 1:
           if ((await paySampleOrderAdvance(id)).code === 200) {
@@ -580,8 +581,8 @@ export default {
 
     },
 
-    async tryToPaySampleOrder() {
-      if (this.id != -1) {
+    async tryToPaySampleOrder () {
+      if (this.id !== -1) {
         await this.placeAndPaySampleOrder(this.id)
 
       } else {
@@ -590,7 +591,7 @@ export default {
           case 0:
             res = await payNewByPaypal(this.amount)
             if (res) {
-              console.log(res)
+              console.log(res,'redirect')
               // window.location = res.data
             }
             break
@@ -602,9 +603,9 @@ export default {
       }
     },
 
-    editLieferadresse() {
+    editLieferadresse () {
       this.dialogLiferAdress = true
-      this.deliveryAddress = Object.assign({},this.dataBody.deliveryAddress)
+      this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
     }
   }
 

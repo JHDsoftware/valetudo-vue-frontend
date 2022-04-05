@@ -1,8 +1,8 @@
 <template>
-  <div >
+  <div>
     <v-simple-table>
       <thead style="height: 90px;background: #e0ddd6;">
-      <tr >
+      <tr>
         <th style="font-size: 18px">Bestellnummber</th>
         <th style="font-size: 18px">Bestelldatum</th>
         <th style="font-size: 18px">Artikel</th>
@@ -18,12 +18,18 @@
         <td style="font-size: 24px">{{ i.bId }}</td>
         <td style="font-size: 24px">{{ i.time }}</td>
         <td style="font-size: 24px">{{ i.type }}</td>
-        <td style="font-size: 24px">{{ i.name ?i.name: '-' }}</td>
+        <td style="font-size: 24px">{{ i.name ? i.name : '-' }}</td>
         <td style="font-size: 24px">{{ i.quantity }}</td>
         <td style="font-size: 24px">{{ i.price.toFixed(2).replace('.', ',') + " €" }}</td>
-        <td><v-icon x-large> {{ i.paymentStatusIcon }} </v-icon></td>
-        <td style="width: 266px"><valet-button :button-text="i.buttonText"
-                          @click="handleZahlen(i)"></valet-button></td>
+        <td>
+          <v-icon x-large
+                  :color="i.paymentStatusIcon==='mdi-close-circle'?'grey':''">
+            {{ i.paymentStatusIcon }}</v-icon>
+        </td>
+        <td style="width: 266px">
+          <valet-button :button-text="i.buttonText"
+                        @click="handleZahlen(i)"></valet-button>
+        </td>
       </tr>
 
       </tbody>
@@ -33,18 +39,18 @@
 
 <script>
 import { orderBestellungHeader } from '@/model/Order'
-import {  myListComplete } from '../../../api/dressDesginService'
+import { myListComplete } from '@/api/dressDesginService'
 import dayjs from 'dayjs'
 import ValetButton from '../../../components/ValetButton'
 
 export default {
-  name: "Bestellung",
+  name: "OrderBestellung",
   components: {ValetButton},
 
   data () {
     return {
       headers: orderBestellungHeader,
-      items: [],
+      items: []
       // listComplete: []
     }
   },
@@ -52,37 +58,34 @@ export default {
     this.init()
   },
   methods: {
-    paymentStatus(item) {
-      let iconStatus =  'mdi-close-circle'
+    paymentStatus (item) {
+      let iconStatus = 'mdi-close-circle'
       let buttonText = 'Bezahlen'
-      if(item === 'Success') {
+      if (item === 'Success') {
         iconStatus = 'mdi-check-circle'
         buttonText = 'Kontakt uns'
       }
-      if(item === 'Pending'){
+      if (item === 'Pending') {
         iconStatus = 'mdi-help-circle'
         buttonText = 'Kontakt uns'
       }
       return [iconStatus, buttonText]
     },
-    handleZahlen(i){
-      if(i.paymentStatus === 'NotApplicable'){
+    handleZahlen (i) {
+      if (i.paymentStatus === 'NotApplicable') {
         this.$router.push({
-          path: '/SampleOrder/'+i.id,
+          path: '/SampleOrder/' + i.id,
           query: {
             data: 3
           }
         })
 
-      }else {
+      } else {
         this.$router.push('/OrderIndex/KontaktUns')
       }
 
     },
-    async init() {
-
-      // this.items = (await myListComplete()).data
-      // console.log("myListComplete",await myListComplete())
+    async init () {
 
       const myDesign = (await myListComplete()).data ?? []
       // console.log("myDesign",myDesign)
@@ -98,7 +101,7 @@ export default {
       })
 
 
-      console.log("this.items",this.items)
+      console.log("this.items", this.items)
 
     }
   }
@@ -109,7 +112,6 @@ export default {
 
 th {
   border-bottom: 1px solid #817163 !important;
-
   border-right: 2px solid #e0ddd6 !important;
   /*font-family: Gill Sans Nova;*/
   font-style: normal;
