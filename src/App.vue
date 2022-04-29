@@ -35,7 +35,7 @@
 
 export default {
 
-  mounted() {
+  created() {
     if (this.$route.path == '/')
       this.$router.replace('/')
   },

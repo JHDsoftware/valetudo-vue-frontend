@@ -1,7 +1,10 @@
 //CustomerController
 import hillo from 'hillo'
 
-const redirectUrl = 'http://localhost:8081/#/registerComplete'
+// const redirectUrl = 'http://localhost:8080/#/registerComplete'
+// const redirectUrl = 'http://valetudo.aaden.online/#/Login'
+
+const redirectUrl = document.location.href + '#/registerComplete'
 
 export async function customerRegister (registerData) {
   return await hillo.post('/customer/register', registerData, {
