@@ -92,9 +92,9 @@
                     <div style="font-size: 24px;">
                       <div class="font-weight-bold"> Lieferadresse</div>
                       <template v-for="(item,j) in dataBody.deliveryAddress">
-                        <div :key="'item'+j">
-                          {{ item }}
-                        </div>
+                          <div :key="'item'+j" >
+                            {{ item }}
+                          </div>
                       </template>
                       <div style="position: absolute; right: 16px; top: 16px">
                         <v-icon @click="editLieferadresse">mdi-pencil-plus</v-icon>

@@ -43,6 +43,7 @@ import { orderBestellungHeader } from '@/model/Order'
 import { myListComplete } from '@/api/dressDesginService'
 import dayjs from 'dayjs'
 import ValetButton from '../../../components/ValetButton'
+import {getMyDesign} from "../../../api/dressDesginService";
 
 export default {
   name: "OrderBestellung",
@@ -87,9 +88,8 @@ export default {
 
     },
     async init () {
-
-      const myDesign = (await myListComplete()).data ?? []
-      // console.log("myDesign",myDesign)
+      const myList = await getMyDesign() ?? []
+      const myDesign = ((await myListComplete()).data ?? []).filter(item => myList.findIndex(i=> i.id === item.dressDesign.id)>=0)
       this.items = myDesign.map(i => {
         i.bId = i.dressDesign.id.toString().padStart(4, '0')
         i.name = i.dressDesign.name

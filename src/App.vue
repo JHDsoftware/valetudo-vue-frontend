@@ -10,7 +10,7 @@
 
         <template v-if="!hideLoginStatus">
 
-          <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
+          <router-link class="flatButton text-decoration-none" to="/" >Login/Register</router-link>
         </template>
 
         <template v-if="!hideKontStatus">
@@ -108,6 +108,11 @@ export default {
   line-height: 24px;
   /* identical to box height */
   color: #817163;
+}
+.flatButton:hover {
+  /*box-shadow: 0.3vw 0.3vw 0.5vw #444;*/
+  /*transform: translateY(-0.05vw) scale(1.08);*/
+  border-bottom: 1px solid #817163;
 }
 
 .label {
