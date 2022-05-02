@@ -89,7 +89,10 @@
 
             <v-card flat>
               <v-card-title style="font-size: 24px; margin-bottom: 8px"> Mussterbox bestellen</v-card-title>
-              <v-card-subtitle style="font-size: 18px">Musterbox für <span style="font-size: 24px; font-weight: bold">29,99 €</span>
+              <v-card-subtitle style="font-size: 18px">Musterbox für
+                <span style="font-size: 24px; font-weight: bold" v-if="!dress.enableFreeMusterBox">29,99 €</span>
+                <span style="font-size: 24px; font-weight: bold" v-else>0,00 €</span>
+
                 . Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
                 sowie
                 ein Maßband und eine Bedienungsanleitung, um Ihre Körpermaße zu nehmen.
@@ -101,7 +104,7 @@
                        color="#817163"
                        class="white--text"
                        style="text-transform: none; font-size: 24px; width: 266px"
-                       @click="toOrderPage(dress.id)"
+                       @click="dress.enableFreeMusterBox ? null : toOrderPage(dress.id)"
 
                 >Bestellen
                 </v-btn>
@@ -271,19 +274,21 @@
 
 <script>
 import DressDisplay from "../../../views/DressDisplay"
-import { deleteDress, getMyDesign, myListCount } from '../../../api/dressDesginService'
+import {deleteDress, getMyDesign, myListComplete, myListCount} from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
 import { views } from '../../../api/dressDisplayRule'
 import { customerMe } from "../../../api/customerService"
 import EntwurfCard from "@/fragments/EntwurfCard"
+import _ from 'lodash'
 
 export default {
   name: "Entwurf",
   components: {EntwurfCard, DressDisplay, ValetInputTextField, ValetButton},
   data: function () {
     return {
+      freeMusterBoxDressList: [],
       myDressList: [],
       dress: null,
       showKontakt: false,
@@ -314,20 +319,39 @@ export default {
     }
   },
   async mounted () {
-    this.listCount = Object.assign(({}, await myListCount()).data)
-    console.log('listCount', this.listCount)
-    await this.loadDressList()
-    await this.getPersonData()
+
+    if(sessionStorage.getItem('token').toString() === 'null'){
+      await this.$router.replace('/')
+    }
+
+    const res = await myListCount()
+
+    if (res.code === 200) {
+      this.listCount = Object.assign(({}, await myListCount()).data)
+
+      await this.loadDressList()
+      await this.getPersonData()
+
+      // console.log('listCount', this.listCount)
+
+      // for(let i=0; i< res.maxFree; i++){
+      //   this.freeMusterBoxDressList.push(this.myDressList[i])
+      // }
+
+
+    } else if (res.code === 500) {
+      this.message.error('Token ist nicht verfügbar, bitte webseite refresh nochmal.')
+    }
+
+
+
 
   },
-  computed: {},
+  computed: {
+
+  },
   methods: {
 
-    // async init() {
-    //   console.log("myListCount",await myListCount())
-
-    //
-    // },
     dressEdit (dress) {
       if (!dress.designCompleted) {
         this.$router.push('/edit/' + dress.id)
@@ -340,7 +364,12 @@ export default {
       }
     },
     toOrderPage (id) {
-      this.$router.push({path: '/SampleOrder/' + id})
+      this.$router.push({
+        path: '/SampleOrder/' + id,
+        query: {
+          artikel: 'Mussterbox'
+        }
+      })
     },
     showPriceQuestionDialog () {
       this.showKontakt = false
@@ -366,6 +395,31 @@ export default {
     },
     async loadDressList () {
       this.myDressList = await getMyDesign() ?? []
+      const order = await myListComplete()
+
+      const freeMusterBox = []
+      if(order.code === 200) {
+
+        const dataArr = _.uniq(order.data.map(i=> {return i.dressDesign.id})) ?? []
+        // console.log("dataArr",dataArr)
+        for(let i=0; i < this.listCount.maxFree; i++){
+          freeMusterBox.push(dataArr[i])
+        }
+      }
+      // console.log("freeMusterBox", freeMusterBox)
+
+      this.myDressList.map(item => {
+        if(freeMusterBox.find(i => i === item.id)){
+          item.enableFreeMusterBox = true
+        }
+        else {
+          item.enableFreeMusterBox = false
+        }
+      })
+
+      // console.log("this.myDressList",this.myDressList)
+
+
       // console.log("xxxx myDressList",this.myDressList)
     },
     cardClick (item) {
@@ -386,12 +440,6 @@ export default {
         return null
       }
       this.personData = Object.assign(this.personData, res.data)
-      // console.log("res",res)
-      // this.personData.firstName = res.data.firstName
-      // this.personData.lastName = res.data.lastName
-      // this.personData.phone = res.data.phone
-      // this.personData.city = res.data.city
-
       this.personData.email = res.data.userName
 
     }

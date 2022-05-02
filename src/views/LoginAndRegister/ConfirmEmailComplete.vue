@@ -37,7 +37,7 @@ export default {
   },
   methods:{
     next(){
-      localStorage.setItem('token',null)
+      sessionStorage.setItem('token',null)
       this.$router.replace('/ResetPassword')
     }
   }

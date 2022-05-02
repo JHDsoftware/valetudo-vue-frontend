@@ -57,7 +57,7 @@ export default {
     customerForgetPassword,
     async confirm() {
 
-      localStorage.setItem('token', null)
+      sessionStorage.setItem('token', null)
 
       if (this.email) {
         const res = await customerForgetPassword(this.email)

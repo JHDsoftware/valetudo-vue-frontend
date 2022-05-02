@@ -84,8 +84,8 @@ export default {
   },
   methods: {
     handleLogout() {
-      this.$router.replace('/')
-      localStorage.setItem('token',null)
+      this.$router.push('/')
+      sessionStorage.setItem('token',null)
     }
   }
 }

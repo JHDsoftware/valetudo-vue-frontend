@@ -7,9 +7,9 @@ import IKUtils from 'innerken-js-utils'
 import { customerConfirmRegister } from '@/api/customerService'
 
 export function getToken () {
-  console.log(localStorage.getItem('token'))
+  console.log(sessionStorage.getItem('token'))
 
-  return localStorage.getItem('token') ?? ''
+  return sessionStorage.getItem('token') ?? ''
 }
 
 Vue.config.productionTip = false
@@ -50,6 +50,7 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
-if (localStorage.getItem('token')) {
-  router.push('/OrderIndex')
-}
+
+// if (sessionStorage.getItem('token')) {
+//   router.push('/OrderIndex')
+// }

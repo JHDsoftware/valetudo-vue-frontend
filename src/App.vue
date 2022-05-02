@@ -10,10 +10,10 @@
 
         <template v-if="!hideLoginStatus">
 
-          <router-link class="flatButton text-decoration-none" to="/" >Login/Register</router-link>
+          <router-link class="flatButton text-decoration-none" to="/">Login/Register</router-link>
         </template>
 
-        <template v-if="!hideKontStatus">
+        <template v-if="!hideKontoStatus">
           <div class="flatButton text-decoration-none"
                @click="checkToken"
                style="margin-left: 32px">Konto
@@ -35,18 +35,21 @@
 
 export default {
 
-  created() {
-    if (this.$route.path == '/')
-      this.$router.replace('/')
+  mounted() {
+    if (this.$route.path == '/'){
+      // this.$router.replace('/')
+      sessionStorage.setItem('token', null)
+    }
+
   },
 
   computed: {
     routePath() {
       return this.$route.path
     },
-    hideKontStatus() {
+    hideKontoStatus() {
       const path = ['/', '/registerComplete', '/FAQ',
-        '/Login', '/ConfirmEmail', '/ResetPassword','/customer/confirmRegister']
+        '/Login', '/ConfirmEmail', '/ResetPassword', '/customer/confirmRegister']
 
       return path.indexOf(this.routePath) >= 0
     },
@@ -57,7 +60,7 @@ export default {
         '/OrderIndex/FAQ',
         '/OrderIndex/KontaktUns',
         '/questionspage',
-          '/CreateNewDress'
+        '/CreateNewDress'
       ]
 
       if (this.routePath.match('/SampleOrder') || this.routePath.match('/edit')) {
@@ -74,9 +77,13 @@ export default {
 
   methods: {
     checkToken() {
-      const token = localStorage.getItem('token')
+      const token = sessionStorage.getItem('token')
+      console.log("real token", token)
       if (token) {
         this.$router.replace('/OrderIndex/Entwurf')
+      }
+      else {
+        this.$router.replace('/')
       }
     },
 
@@ -109,6 +116,7 @@ export default {
   /* identical to box height */
   color: #817163;
 }
+
 .flatButton:hover {
   /*box-shadow: 0.3vw 0.3vw 0.5vw #444;*/
   /*transform: translateY(-0.05vw) scale(1.08);*/
@@ -231,7 +239,7 @@ export default {
 
 }
 
-.pointerMouse{
+.pointerMouse {
   cursor: pointer;
 }
 

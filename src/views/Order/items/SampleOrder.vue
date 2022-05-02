@@ -2,7 +2,7 @@
   <div style="height: calc(100vh - 60px);overflow: hidden">
     <div style="margin-top: 70px;" class="d-flex justify-center flex-wrap">
       <div class="va-title" style="margin-bottom: 16px;text-align: center;width: 100%">
-        <span v-if="id != -1">Musterbox</span>
+        <span v-if="id != -1">{{ artikel }}</span>
         <span v-else>Entwurf</span>
         bestellen
       </div>
@@ -39,7 +39,7 @@
               <div>
                 <div class="unterTitle24">ARTIKEL</div>
                 <div>
-                  <div class="unterTitle36" v-if="id != -1">Musterbox</div>
+                  <div class="unterTitle36" v-if="id != -1">{{ artikel }}</div>
                   <div class="unterTitle36" v-else>Neuer Entwurf</div>
 
                   <div class="unterTitle18" v-if="id != -1">(Inkl. Versandkosten)</div>
@@ -91,7 +91,7 @@
                           style="padding-right:20px; margin-bottom: 90px">
                     <div style="font-size: 24px;">
                       <div class="font-weight-bold"> Lieferadresse</div>
-                      <template v-for="(item,j) in dataBody.deliveryAddress">
+                      <template v-for="(item,j) in deliveryAddressFilter">
                           <div :key="'item'+j" >
                             {{ item }}
                           </div>
@@ -105,7 +105,7 @@
                           tile>
                     <div style="font-size: 24px; ">
                       <div class="font-weight-bold">Rechnungsadresse</div>
-                      <template v-for="(item,j) in dataBody.billingAddress">
+                      <template v-for="(item,j) in billingAddressFilter">
                         <div :key="'item'+j">
                           {{ item }}
                         </div>
@@ -360,10 +360,25 @@ import { updateAddress } from "@/model/Order"
 export default {
   name: "SampleOrder",
   components: {FormAdress, ValetButton, ValetSnackBar},
+
+  async mounted () {
+    this.productInfo = await loadDesign(this.id)
+    this.token = sessionStorage.getItem('token')
+    await this.getPersonData()
+    this.artikel = this.$route.query.artikel
+  },
   computed: {
 
+    deliveryAddressFilter(){
+      const address = this.dataBody.deliveryAddress
+      return Object.keys(address).filter(key => key!=='id').reduce((res,key)=>(res[key]= address[key], res), {})
+    },
+    billingAddressFilter(){
+      const address = this.dataBody.billingAddress
+      return Object.keys(address).filter(key => key!=='id').reduce((res,key)=>(res[key]=address[key],res), {})
+    },
     price () {
-      return (this.amount ?? 1) * (parseInt(this.id===-1)?19.99:29.99)
+      return (this.amount ?? 1) * (parseInt(this.id===-1) ?19.99:29.99)
     },
     versandPrice () {
       return 0.00
@@ -371,11 +386,13 @@ export default {
   },
   props: {
     id: {},
-    status: {}
+    status: {},
+    // artikel: {}
   },
 
   data () {
     return {
+      artikel: null,
       payStatus: true,
       payMethodValue: 0,
       token: null,
@@ -467,12 +484,7 @@ export default {
 
     }
   },
-  async mounted () {
-    this.productInfo = await loadDesign(this.id)
-    this.token = localStorage.getItem('token')
-    await this.getPersonData()
 
-  },
 
   methods: {
 

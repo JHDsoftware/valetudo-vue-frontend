@@ -78,7 +78,8 @@ export default {
         this.$router.push({
           path: '/SampleOrder/' + i.id,
           query: {
-            data: 3
+            data: 3,
+            artikel: i.orderType==='Design'?'Entwurf':'MusterBox'
           }
         })
 
@@ -88,6 +89,11 @@ export default {
 
     },
     async init () {
+
+      if(sessionStorage.getItem('token').toString() === 'null'){
+        await this.$router.replace('/')
+      }
+
       const myList = await getMyDesign() ?? []
       const myDesign = ((await myListComplete()).data ?? []).filter(item => myList.findIndex(i=> i.id === item.dressDesign.id)>=0)
       this.items = myDesign.map(i => {

@@ -179,7 +179,7 @@ export default {
       if (this.loginEmail && this.loginPassword) {
         const res = await customerLogin(this.loginEmail, this.loginPassword)
         console.log(res)
-        localStorage.setItem('token', res.data.tokenValue)
+        sessionStorage.setItem('token', res.data.tokenValue)
         if (res.code === 200) {
           refreshHeader()
           this.$router.push('/OrderIndex')
@@ -193,8 +193,6 @@ export default {
 
     },
     async register() {
-
-
 
       const checkEmailRes = await customerCheckEmailRegistered(this.email)
 
@@ -222,7 +220,7 @@ export default {
         }
         if (Object.values(data).every((i) => !!i)) {
           data.phone = this.phone
-          const res = await customerRegister(data)
+          const res = await customerRegister('/customer/register',data, '#/registerComplete')
 
           if (res.code === 200) {
             // await this.$router.push('/registerComplete')

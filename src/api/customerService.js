@@ -4,12 +4,13 @@ import hillo from 'hillo'
 // const redirectUrl = 'http://localhost:8080/#/registerComplete'
 // const redirectUrl = 'http://valetudo.aaden.online/#/Login'
 
-const redirectUrl = document.location.href + '#/registerComplete'
+// const redirectUrl = document.location.href + '#/registerComplete'
 
-export async function customerRegister (registerData) {
-  return await hillo.post('/customer/register', registerData, {
+export async function customerRegister (path, registerData, redirectUrl) {
+  // '/customer/register'
+  return await hillo.post(path, registerData, {
     params: {
-      mailRedirect: redirectUrl
+      mailRedirect: document.location.href + redirectUrl
     }
   })
 }

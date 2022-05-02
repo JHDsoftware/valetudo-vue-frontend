@@ -218,7 +218,7 @@ import {customerMe} from "@/api/customerService";
 import {
   customerChangeEmail,
   customerChangePassword,
-  customerEditMe
+  customerEditMe, customerRegister
 } from "../../../api/customerService";
 import PersonDataCard from "../../../fragments/PersonDataCard";
 import ValetSnackBar from "@/components/ValetSnackBar";
@@ -378,6 +378,11 @@ export default {
 
                 const res = await customerChangeEmail({email: this.email})
                 if (res.code === 200) {
+                  const data = {
+                    email: this.email
+                  }
+                  const res = await customerRegister('/customer/emailChange',data, '#/emailChanged')
+                  sessionStorage.setItem('token', res.data.tokenValue)
                   await this.$router.replace('/Login')
                 } else {
                   this.snackbar = true
@@ -404,6 +409,14 @@ export default {
               })
 
               if (resChangePassword.code === 200) {
+
+                const data = {
+                  oldPassword: this.currentPassword,
+                  newPassword: this.newPassword
+                }
+                const res = await customerRegister('/customer/passwordChange',data, '#/passwordChanged')
+                sessionStorage.setItem('token', res.data.tokenValue)
+
                 await this.$router.push('/Login')
               } else {
                 this.snackbar = true

@@ -86,8 +86,8 @@ export default {
           const res = await customerLogin(this.loginEmail, this.loginPassword)
           // console.log(res.data.tokenValue)
           if (res.code === 200) {
-            localStorage.setItem('token', res.data.tokenValue)
-            localStorage.setItem('id',res.data.loginId)
+            sessionStorage.setItem('token', res.data.tokenValue)
+            sessionStorage.setItem('id',res.data.loginId)
 
             refreshHeader()
             this.$router.replace('/OrderIndex')
