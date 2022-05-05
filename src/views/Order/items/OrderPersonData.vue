@@ -151,7 +151,7 @@
               <ValetInputTextField title="Zusätzliche Adresse" width-input="266px"
                                    v-model="deliveryAddress.addressLine2"
                                    :useRule="false"
-                                   />
+              />
 
               <ValetInputTextField title="Staat/Provinz*"
                                    width-input="266px"
@@ -202,6 +202,30 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="showPasswortChangeComplete" width="30vw">
+      <v-card height="12vw">
+        <v-card-title class="formTitle " >
+          Änderung erfolgreich!
+        </v-card-title>
+
+        <v-card-subtitle>
+          Bitte den Linker in Ihre Email bestätigen
+        </v-card-subtitle>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <div style="width: 80px" >
+
+            <ValetButton
+                button-text="OK"
+                @click="handleConfirm"
+            ></ValetButton>
+          </div>
+        </v-card-actions>
+      </v-card>
+
+    </v-dialog>
+
 
     <ValetSnackBar
         v-model="snackbar"
@@ -218,8 +242,9 @@ import {customerMe} from "@/api/customerService";
 import {
   customerChangeEmail,
   customerChangePassword,
-  customerEditMe, customerRegister
+  customerEditMe,customerRegister
 } from "../../../api/customerService";
+
 import PersonDataCard from "../../../fragments/PersonDataCard";
 import ValetSnackBar from "@/components/ValetSnackBar";
 import {updateAddress} from '@/model/Order'
@@ -238,6 +263,7 @@ export default {
   },
   data() {
     return {
+      showPasswortChangeComplete: false,
       currentPassword: null,
       newPassword: null,
       confirmNewPassword: null,
@@ -307,15 +333,19 @@ export default {
   },
 
   methods: {
+    handleConfirm(){
+      this.showPasswortChangeComplete = false
+      this.$router.push('/Login')
+    },
 
     async getPersonData() {
       const res = await customerMe()
       if (res.code != 200) {
         return null
       }
-      this.dataBody =res.data
+      this.dataBody = res.data
 
-      const tempData ={
+      const tempData = {
         firstName: res.data.firstName,
         lastName: res.data.lastName,
         city: res.data.city
@@ -324,11 +354,11 @@ export default {
       // console.log('this.defaultAddress',this.defaultAddress,tempData)
 
       if (!this.dataBody.deliveryAddress) {
-        this.dataBody.deliveryAddress = Object.assign(this.defaultAddress,tempData)
+        this.dataBody.deliveryAddress = Object.assign(this.defaultAddress, tempData)
       }
 
       if (!this.dataBody.billingAddress) {
-        this.dataBody.billingAddress = Object.assign(this.defaultAddress,tempData)
+        this.dataBody.billingAddress = Object.assign(this.defaultAddress, tempData)
 
       }
 
@@ -339,10 +369,10 @@ export default {
     handleButtonClick(text) {
       this.dialogBearbeit = true
       this.dialogTitle = text
-      if(this.dialogTitle === 'Lieferaddresse'){
+      if (this.dialogTitle === 'Lieferaddresse') {
         this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
       }
-      if(this.dialogTitle === 'Rechnungsaddresse'){
+      if (this.dialogTitle === 'Rechnungsaddresse') {
         this.billingAddress = Object.assign({}, this.dataBody.billingAddress)
       }
     },
@@ -378,12 +408,22 @@ export default {
 
                 const res = await customerChangeEmail({email: this.email})
                 if (res.code === 200) {
+
+
+                  this.showPasswortChangeComplete = true
+
                   const data = {
                     email: this.email
                   }
-                  const res = await customerRegister('/customer/emailChange',data, '#/emailChanged')
+                  const res = await customerRegister('/customer/changeEmail', data, '#/emailChanged')
                   sessionStorage.setItem('token', res.data.tokenValue)
-                  await this.$router.replace('/Login')
+                  // await this.$router.replace('/Login')
+
+
+
+
+                  // this.dialogBearbeit = false
+
                 } else {
                   this.snackbar = true
                   this.snackbarText = res.message
@@ -396,9 +436,9 @@ export default {
 
           case 'Dein Passwort':
 
-            if(this.newPassword.length<8){
-              this.snackbar=true
-              this.snackbarText='Bitte mindestens 8 Zahlen oder Zeichen'
+            if (this.newPassword.length < 8) {
+              this.snackbar = true
+              this.snackbarText = 'Bitte mindestens 8 Zahlen oder Zeichen'
               return null
             }
 
@@ -410,14 +450,27 @@ export default {
 
               if (resChangePassword.code === 200) {
 
-                const data = {
-                  oldPassword: this.currentPassword,
-                  newPassword: this.newPassword
-                }
-                const res = await customerRegister('/customer/passwordChange',data, '#/passwordChanged')
-                sessionStorage.setItem('token', res.data.tokenValue)
+                // const data = {
+                //   oldPassword: this.currentPassword,
+                //   newPassword: this.newPassword
+                // }
+                // const res = await customerRegister('/customer/changePassword',data, '#/passwordChanged')
+                // sessionStorage.setItem('token', res.data.tokenValue)
 
-                await this.$router.push('/Login')
+                this.showPasswortChangeComplete = true
+                // this.snackbar = true
+                // this.snackbarText = "Passwortänderung erfolgreich!"
+
+
+                console.log("get resChangePassword")
+
+                // this.currentPassword = null
+                // this.confirmNewPassword = null
+                // this.newPassword = null
+                // window.setTimeout(function(){
+                // },10000)
+
+
               } else {
                 this.snackbar = true
                 this.snackbarText = resChangePassword.message
@@ -431,6 +484,8 @@ export default {
               this.snackbarText = "Die beide Password sind nicht gleich. "
             }
             this.snackbar = false
+
+
             break
 
           case 'Lieferaddresse':
