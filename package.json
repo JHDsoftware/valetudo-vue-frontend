@@ -16,6 +16,7 @@
     "lodash": "^4.17.21",
     "pinia": "^2.0.12",
     "vue": "^2.6.11",
+    "vue-paypal-checkout": "^3.2.0",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0"
   },

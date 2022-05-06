@@ -91,7 +91,7 @@
               <v-card-title style="font-size: 24px; margin-bottom: 8px"> Mussterbox bestellen</v-card-title>
               <v-card-subtitle style="font-size: 18px">Musterbox für
                 <span style="font-size: 24px; font-weight: bold" v-if="!dress.enableFreeMusterBox">29,99 €</span>
-                <span style="font-size: 24px; font-weight: bold" v-else>0,00 €</span>
+                <span style="font-size: 24px; font-weight: bold" v-else>29,99 €</span>
 
                 . Darin enthalten sind Stoffmuster (Spitze, Tüll und so weiter)
                 sowie

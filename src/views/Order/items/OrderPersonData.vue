@@ -202,19 +202,20 @@
       </v-card>
     </v-dialog>
 
+<!--    <v-dialog  width="30vw">-->
     <v-dialog v-model="showPasswortChangeComplete" width="30vw">
-      <v-card height="12vw">
-        <v-card-title class="formTitle " >
+      <v-card height="20vh">
+        <v-card-title class="formTitle display-1 mb-3 pt-10" >
           Änderung erfolgreich!
         </v-card-title>
 
-        <v-card-subtitle>
-          Bitte den Linker in Ihre Email bestätigen
+        <v-card-subtitle style="font-size: 18px">
+          Bitte den Linker in Ihre Email bestätigen und nochmal login.
         </v-card-subtitle>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <div style="width: 80px" >
+          <div style="width: 80px; height: 32px" >
 
             <ValetButton
                 button-text="OK"

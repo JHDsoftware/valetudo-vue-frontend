@@ -244,6 +244,18 @@
 
                     <div style="padding-top: 40px">
                       <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
+
+<!--                      <template v-if="showPaypal">-->
+                        <Paypal
+                          :amount="price + versandPrice"
+                          currency="USD"
+                          :client="credentials"
+                          env="sandbox"
+                          @payment-authorized="paymentAuthorized"
+                          @payment-completed="paymentCompleted"
+                          @payment-cancelled="paymentCancelled"
+                        ></Paypal>
+<!--                      </template>-->
                     </div>
                   </div>
 
@@ -356,16 +368,20 @@ import {
 } from '../../../api/dressDesginService'
 import { customerEditMe, customerMe } from "@/api/customerService"
 import { updateAddress } from "@/model/Order"
+import Paypal from 'vue-paypal-checkout'
+
 
 export default {
   name: "SampleOrder",
-  components: {FormAdress, ValetButton, ValetSnackBar},
+  components: {FormAdress, ValetButton, ValetSnackBar, Paypal},
 
   async mounted () {
     this.productInfo = await loadDesign(this.id)
     this.token = sessionStorage.getItem('token')
     await this.getPersonData()
     this.artikel = this.$route.query.artikel
+
+    this.$nextTick(()=>(this.paypalBtnShow = true))
   },
   computed: {
 
@@ -392,6 +408,22 @@ export default {
 
   data () {
     return {
+
+      credentials: {
+        sandbox: 'xxxxx',
+        production: 'xxxxx'
+      },
+
+      buttonStyle:{
+        label:'pay',
+        size:'small',
+        shap:'rect',
+        color: 'blue'
+      },
+
+      showPaypal: true,
+      paypalBtnShow: true,
+
       artikel: null,
       payStatus: true,
       payMethodValue: 0,
@@ -600,6 +632,8 @@ export default {
         let res = null
         switch (this.payMethodValue) {
           case 0:
+
+            this.showPaypal=true
             res = await payNewByPaypal(this.amount)
             if (res) {
               console.log(res,'redirect')
@@ -617,7 +651,18 @@ export default {
     editLieferadresse () {
       this.dialogLiferAdress = true
       this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
+    },
+
+    paymentAuthorized (data){
+      console.log('data',data)
+    },
+    paymentCompleted(data){
+      console.log('data',data)
+    },
+    paymentCancelled(data){
+      console.log('data',data)
     }
+
   }
 
 }
