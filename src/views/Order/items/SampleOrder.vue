@@ -92,9 +92,9 @@
                     <div style="font-size: 24px;">
                       <div class="font-weight-bold"> Lieferadresse</div>
                       <template v-for="(item,j) in deliveryAddressFilter">
-                          <div :key="'item'+j" >
-                            {{ item }}
-                          </div>
+                        <div :key="'item'+j">
+                          {{ item }}
+                        </div>
                       </template>
                       <div style="position: absolute; right: 16px; top: 16px">
                         <v-icon @click="editLieferadresse">mdi-pencil-plus</v-icon>
@@ -245,17 +245,17 @@
                     <div style="padding-top: 40px">
                       <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
 
-<!--                      <template v-if="showPaypal">-->
-                        <Paypal
-                          :amount="price + versandPrice"
-                          currency="USD"
-                          :client="credentials"
-                          env="sandbox"
-                          @payment-authorized="paymentAuthorized"
-                          @payment-completed="paymentCompleted"
-                          @payment-cancelled="paymentCancelled"
-                        ></Paypal>
-<!--                      </template>-->
+                      <!--                      <template v-if="showPaypal">-->
+                      <!--                        <Paypal-->
+                      <!--                          :amount="price + versandPrice"-->
+                      <!--                          currency="USD"-->
+                      <!--                          :client="credentials"-->
+                      <!--                          env="sandbox"-->
+                      <!--                          @payment-authorized="paymentAuthorized"-->
+                      <!--                          @payment-completed="paymentCompleted"-->
+                      <!--                          @payment-cancelled="paymentCancelled"-->
+                      <!--                        ></Paypal>-->
+                      <!--                      </template>-->
                     </div>
                   </div>
 
@@ -366,37 +366,39 @@ import {
   paySampleOrderAdvance, paySampleOrderBilling,
   placeSampleOrder
 } from '../../../api/dressDesginService'
-import { customerEditMe, customerMe } from "@/api/customerService"
-import { updateAddress } from "@/model/Order"
-import Paypal from 'vue-paypal-checkout'
+import {customerEditMe, customerMe} from "@/api/customerService"
+import {updateAddress} from "@/model/Order"
+// import Paypal from 'vue-paypal-checkout'
 
 
 export default {
   name: "SampleOrder",
-  components: {FormAdress, ValetButton, ValetSnackBar, Paypal},
+  components: {FormAdress, ValetButton, ValetSnackBar},
 
-  async mounted () {
+  async mounted() {
     this.productInfo = await loadDesign(this.id)
     this.token = sessionStorage.getItem('token')
     await this.getPersonData()
     this.artikel = this.$route.query.artikel
+    this.amount = this.$route.query.amount ?? '1'
 
-    this.$nextTick(()=>(this.paypalBtnShow = true))
+    this.$nextTick(() => (this.paypalBtnShow = true))
   },
   computed: {
 
-    deliveryAddressFilter(){
+    deliveryAddressFilter() {
       const address = this.dataBody.deliveryAddress
-      return Object.keys(address).filter(key => key!=='id').reduce((res,key)=>(res[key]= address[key], res), {})
+      return Object.keys(address).filter(key => key !== 'id').reduce((res, key) => (res[key] = address[key], res), {})
     },
-    billingAddressFilter(){
+    billingAddressFilter() {
       const address = this.dataBody.billingAddress
-      return Object.keys(address).filter(key => key!=='id').reduce((res,key)=>(res[key]=address[key],res), {})
+      return Object.keys(address).filter(key => key !== 'id').reduce((res, key) => (res[key] = address[key], res), {})
     },
-    price () {
-      return (this.amount ?? 1) * (parseInt(this.id===-1) ?19.99:29.99)
+    price() {
+      const localCmount = this.amount === '10+' ? 10 : parseInt(this.amount)
+      return localCmount * (parseInt(this.id === -1) ? this.amount : 19.99)
     },
-    versandPrice () {
+    versandPrice() {
       return 0.00
     }
   },
@@ -406,7 +408,7 @@ export default {
     // artikel: {}
   },
 
-  data () {
+  data() {
     return {
 
       credentials: {
@@ -414,10 +416,10 @@ export default {
         production: 'xxxxx'
       },
 
-      buttonStyle:{
-        label:'pay',
-        size:'small',
-        shap:'rect',
+      buttonStyle: {
+        label: 'pay',
+        size: 'small',
+        shap: 'rect',
         color: 'blue'
       },
 
@@ -520,7 +522,7 @@ export default {
 
   methods: {
 
-    async getPersonData () {
+    async getPersonData() {
       const res = await customerMe()
       if (res.code !== 200) {
         return null
@@ -548,12 +550,12 @@ export default {
 
       console.log('this.dataBody', this.dataBody)
     },
-    handleReturn (i) {
+    handleReturn(i) {
       if (this.anzahlStep > (i + 1)) {
         this.anzahlStep = (i + 1)
       }
     },
-    async adressConfirm () {
+    async adressConfirm() {
 
       const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2')
 
@@ -574,18 +576,37 @@ export default {
 
     },
 
-    async confirm () {
+    async confirm() {
 
       if (this.anzahlStep === 2) {
 
-        await customerEditMe(this.dataBody)
+        console.log("dataBody", this.dataBody)
+        const dataBillingAddr = Object.entries(this.dataBody.billingAddress).filter(i => i[0] !== 'addressLine2' || i[0] !== 'id')
+        const isNoEmpty = dataBillingAddr.every(i => {
+          return !!i[1]
+        })
+        if (isNoEmpty) {
+          await customerEditMe(this.dataBody)
+
+          this.anzahlStep = this.anzahlStep + 1
+
+        } else {
+          this.snackbar = true
+          this.snackbarText = "Es fehlt noch einige Info in Rechungsadresse"
+
+          this.dialogRechnungAdress=true
+        }
+
+      }
+      else {
+        this.anzahlStep = this.anzahlStep + 1
       }
 
-      this.anzahlStep = this.anzahlStep + 1
+
 
     },
 
-    async handelClose () {
+    async handelClose() {
       if (JSON.stringify(this.deliveryAddress) !== JSON.stringify(this.dataBody.deliveryAddress)) {
         const resUpdate = await updateAddress(this.dataBody, this.deliveryAddress, 'deliveryAddress')
         this.snackbar = resUpdate.snackbar
@@ -604,7 +625,7 @@ export default {
       this.dialogLiferAdress = false
     },
 
-    async placeAndPaySampleOrder (id) {
+    async placeAndPaySampleOrder(id) {
       await placeSampleOrder(id, this.amount, this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
@@ -625,7 +646,7 @@ export default {
 
     },
 
-    async tryToPaySampleOrder () {
+    async tryToPaySampleOrder() {
       if (parseInt(this.id) !== -1) {
         await this.placeAndPaySampleOrder(this.id)
       } else {
@@ -633,10 +654,10 @@ export default {
         switch (this.payMethodValue) {
           case 0:
 
-            this.showPaypal=true
+            this.showPaypal = true
             res = await payNewByPaypal(this.amount)
             if (res) {
-              console.log(res,'redirect')
+              console.log(res, 'redirect')
               // window.location = res.data
             }
             break
@@ -648,19 +669,19 @@ export default {
       }
     },
 
-    editLieferadresse () {
+    editLieferadresse() {
       this.dialogLiferAdress = true
       this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
     },
 
-    paymentAuthorized (data){
-      console.log('data',data)
+    paymentAuthorized(data) {
+      console.log('data', data)
     },
-    paymentCompleted(data){
-      console.log('data',data)
+    paymentCompleted(data) {
+      console.log('data', data)
     },
-    paymentCancelled(data){
-      console.log('data',data)
+    paymentCancelled(data) {
+      console.log('data', data)
     }
 
   }

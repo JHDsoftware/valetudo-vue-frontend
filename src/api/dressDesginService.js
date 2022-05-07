@@ -77,6 +77,6 @@ export async function myListCount(){
   return (await hillo.post('/dressDesign/myListCount'))
 }
 
-export async function myListComplete(){
+export async function myOrderList(){
   return (await hillo.post('/dressDesign/myOrder'))
 }

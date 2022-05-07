@@ -36,7 +36,7 @@
 export default {
 
   mounted() {
-    if (this.$route.path == '/'){
+    if (this.$route.path == '/') {
       // this.$router.replace('/')
       sessionStorage.setItem('token', null)
     }
@@ -60,12 +60,13 @@ export default {
         '/OrderIndex/FAQ',
         '/OrderIndex/KontaktUns',
         '/questionspage',
-        '/CreateNewDress'
+        '/createNewDress',
       ]
 
-      if (this.routePath.match('/SampleOrder') || this.routePath.match('/edit')) {
+      if (this.routePath.match('/SampleOrder') || this.routePath.match('/edit') || this.routePath.match('/createNewDress')) {
         return true
       }
+
 
       return path.indexOf(this.routePath) >= 0
     }
@@ -80,9 +81,10 @@ export default {
       const token = sessionStorage.getItem('token')
       console.log("real token", token)
       if (token) {
-        this.$router.replace('/OrderIndex/Entwurf')
-      }
-      else {
+
+        if (this.$route.path !== '/OrderIndex/Entwurf')
+          this.$router.replace('/OrderIndex/Entwurf')
+      } else {
         this.$router.replace('/')
       }
     },

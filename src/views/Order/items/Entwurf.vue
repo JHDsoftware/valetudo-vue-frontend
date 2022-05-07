@@ -104,9 +104,11 @@
                        color="#817163"
                        class="white--text"
                        style="text-transform: none; font-size: 24px; width: 266px"
-                       @click="dress.enableFreeMusterBox ? null : toOrderPage(dress.id)"
+                       @click="toOrderPage(dress.id, amount)"
 
                 >Bestellen
+
+                  <!--                  @click="dress.enableFreeMusterBox ? null : toOrderPage(dress.id)"-->
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -274,12 +276,12 @@
 
 <script>
 import DressDisplay from "../../../views/DressDisplay"
-import {deleteDress, getMyDesign, myListComplete, myListCount} from '../../../api/dressDesginService'
+import {deleteDress, getMyDesign, myOrderList, myListCount} from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
-import { views } from '../../../api/dressDisplayRule'
-import { customerMe } from "../../../api/customerService"
+import {views} from '../../../api/dressDisplayRule'
+import {customerMe} from "../../../api/customerService"
 import EntwurfCard from "@/fragments/EntwurfCard"
 import _ from 'lodash'
 
@@ -288,6 +290,8 @@ export default {
   components: {EntwurfCard, DressDisplay, ValetInputTextField, ValetButton},
   data: function () {
     return {
+      amount: null,
+      showBaseQuestion: true,
       freeMusterBoxDressList: [],
       myDressList: [],
       dress: null,
@@ -318,60 +322,64 @@ export default {
 
     }
   },
-  async mounted () {
+  async mounted() {
 
-    if(sessionStorage.getItem('token').toString() === 'null'){
-      await this.$router.replace('/')
-    }
+    // if (sessionStorage.getItem('token').toString() === 'null') {
+    //   await this.$router.replace('/')
+    // }
 
     const res = await myListCount()
 
     if (res.code === 200) {
-      this.listCount = Object.assign(({}, await myListCount()).data)
+      this.listCount = res.data
+
+      this.showBaseQuestion = localStorage.getItem('showBaseQuestion') ?? true
+
+      console.log("showBaseQuestion", this.showBaseQuestion, "listCount", this.listCount)
+
+      if (this.listCount.currentCount === 0) {
+
+        if (this.showBaseQuestion){
+          // this.$router.push('/questionspage')
+          localStorage.setItem('showBaseQuestion', false)
+          // this.showBaseQuestion = false
+        }
+
+      }
 
       await this.loadDressList()
       await this.getPersonData()
-
-      // console.log('listCount', this.listCount)
-
-      // for(let i=0; i< res.maxFree; i++){
-      //   this.freeMusterBoxDressList.push(this.myDressList[i])
-      // }
-
 
     } else if (res.code === 500) {
       this.message.error('Token ist nicht verfügbar, bitte webseite refresh nochmal.')
     }
 
 
-
-
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
 
-    dressEdit (dress) {
+    dressEdit(dress) {
       if (!dress.designCompleted) {
         this.$router.push('/edit/' + dress.id)
       }
     },
-    deleteEntwurf (item) {
+    deleteEntwurf(item) {
       if (item.designCompleted) {
         this.confirmDeleteDialog = true
         this.targetDeleteId = item.id
       }
     },
-    toOrderPage (id) {
+    toOrderPage(id, amount) {
       this.$router.push({
         path: '/SampleOrder/' + id,
         query: {
-          artikel: 'Mussterbox'
+          artikel: 'Mussterbox',
+          amount: amount
         }
       })
     },
-    showPriceQuestionDialog () {
+    showPriceQuestionDialog() {
       this.showKontakt = false
       this.showCompleteTip = true
 
@@ -379,51 +387,48 @@ export default {
         this.showCompleteTip = false
       }, 5000)
     },
-    changeView () {
+    changeView() {
       this.dressLoading = true
       this.currentView = views[this.currentView === views[0] ? 1 : 0]
       setTimeout(() => {
         this.dressLoading = false
       }, 400)
     },
-    async deleteDress () {
+    async deleteDress() {
       if (this.targetDeleteId) {
         await deleteDress(this.targetDeleteId)
         await this.loadDressList()
         this.confirmDeleteDialog = false
       }
     },
-    async loadDressList () {
+    async loadDressList() {
       this.myDressList = await getMyDesign() ?? []
-      const order = await myListComplete()
+      const order = await myOrderList()
 
       const freeMusterBox = []
-      if(order.code === 200) {
+      if (order.code === 200) {
 
-        const dataArr = _.uniq(order.data.map(i=> {return i.dressDesign.id})) ?? []
+        const dataArr = _.uniq(order.data.map(i => {
+          return i.dressDesign.id
+        })) ?? []
         // console.log("dataArr",dataArr)
-        for(let i=0; i < this.listCount.maxFree; i++){
+        for (let i = 0; i < this.listCount.maxFree; i++) {
           freeMusterBox.push(dataArr[i])
         }
       }
       // console.log("freeMusterBox", freeMusterBox)
 
       this.myDressList.map(item => {
-        if(freeMusterBox.find(i => i === item.id)){
+        if (freeMusterBox.find(i => i === item.id)) {
           item.enableFreeMusterBox = true
-        }
-        else {
+        } else {
           item.enableFreeMusterBox = false
         }
       })
 
-      // console.log("this.myDressList",this.myDressList)
-
-
-      // console.log("xxxx myDressList",this.myDressList)
     },
-    cardClick (item) {
-      console.log(item)
+    cardClick(item) {
+      // console.log(item)
       if (item.completedAt) {
         this.dress = item
       } else {
@@ -434,7 +439,7 @@ export default {
         }
       }
     },
-    async getPersonData () {
+    async getPersonData() {
       const res = await customerMe()
       if (res.code != 200) {
         return null

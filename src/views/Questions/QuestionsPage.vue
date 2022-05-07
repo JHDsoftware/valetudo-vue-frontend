@@ -7,7 +7,7 @@
 
 
     <div class="d-flex flex-column">
-<!--      <div style="position: absolute; top: 50px; right: 50px"><v-icon>mdi-arrow-left-thick </v-icon></div>-->
+      <!--      <div style="position: absolute; top: 50px; right: 50px"><v-icon>mdi-arrow-left-thick </v-icon></div>-->
       <v-spacer/>
 
       <div class="d-flex justify-center">
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <v-stepper v-model="e1" flat>
+      <v-stepper v-model="e1" flat elevation="0">
         <div style="width: 100%;" class="d-flex justify-center">
           <div class="d-flex align-center" style="width: 180px">
             <div :style=" e1>=1  ? {color: '#817163'} : {color: '#CCC6BB'}" @click="handleBack(1)">
@@ -36,6 +36,17 @@
         </div>
 
 
+        <!--        <v-stepper-header >-->
+        <!--          <v-stepper-step step="1"-->
+
+        <!--          ></v-stepper-step>-->
+        <!--          <v-divider></v-divider>-->
+        <!--          <v-stepper-step step="2"></v-stepper-step>-->
+        <!--          <v-divider></v-divider>-->
+        <!--          <v-stepper-step step="3"></v-stepper-step>-->
+        <!--  -->
+        <!--        </v-stepper-header >-->
+
         <v-stepper-items>
           <v-stepper-content v-if="e1===1" class="d-flex justify-center flex-wrap">
             <!--              <div style="width: 633px;" >-->
@@ -49,7 +60,7 @@
                     class="ml-2"
                     large
                     color="#CCC6BB"
-                    @click="showInfo=true"
+                    @click="showInfo=true; "
                 >
                   mdi-alert-circle
                 </v-icon>
@@ -98,7 +109,7 @@
                 </v-menu>
               </div>
               <div style="height: 100%; padding-top: 30px">
-                  <v-icon large>mdi-calendar-text</v-icon>
+                <v-icon large>mdi-calendar-text</v-icon>
               </div>
 
             </div>
@@ -145,9 +156,10 @@
               </div>
 
               <div class="my-2 d-flex flex-wrap" style="width: 568px">
-                <v-card v-for="(item,i) in multiFiles" :key="'file'+i" class="pa-2 d-flex align-center" style="width: 142px;" flat>
+                <v-card v-for="(item,i) in multiFiles" :key="'file'+i" class="pa-2 d-flex align-center"
+                        style="width: 142px;" flat>
                   <div style="; white-space:nowrap; text-overflow: ellipsis; overflow: hidden ">
-                    {{item.name}}
+                    {{ item.name }}
                   </div>
                   <v-icon @click="removeFile(i)" style="color: #E0DDD6">mdi-close-circle</v-icon>
                 </v-card>
@@ -162,16 +174,16 @@
                       hide-details
                       @change="handleFileMulti"
                   >
-<!--                    <template #selection>-->
-<!--                      <v-chip-->
-<!--                          small-->
-<!--                          label-->
-<!--                          color="primary"-->
-<!--                      >-->
-<!--                        {{ text }}-->
-<!--                      </v-chip>-->
+                    <!--                    <template #selection>-->
+                    <!--                      <v-chip-->
+                    <!--                          small-->
+                    <!--                          label-->
+                    <!--                          color="primary"-->
+                    <!--                      >-->
+                    <!--                        {{ text }}-->
+                    <!--                      </v-chip>-->
 
-<!--                    </template>-->
+                    <!--                    </template>-->
                   </v-file-input>
                 </template>
               </div>
@@ -255,20 +267,25 @@ export default {
       return this.formatDate(this.date)
     },
     isReady() {
-      if(this.e1 === 1 && this.date) {return  true}
-      else if(this.e1 === 2 && this.budget) {return  true}
-      else if(this.e1 === 3 && (this.areaText || this.multiFiles.length>0)) {return true}
-      else {return  false}
+      if (this.e1 === 1 && this.date) {
+        return true
+      } else if (this.e1 === 2 && this.budget) {
+        return true
+      } else if (this.e1 === 3 && (this.areaText || this.multiFiles.length > 0)) {
+        return true
+      } else {
+        return false
+      }
       // console.log("e1", this.e1, 'budget', this.budget)
     }
 
   },
   methods: {
-    handleFileMulti(files){
-     this.multiFiles = _.uniqBy(this.multiFiles.concat(files), 'name')
+    handleFileMulti(files) {
+      this.multiFiles = _.uniqBy(this.multiFiles.concat(files), 'name')
       // console.log("files", this.multiFiles)
     },
-    removeFile(i){
+    removeFile(i) {
       this.multiFiles.splice(i, 1)
       // console.log("this.multiFiles", this.multiFiles)
       // this.multiFiles
@@ -278,8 +295,18 @@ export default {
         this.e1++
       }
       if (this.e1 === 4) {
-        
-        this.$router.push('/CreateNewDress')
+        // this.$router.push('/CreateNewDress')
+
+        localStorage.setItem('feydagosto@vusra.com', false)
+        this.$router.replace('/OrderIndex/Entwurf')
+
+        // 提取出来的数据, 用后端什么接口
+       const resultData = {
+         computedDate: this.computedDate,
+         budget: this.budget,
+         areaText: this.areaText
+       }
+        console.log("res", resultData)
       }
     },
     handelClear() {
@@ -287,8 +314,8 @@ export default {
       this.date = null
       this.isReady = false
     },
-    handleBack(val){
-      if(this.e1 >= val) {
+    handleBack(val) {
+      if (this.e1 >= val) {
         this.e1 = val
       }
     },

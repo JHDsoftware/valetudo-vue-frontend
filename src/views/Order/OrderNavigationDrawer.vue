@@ -9,17 +9,19 @@
           <v-item v-for="(item,i) in menuRouter"
                   :key="'orderNav'+i"
                   v-slot="{active}"
-                  >
+          >
 
             <div v-if="item.to !='/'"
-                class="navItem"
-                :style="active ? {'color': '#817163', 'border-bottom': '3px solid #817163'}: {}"
-                 @click="$router.push(item.to); orderNav=i">{{ item.title }} </div>
+                 class="navItem"
+                 :style="active ? {'color': '#817163', 'border-bottom': '3px solid #817163'}: {}"
+                 @click="goto(item); orderNav=i">{{ item.title }}
+            </div>
 
             <div v-else
                  class="navItem"
                  :style="active ? {'color': '#817163', 'border-bottom': '3px solid #817163'}: {}"
-                 @click="abmeldenDialog=true; orderNav=i">{{ item.title }} </div>
+                 @click="abmeldenDialog=true; orderNav=i">{{ item.title }}
+            </div>
 
           </v-item>
         </v-item-group>
@@ -38,7 +40,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
 
 
   </div>
@@ -83,9 +84,14 @@ export default {
     };
   },
   methods: {
+
+    goto(item) {
+      if (this.$route.path !== item.to)
+        this.$router.push(item.to);
+    },
     handleLogout() {
       this.$router.push('/')
-      sessionStorage.setItem('token',null)
+      sessionStorage.setItem('token', null)
     }
   }
 }
