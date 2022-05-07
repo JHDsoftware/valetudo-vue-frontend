@@ -38,8 +38,7 @@
 </template>
 
 <script>
-import {refreshHeader} from '../../main'
-import {customerLogin} from '../../api/customerService'
+import {customerLogin} from '@/api/customerService'
 import ValetInputTextField from "../../components/ValetInputTextField";
 import ValetButton from "../../components/ValetButton";
 import ValetSnackBar from "@/components/ValetSnackBar";
@@ -90,12 +89,7 @@ export default {
       try{
         if (this.loginEmail && this.loginPassword) {
           const res = await customerLogin(this.loginEmail, this.loginPassword)
-          // console.log(res.data.tokenValue)
-          if (res.code === 200) {
-            sessionStorage.setItem('token', res.data.tokenValue)
-            sessionStorage.setItem('id',res.data.loginId)
-
-            refreshHeader()
+          if (!res) {
             this.$router.replace('/OrderIndex')
           } else {
             this.snackbar = true

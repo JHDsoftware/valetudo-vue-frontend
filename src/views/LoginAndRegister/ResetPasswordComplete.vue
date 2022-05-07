@@ -50,7 +50,6 @@
 import ValetInputTextField from "@/components/ValetInputTextField";
 import ValetButton from "@/components/ValetButton";
 import {customerLogin} from "@/api/customerService";
-import {refreshHeader} from "@/main";
 import ValetSnackBar from "@/components/ValetSnackBar";
 
 export default {
@@ -68,10 +67,7 @@ export default {
     async login() {
       if (this.loginEmail && this.loginPassword) {
         const res = await customerLogin(this.loginEmail, this.loginPassword)
-        console.log(res)
-        sessionStorage.setItem('token', res.tokenValue)
-        if (res.code === 200) {
-          refreshHeader()
+        if (!res) {
           this.$router.replace('/OrderIndex')
         } else {
           this.snackbar = true

@@ -23,6 +23,9 @@
       <div class="partImg skirt" style="height: 160%;z-index: 1">
         <img width="100%" style="z-index: 1" :src="require('@/assets/image/images/'+displaySkirtPart)">
       </div>
+      <div v-if="secondaryDisplaySkirtPart" class="partImg skirt" style="height: 160%;z-index: 1">
+        <img width="100%" style="z-index: 1" :src="require('@/assets/image/images/'+secondaryDisplaySkirtPart)">
+      </div>
 
       <v-img contain class="partImg sleeve" width="92.97%" v-if="displaySleevePart"
              :src="require('@/assets/image/images/'+displaySleevePart)">
@@ -65,7 +68,7 @@ import availablePicSet from "@/assets/topSet.json"
 import {
   backSelection,
   defaultSkirt,
-  defaultTop,
+  defaultTop, defaultTopBack,
   excludeImage,
   skirtSelection,
   sleevesSelection,
@@ -100,22 +103,29 @@ export default {
       return this.filterPartsWithMask(topMask)
     },
     currentDisplayTopVariant () {
+      console.log(this.selectedTopParts)
       if (this.selectedTopParts.length > 0) {
         const def = this.findDefaultPartInImageSet('Bodice', this.selectedTopParts.filter(s => s !== "Ga"))
-        return (def?.join('-') ?? defaultTop) + ".png"
+        return (def?.join('-') ?? (this.isFrontView ? defaultTop : defaultTopBack)) + ".png"
       } else {
-        return defaultTop + '.png'
+        return (this.isFrontView ? defaultTop : defaultTopBack) + '.png'
       }
     },
     displaySkirtPart () {
       const skirtParts = this.filterPartsWithMask(skirtSelection, 1)
+
       if (skirtParts.length > 0) {
-        console.log(skirtParts)
+        console.log(skirtParts,'裙子')
         const def = this.findDefaultPartInImageSet('Skirt', skirtParts)
+        console.log(def)
         return (def?.join('-') ?? defaultSkirt) + ".png"
       } else {
         return defaultSkirt + ".png"
       }
+    },
+    secondaryDisplaySkirtPart () {
+      return this.displaySkirtPart.includes('inside') ?
+          this.displaySkirtPart.replace('inside', 'outside') : null
     },
     displayStripPart () {
       const stripPart = this.filterPartsWithMask(stripSelection)
@@ -172,9 +182,9 @@ export default {
           })
         }
       }
-      setTimeout(()=>{
+      setTimeout(() => {
         this.loading = false
-      },2000)
+      }, 2000)
 
     }
   }

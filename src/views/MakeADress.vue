@@ -393,6 +393,8 @@ export default {
         if (tab === 0) {
           if (['K', 'L'].includes(fatherCode)) {
             targetView = 1
+          } else if (['B'].includes(fatherCode)){
+            targetView = 0
           }
         } else {
           if (['L', 'M'].includes(fatherCode)) {
@@ -416,15 +418,15 @@ export default {
         }
       }
     },
-    async beforeChange (fatherCode, callback, justPass = false) {
-      if (!justPass && fatherCode === 'B' && Object.keys(this.selectedPart).filter(k => !k.includes('B')).length > 0) {
+    async beforeChange (tab, fatherCode, callback, justPass = false) {
+      if (!justPass && fatherCode === 'B' && Object.keys(this.selectedPart).filter(k => !k.includes('B') && k.includes(tab.toString())).length > 0) {
         this.okToChange(callback)
       } else {
         callback()
       }
     },
     async selectPart (fatherCode, partCode, partId, toggle = null, tab = 0, removeFatherKey = true) {
-      await this.beforeChange(fatherCode, async () => {
+      await this.beforeChange(tab, fatherCode, async () => {
         if (fatherCode === 'D' && partCode === 'c') {
           this.needAMeetingD()
           return
@@ -451,8 +453,13 @@ export default {
         await updateMyDesignParts(this.dressId, currentPart)
         this.shouldChangeView(fatherCode, tab, !removeFatherKey)
         this.refreshCounter++
+
         if (toggle) {
           toggle()
+        }
+
+        if (fatherCode === 'B' && partCode === '10' && tab === 0) {
+          this.selectPart("J", "j", 52)
         }
       }, !removeFatherKey)
 

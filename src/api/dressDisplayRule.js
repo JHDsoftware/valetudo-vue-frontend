@@ -6,5 +6,6 @@ export const sleevesSelection = ["G", "H", "I"]
 export const stripSelection = ["J"]
 export const backSelection = ["K", "L"]
 export const defaultTop = "Bodice-Front-B1-Da-Ea"
+export const defaultTopBack = "Bodice-Back-Ka-La"
 export const defaultSkirt = "Skirt-Front-B1-Da-Ga-Ha-Ia"
 export const availablePicSet = require('@/assets/topSet.json')
