@@ -1,11 +1,14 @@
 <template>
   <div class="imgContainer" style="width: 100%;position: relative;">
-
+    <div class="partImg skirt" style="height: 160%;" :style="{zIndex:secondaryDisplaySkirtPart?0:1}">
+      <img width="100%" style="z-index: 1" :src="require('@/assets/image/images/'+displaySkirtPart)">
+    </div>
     <v-img contain class="partImg model" width="92.97%"
            :src="'/model/'+(isFrontView?'frontModel.png':'backModel.png')">
     </v-img>
     <template v-show="!loading">
       <v-img contain style="z-index: 2" class="partImg top" width="92.97%"
+             :style="isFrontView?{left:0}:{left: '-1px'}"
              :src="require('@/assets/image/images/'+currentDisplayTopVariant)">
         <template v-slot:placeholder>
           <v-row
@@ -20,9 +23,7 @@
           </v-row>
         </template>
       </v-img>
-      <div class="partImg skirt" style="height: 160%;z-index: 1">
-        <img width="100%" style="z-index: 1" :src="require('@/assets/image/images/'+displaySkirtPart)">
-      </div>
+
       <div v-if="secondaryDisplaySkirtPart" class="partImg skirt" style="height: 160%;z-index: 1">
         <img width="100%" style="z-index: 1" :src="require('@/assets/image/images/'+secondaryDisplaySkirtPart)">
       </div>
@@ -106,6 +107,7 @@ export default {
       console.log(this.selectedTopParts)
       if (this.selectedTopParts.length > 0) {
         const def = this.findDefaultPartInImageSet('Bodice', this.selectedTopParts.filter(s => s !== "Ga"))
+        console.log(def,'身体')
         return (def?.join('-') ?? (this.isFrontView ? defaultTop : defaultTopBack)) + ".png"
       } else {
         return (this.isFrontView ? defaultTop : defaultTopBack) + '.png'
@@ -131,6 +133,7 @@ export default {
       const stripPart = this.filterPartsWithMask(stripSelection)
       if (stripPart.length > 0) {
         const def = this.findDefaultPartInImageSet('Strip', [this.selectedTopParts[0], ...stripPart])
+        console.log(def)
         return def ? (def?.join('-') + ".png") : null
       } else {
         return null

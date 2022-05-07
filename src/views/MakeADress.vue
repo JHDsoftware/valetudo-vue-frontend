@@ -393,12 +393,15 @@ export default {
         if (tab === 0) {
           if (['K', 'L'].includes(fatherCode)) {
             targetView = 1
-          } else if (['B'].includes(fatherCode)){
+          } else{
             targetView = 0
           }
         } else {
           if (['L', 'M'].includes(fatherCode)) {
             targetView = 1
+          }
+          else{
+            targetView = 0
           }
         }
         if (targetView && views[targetView] !== this.currentView) {
