@@ -76,7 +76,7 @@ export default {
     handleZahlen (i) {
       if (i.paymentStatus === 'NotApplicable') {
         this.$router.push({
-          path: '/SampleOrder/' + i.id,
+          path: '/SampleOrder/' + i.dressDesign.id,
           query: {
             data: 3,
             artikel: i.orderType==='Design'?'Entwurf':'MusterBox'
@@ -101,7 +101,7 @@ export default {
         i.name = i.dressDesign.name
         i.time = dayjs(i.localDateTime).format('YYYY-MM-DD')
         i.type = 'MusterBox'
-        i.quantity = i.quantity || 1
+        i.quantity = i.count || 1
         i.paymentStatusIcon = this.paymentStatus(i.paymentStatus)[0]
         i.buttonText = this.paymentStatus(i.paymentStatus)[1]
 

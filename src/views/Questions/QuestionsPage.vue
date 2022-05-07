@@ -297,16 +297,22 @@ export default {
       if (this.e1 === 4) {
         // this.$router.push('/CreateNewDress')
 
-        localStorage.setItem('feydagosto@vusra.com', false)
-        this.$router.replace('/OrderIndex/Entwurf')
+        // const showBaseQuestion = localStorage.getItem('showBaseQuestion')
+        //
+        // if(showBaseQuestion){
+
+
+        localStorage.setItem('finishBaseQuestion', true)
 
         // 提取出来的数据, 用后端什么接口
-       const resultData = {
-         computedDate: this.computedDate,
-         budget: this.budget,
-         areaText: this.areaText
-       }
+        const resultData = {
+          computedDate: this.computedDate,
+          budget: this.budget,
+          areaText: this.areaText
+        }
         console.log("res", resultData)
+
+        this.$router.replace('/OrderIndex/Entwurf')
       }
     },
     handelClear() {

@@ -30,13 +30,13 @@
             </div>
 
             <template v-if="listCount.currentCount<1">
-              <div @click="$router.push('/createNewDress/0')">
+              <div @click="freeCardClick(0)">
                 <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
               </div>
             </template>
 
             <template v-if="listCount.currentCount<2">
-              <div @click="$router.push('/createNewDress/0')">
+              <div @click="freeCardClick(1)">
                 <entwurf-card
                     title="Entwirf Dein zweites Brautkleid kostenlos"/>
               </div>
@@ -269,6 +269,11 @@
           </v-card>
         </div>
       </v-dialog>
+
+      <ValetSnackBar
+          v-model="snackbar"
+          :snackbar-text="snackbarText"
+      ></ValetSnackBar>
     </div>
   </div>
 
@@ -284,14 +289,18 @@ import {views} from '../../../api/dressDisplayRule'
 import {customerMe} from "../../../api/customerService"
 import EntwurfCard from "@/fragments/EntwurfCard"
 import _ from 'lodash'
+import ValetSnackBar from "@/components/ValetSnackBar";
+// import {firstQuestion} from "../../../model/Order";
 
 export default {
   name: "Entwurf",
-  components: {EntwurfCard, DressDisplay, ValetInputTextField, ValetButton},
+  components: {EntwurfCard, DressDisplay, ValetInputTextField, ValetButton, ValetSnackBar},
   data: function () {
     return {
+      snackbar:null,
+      snackbarText: null,
       amount: null,
-      showBaseQuestion: true,
+      // showBaseQuestion: true,
       freeMusterBoxDressList: [],
       myDressList: [],
       dress: null,
@@ -331,27 +340,35 @@ export default {
     const res = await myListCount()
 
     if (res.code === 200) {
+
       this.listCount = res.data
 
-      this.showBaseQuestion = localStorage.getItem('showBaseQuestion') ?? true
-
-      console.log("showBaseQuestion", this.showBaseQuestion, "listCount", this.listCount)
+      const showBaseQuestion = JSON.parse(localStorage.getItem('showBaseQuestion')) ?? true
+      console.log("showBaseQuestion", showBaseQuestion)
 
       if (this.listCount.currentCount === 0) {
-
-        if (this.showBaseQuestion){
-          // this.$router.push('/questionspage')
+        if (showBaseQuestion){
+          await this.$router.replace('/questionspage')
           localStorage.setItem('showBaseQuestion', false)
-          // this.showBaseQuestion = false
+          localStorage.setItem('finishBaseQuestion',false)
+        }else {
+          await this.$router.replace('/OrderIndex/Entwurf')
         }
-
       }
 
       await this.loadDressList()
       await this.getPersonData()
 
-    } else if (res.code === 500) {
-      this.message.error('Token ist nicht verfügbar, bitte webseite refresh nochmal.')
+    }
+
+    if (res.code === 500) {
+
+      setTimeout(async function (){
+        this.snackbar=true
+        this.snackbarText="Token ist ungültig"
+      },300)
+
+      await this.$router.replace('/Login')
     }
 
 
@@ -428,7 +445,7 @@ export default {
 
     },
     cardClick(item) {
-      // console.log(item)
+
       if (item.completedAt) {
         this.dress = item
       } else {
@@ -437,6 +454,16 @@ export default {
         } else {
           this.$router.push('/edit/' + item.id)
         }
+      }
+
+    },
+    freeCardClick(id){
+      const finishBaseQuestion = JSON.parse(localStorage.getItem('finishBaseQuestion'))
+      console.log('finishBaseQuestion',finishBaseQuestion)
+      if(finishBaseQuestion){
+        this.$router.replace('/createNewDress/'+id)
+      }else {
+        this.$router.replace('/questionspage')
       }
     },
     async getPersonData() {

@@ -626,7 +626,7 @@ export default {
     },
 
     async placeAndPaySampleOrder(id) {
-      await placeSampleOrder(id, this.amount, this.deliveryAddress, this.billingAddress)
+      await placeSampleOrder(id, parseInt(this.amount), this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
         case 0:

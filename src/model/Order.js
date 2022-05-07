@@ -81,3 +81,19 @@ export async function updateAddress(dataBodyWithAddress, address, str = 'deliver
 
     return {snackbar, snackbarText}
 }
+
+
+export function firstQuestion(listCount){
+
+    const showBaseQuestion = JSON.parse(localStorage.getItem('showBaseQuestion')) ?? true
+    console.log("showBaseQuestion", showBaseQuestion)
+
+    if (listCount.currentCount === 0) {
+        if (showBaseQuestion){
+            window.path.replace('/questionspage')
+            localStorage.setItem('showBaseQuestion', false)
+        }else {
+            window.path.replace('/OrderIndex/Entwurf')
+        }
+    }
+}
