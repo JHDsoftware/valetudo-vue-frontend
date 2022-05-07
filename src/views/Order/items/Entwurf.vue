@@ -30,13 +30,13 @@
             </div>
 
             <template v-if="listCount.currentCount<1">
-              <div @click="freeCardClick(0)">
+              <div @click="freeCardClick">
                 <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
               </div>
             </template>
 
             <template v-if="listCount.currentCount<2">
-              <div @click="freeCardClick(1)">
+              <div @click="freeCardClick">
                 <entwurf-card
                     title="Entwirf Dein zweites Brautkleid kostenlos"/>
               </div>
@@ -457,11 +457,11 @@ export default {
       }
 
     },
-    freeCardClick(id){
+    freeCardClick(){
       const finishBaseQuestion = JSON.parse(localStorage.getItem('finishBaseQuestion'))
       console.log('finishBaseQuestion',finishBaseQuestion)
       if(finishBaseQuestion){
-        this.$router.replace('/createNewDress/'+id)
+        this.$router.replace('/createNewDress/0')
       }else {
         this.$router.replace('/questionspage')
       }
