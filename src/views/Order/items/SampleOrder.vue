@@ -396,7 +396,8 @@ export default {
     },
     price() {
       const localCmount = this.amount === '10+' ? 10 : parseInt(this.amount)
-      return localCmount * (parseInt(this.id === -1) ? this.amount : 19.99)
+      // return localCmount * (parseInt(this.id === -1) ? this.amount : 29.99)
+      return localCmount * (parseInt(this.id)  === -1 ? 19.99 : 29.99)
     },
     versandPrice() {
       return 0.00
@@ -563,6 +564,9 @@ export default {
       const isNoEmpty = res.every(i => {
         return !!i[1]
       })
+
+      console.log('isNoEmpty x', isNoEmpty)
+
       if (isNoEmpty) {
         this.showEditAdress = false
       } else {

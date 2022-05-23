@@ -4,6 +4,20 @@
       <div class="flex-grow-1" style="padding:38px 100px;" v-if="!dress">
         <div class="pageContent d-flex justify-center" style="width: 100%">
           <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
+
+            <template v-if="listCount.currentCount< 1 ">
+              <div @click="freeCardClick">
+                <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
+              </div>
+            </template>
+
+            <template v-if="listCount.currentCount< 2">
+              <div @click="freeCardClick">
+                <entwurf-card
+                    title="Entwirf Dein zweites Brautkleid kostenlos"/>
+              </div>
+            </template>
+
             <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList"
                  @click="cardClick(item)">
               <template v-if="item.name!=='neuer Entwurf'">
@@ -28,19 +42,6 @@
               </template>
 
             </div>
-
-            <template v-if="listCount.currentCount<1">
-              <div @click="freeCardClick">
-                <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
-              </div>
-            </template>
-
-            <template v-if="listCount.currentCount<2">
-              <div @click="freeCardClick">
-                <entwurf-card
-                    title="Entwirf Dein zweites Brautkleid kostenlos"/>
-              </div>
-            </template>
 
 
             <div @click="$router.push({path: '/SampleOrder/' + '-1'})">
@@ -297,9 +298,10 @@ export default {
   components: {EntwurfCard, DressDisplay, ValetInputTextField, ValetButton, ValetSnackBar},
   data: function () {
     return {
-      snackbar:null,
+      snackbar: null,
       snackbarText: null,
       amount: null,
+      price: 29.9,
       // showBaseQuestion: true,
       freeMusterBoxDressList: [],
       myDressList: [],
@@ -347,11 +349,11 @@ export default {
       console.log("showBaseQuestion", showBaseQuestion)
 
       if (this.listCount.currentCount === 0) {
-        if (showBaseQuestion){
+        if (showBaseQuestion) {
           await this.$router.replace('/questionspage')
           localStorage.setItem('showBaseQuestion', false)
-          localStorage.setItem('finishBaseQuestion',false)
-        }else {
+          localStorage.setItem('finishBaseQuestion', false)
+        } else {
           await this.$router.replace('/OrderIndex/Entwurf')
         }
       }
@@ -363,10 +365,10 @@ export default {
 
     if (res.code === 500) {
 
-      setTimeout(async function (){
-        this.snackbar=true
-        this.snackbarText="Token ist ungültig"
-      },300)
+      setTimeout(async function () {
+        this.snackbar = true
+        this.snackbarText = "Token ist ungültig"
+      }, 300)
 
       await this.$router.replace('/Login')
     }
@@ -392,7 +394,8 @@ export default {
         path: '/SampleOrder/' + id,
         query: {
           artikel: 'Mussterbox',
-          amount: amount
+          amount: amount,
+          price: 29.9
         }
       })
     },
@@ -457,12 +460,12 @@ export default {
       }
 
     },
-    freeCardClick(){
+    freeCardClick() {
       const finishBaseQuestion = JSON.parse(localStorage.getItem('finishBaseQuestion'))
-      console.log('finishBaseQuestion',finishBaseQuestion)
-      if(finishBaseQuestion){
+      console.log('finishBaseQuestion', finishBaseQuestion)
+      if (finishBaseQuestion) {
         this.$router.replace('/createNewDress/0')
-      }else {
+      } else {
         this.$router.replace('/questionspage')
       }
     },
