@@ -361,14 +361,20 @@ import ValetButton from "../../../components/ValetButton"
 import ValetSnackBar from "@/components/ValetSnackBar"
 import FormAdress from "../../../fragments/FormAdress"
 import {
-  loadDesign, payNewByBilling, payNewByPaypal,
-  paySampleOrder,
-  paySampleOrderAdvance, paySampleOrderBilling,
-  placeSampleOrder
+  loadDesign,
 } from '../../../api/dressDesginService'
 import {customerEditMe, customerMe} from "@/api/customerService"
 import {updateAddress} from "@/model/Order"
-// import Paypal from 'vue-paypal-checkout'
+import {isNotBlank} from "../../../api/utils";
+
+import {
+  placeSampleOrder,
+  payNewByBilling,
+  payNewByPaypal,
+  paySampleOrder,
+  paySampleOrderAdvance,
+  paySampleOrderBilling
+} from "../../../api/dressOrderService"
 
 
 export default {
@@ -397,7 +403,7 @@ export default {
     price() {
       const localCmount = this.amount === '10+' ? 10 : parseInt(this.amount)
       // return localCmount * (parseInt(this.id === -1) ? this.amount : 29.99)
-      return localCmount * (parseInt(this.id)  === -1 ? 19.99 : 29.99)
+      return localCmount * (parseInt(this.id) === -1 ? 19.99 : 29.99)
     },
     versandPrice() {
       return 0.00
@@ -561,11 +567,9 @@ export default {
       const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2')
 
       // console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
-      const isNoEmpty = res.every(i => {
-        return !!i[1]
-      })
+      const isNoEmpty = res.every(item => isNotBlank(item[1].toString().trim()))
 
-      console.log('isNoEmpty x', isNoEmpty)
+      console.log('isNoEmpty x', isNoEmpty, 'res', res)
 
       if (isNoEmpty) {
         this.showEditAdress = false
@@ -598,14 +602,12 @@ export default {
           this.snackbar = true
           this.snackbarText = "Es fehlt noch einige Info in Rechungsadresse"
 
-          this.dialogRechnungAdress=true
+          this.dialogRechnungAdress = true
         }
 
-      }
-      else {
+      } else {
         this.anzahlStep = this.anzahlStep + 1
       }
-
 
 
     },
@@ -634,7 +636,6 @@ export default {
 
       switch (this.payMethodValue) {
         case 0:
-          // eslint-disable-next-line no-case-declarations
           location.href = (await paySampleOrder(id))
           break
         case 1:

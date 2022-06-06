@@ -40,10 +40,11 @@
 
 <script>
 import { orderBestellungHeader } from '@/model/Order'
-import { myOrderList } from '@/api/dressDesginService'
+// import { myOrderList } from '@/api/dressDesginService'
 import dayjs from 'dayjs'
 import ValetButton from '../../../components/ValetButton'
-import {getMyDesign} from "../../../api/dressDesginService";
+import {getDressDesignList} from "../../../api/dressDesginService";
+import {dressOrder} from "../../../api/dressOrderService";
 
 export default {
   name: "OrderBestellung",
@@ -88,14 +89,16 @@ export default {
       }
 
     },
-    async init () {
+    async init() {
 
-      if(sessionStorage.getItem('token').toString() === 'null'){
+      if (sessionStorage.getItem('token').toString() === 'null') {
         await this.$router.replace('/')
       }
 
-      const myList = await getMyDesign() ?? []
-      const myDesign = ((await myOrderList()).data ?? []).filter(item => myList.findIndex(i=> i.id === item.dressDesign.id)>=0)
+      const myDressDesignList = await getDressDesignList() ?? []
+      console.log("myDressDesignList", myDressDesignList)
+
+      const myDesign = ((dressOrder()).data ?? []).filter(item => myDressDesignList.findIndex(i => i.id === item.dressDesign.id) >= 0)
       this.items = myDesign.map(i => {
         i.bId = i.dressDesign.id.toString().padStart(4, '0')
         i.name = i.dressDesign.name
@@ -109,6 +112,9 @@ export default {
       })
       this.items.reverse()
 
+
+      const dressOrderList = dressOrder() ?? []
+      console.log("dressOrder", dressOrderList)
 
       console.log("this.items", this.items)
 

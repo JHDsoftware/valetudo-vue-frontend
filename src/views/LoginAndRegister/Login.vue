@@ -44,6 +44,7 @@ import ValetButton from "../../components/ValetButton";
 import ValetSnackBar from "@/components/ValetSnackBar";
 import hillo from "hillo";
 import {GlobalSetting} from '@/GlobalSetting'
+import {refreshHeader} from "../../main";
 
 export default {
   name: "LoginPage",
@@ -89,12 +90,17 @@ export default {
       try{
         if (this.loginEmail && this.loginPassword) {
           const res = await customerLogin(this.loginEmail, this.loginPassword)
-          if (!res) {
+          console.log("login ",res)
+          if (res.code === 200) {
+            sessionStorage.setItem('token', res.data.tokenValue)
+            sessionStorage.setItem('id',res.data.loginId)
+            refreshHeader()
             this.$router.replace('/OrderIndex')
           } else {
             this.snackbar = true
             this.snackbarText = "Konto oder Passwort ist falsch"
           }
+
         }
       }
       catch(e){

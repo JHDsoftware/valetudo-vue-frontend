@@ -28,10 +28,10 @@ jobs:
         with:
           server: aaden.online
           server-dir: ./valetudo/
-          #          username: ${{ secrets.ftp_username }}
-          #          password: ${{ secrets.ftp_password }}
-          username: u172534159.cong
-          password: Innerken322.
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+#          username: u172534159.cong
+#          password: Innerken322.
           local-dir: ./dist/
           exclude: |
             **/.git*

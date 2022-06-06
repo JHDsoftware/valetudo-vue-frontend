@@ -21,7 +21,8 @@
             <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList"
                  @click="cardClick(item)">
               <template v-if="item.name!=='neuer Entwurf'">
-                <div class="dressContainer hasContent d-flex align-center" style="position: relative;">
+                <div class="dressContainer hasContent d-flex align-center"
+                     style="position: relative;">
                   <dress-display style="height: 390px;width: 125%;position: absolute;left: -12.5%;top: 24px"
                                  :refresh-counter="item.id"
                                  :dress-id="item.id"
@@ -44,9 +45,9 @@
             </div>
 
 
-            <div @click="$router.push({path: '/SampleOrder/' + '-1'})">
+            <div @click="buyNewDesign()">
               <entwurf-card
-                  title="Entwirf mehr Brautkleid für 19.90 €"
+                  title="Entwirf mehr Brautkleid für 19,90 €"
               />
             </div>
 
@@ -282,16 +283,19 @@
 
 <script>
 import DressDisplay from "../../../views/DressDisplay"
-import {deleteDress, getMyDesign, myOrderList, myListCount} from '../../../api/dressDesginService'
+import {deleteDress,
+  getDressDesignList,
+  // myDesignOrderList,
+  myDesignListCount} from '../../../api/dressDesginService'
 import ValetInputTextField from "../../../components/ValetInputTextField"
 import ValetButton from "../../../components/ValetButton"
 import dayjs from 'dayjs'
 import {views} from '../../../api/dressDisplayRule'
 import {customerMe} from "../../../api/customerService"
 import EntwurfCard from "@/fragments/EntwurfCard"
-import _ from 'lodash'
+// import _ from 'lodash'
 import ValetSnackBar from "@/components/ValetSnackBar";
-// import {firstQuestion} from "../../../model/Order";
+
 
 export default {
   name: "Entwurf",
@@ -339,7 +343,7 @@ export default {
     //   await this.$router.replace('/')
     // }
 
-    const res = await myListCount()
+    const res = await myDesignListCount()
 
     if (res.code === 200) {
 
@@ -354,7 +358,7 @@ export default {
           localStorage.setItem('showBaseQuestion', false)
           localStorage.setItem('finishBaseQuestion', false)
         } else {
-          await this.$router.replace('/OrderIndex/Entwurf')
+          // await this.$router.replace('/OrderIndex/Entwurf')
         }
       }
 
@@ -422,33 +426,32 @@ export default {
       }
     },
     async loadDressList() {
-      this.myDressList = await getMyDesign() ?? []
-      const order = await myOrderList()
+      this.myDressList = await getDressDesignList() ?? []
+      // const designOrder = await myDesignOrderList()
 
-      const freeMusterBox = []
-      if (order.code === 200) {
-
-        const dataArr = _.uniq(order.data.map(i => {
-          return i.dressDesign.id
-        })) ?? []
-        // console.log("dataArr",dataArr)
-        for (let i = 0; i < this.listCount.maxFree; i++) {
-          freeMusterBox.push(dataArr[i])
-        }
-      }
-      // console.log("freeMusterBox", freeMusterBox)
-
-      this.myDressList.map(item => {
-        if (freeMusterBox.find(i => i === item.id)) {
-          item.enableFreeMusterBox = true
-        } else {
-          item.enableFreeMusterBox = false
-        }
-      })
+      // const freeMusterBox = []
+      // if (designOrder.code === 200) {
+      //
+      //   const dataArr = _.uniq(designOrder.data.map(i => {
+      //     return i.dressDesign.id
+      //   })) ?? []
+      //   // console.log("dataArr",dataArr)
+      //   for (let i = 0; i < this.listCount.maxFree; i++) {
+      //     freeMusterBox.push(dataArr[i])
+      //   }
+      // }
+      // // console.log("freeMusterBox", freeMusterBox)
+      //
+      // this.myDressList.map(item => {
+      //   if (freeMusterBox.find(i => i === item.id)) {
+      //     item.enableFreeMusterBox = true
+      //   } else {
+      //     item.enableFreeMusterBox = false
+      //   }
+      // })
 
     },
     cardClick(item) {
-
       if (item.completedAt) {
         this.dress = item
       } else {
@@ -458,6 +461,8 @@ export default {
           this.$router.push('/edit/' + item.id)
         }
       }
+
+
 
     },
     freeCardClick() {
@@ -476,6 +481,17 @@ export default {
       }
       this.personData = Object.assign(this.personData, res.data)
       this.personData.email = res.data.userName
+
+    },
+
+    buyNewDesign() {
+      if(this.listCount.currentCount>= 2){
+        this.$router.push({path: '/SampleOrder/' + '-1'})
+      }
+      else {
+        this.snackbar = true
+        this.snackbarText = "Bitte verwenden Sie zuerst den kostenlos Entwurf."
+      }
 
     }
   }
