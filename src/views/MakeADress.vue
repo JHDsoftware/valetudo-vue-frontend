@@ -2,8 +2,7 @@
   <div style="display: grid;grid-template-columns: 50% 50%;overflow: hidden">
     <template v-if="finished">
       <div style="position:absolute;top: 0;left: 0;width: 100vw;height: calc(100vh - 60px);background: center / cover"
-           :style="{
-backgroundImage:'url('+require('@/assets/image/frameUI/completeBackground.png')+')'}"
+           :style="{backgroundImage:'url('+require('@/assets/image/frameUI/completeBackground.png')+')'}"
       >
         <div style="width: 100%;height: 100%;position: relative">
           <div style="width: 833px;height: 933px;position: absolute;top: 55px;left: 249px">

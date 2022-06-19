@@ -5,19 +5,6 @@
         <div class="pageContent d-flex justify-center" style="width: 100%">
           <div style="display: grid;grid-template-columns: repeat(4,340px);grid-gap: 38px">
 
-            <template v-if="listCount.currentCount< 1 ">
-              <div @click="freeCardClick">
-                <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
-              </div>
-            </template>
-
-            <template v-if="listCount.currentCount< 2">
-              <div @click="freeCardClick">
-                <entwurf-card
-                    title="Entwirf Dein zweites Brautkleid kostenlos"/>
-              </div>
-            </template>
-
             <div class="d-flex justify-center flex-wrap" :key="item.id" v-for="item in myDressList"
                  @click="cardClick(item)">
               <template v-if="item.name!=='neuer Entwurf'">
@@ -44,8 +31,20 @@
 
             </div>
 
+            <template v-if="listCount.currentCount< 1 ">
+              <div @click="freeCardClick">
+                <entwurf-card title="Entwirf Dein Traumkleid kostenlos"/>
+              </div>
+            </template>
 
-            <div @click="buyNewDesign()">
+            <template v-if="listCount.currentCount< 2">
+              <div @click="freeCardClick">
+                <entwurf-card
+                    title="Entwirf Dein zweites Brautkleid kostenlos"/>
+              </div>
+            </template>
+
+            <div @click="buyNewDesign">
               <entwurf-card
                   title="Entwirf mehr Brautkleid für 19,90 €"
               />
@@ -490,7 +489,7 @@ export default {
       }
       else {
         this.snackbar = true
-        this.snackbarText = "Bitte verwenden Sie zuerst den kostenlos Entwurf."
+        this.snackbarText = "Bitte versuchen Sie zuerst den kostenlos Entwurf."
       }
 
     }

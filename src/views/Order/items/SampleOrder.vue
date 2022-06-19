@@ -226,7 +226,9 @@
                       </div>
 
                       <div class="d-flex justify-space-between unterTitle24" style="padding-top: 8px">
-                        <div>Musterbox</div>
+                        <div v-if="id != -1">Musterbox</div>
+                        <div v-else>Entwurf</div>
+
                         <div style="font-weight: bold">{{ price | priceDisplay }} €</div>
                       </div>
 
@@ -244,18 +246,6 @@
 
                     <div style="padding-top: 40px">
                       <ValetButton button-text="Bestätigen und bezahlen" @click="tryToPaySampleOrder"/>
-
-                      <!--                      <template v-if="showPaypal">-->
-                      <!--                        <Paypal-->
-                      <!--                          :amount="price + versandPrice"-->
-                      <!--                          currency="USD"-->
-                      <!--                          :client="credentials"-->
-                      <!--                          env="sandbox"-->
-                      <!--                          @payment-authorized="paymentAuthorized"-->
-                      <!--                          @payment-completed="paymentCompleted"-->
-                      <!--                          @payment-cancelled="paymentCancelled"-->
-                      <!--                        ></Paypal>-->
-                      <!--                      </template>-->
                     </div>
                   </div>
 
@@ -452,7 +442,7 @@ export default {
       headers: [
         'ARTIKEL', 'BRAUTKLEID', 'ANZAHL', 'PREIS'
       ],
-      selectItems: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10+'],
+      selectItems: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
       stepHeaders: [
         {title: 'Produkt', value: 1},
         {title: 'Adresse', value: 2},
@@ -565,9 +555,10 @@ export default {
     async adressConfirm() {
 
       const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2')
+      console.log("items",res)
 
       // console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
-      const isNoEmpty = res.every(item => isNotBlank(item[1].toString().trim()))
+      const isNoEmpty = res.every(item => isNotBlank(item[1]?.toString().trim()))
 
       console.log('isNoEmpty x', isNoEmpty, 'res', res)
 

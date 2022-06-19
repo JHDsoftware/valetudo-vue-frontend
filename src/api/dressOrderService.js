@@ -13,7 +13,7 @@ const defaultAddress = {
 
 
 export async function dressOrder() {
-    return hillo.post('/dressOrder/myOrder')
+    return (await hillo.post('/dressOrder/myOrder')).data
 }
 
 export async function placeSampleOrder (id, quantity = 1, deliveryAddress = defaultAddress, billingAddress = defaultAddress) {

@@ -43,7 +43,6 @@ import { orderBestellungHeader } from '@/model/Order'
 // import { myOrderList } from '@/api/dressDesginService'
 import dayjs from 'dayjs'
 import ValetButton from '../../../components/ValetButton'
-import {getDressDesignList} from "../../../api/dressDesginService";
 import {dressOrder} from "../../../api/dressOrderService";
 
 export default {
@@ -75,9 +74,10 @@ export default {
       return [iconStatus, buttonText]
     },
     handleZahlen (i) {
+      console.log("i",i)
       if (i.paymentStatus === 'NotApplicable') {
         this.$router.push({
-          path: '/SampleOrder/' + i.dressDesign.id,
+          path: '/SampleOrder/' + i.dressDesignId,
           query: {
             data: 3,
             artikel: i.orderType==='Design'?'Entwurf':'MusterBox'
@@ -95,29 +95,32 @@ export default {
         await this.$router.replace('/')
       }
 
-      const myDressDesignList = await getDressDesignList() ?? []
-      console.log("myDressDesignList", myDressDesignList)
+      // const myDressDesignList = await getDressDesignList() ?? []
+      // console.log("myDressDesignList", myDressDesignList)
 
-      const myDesign = ((dressOrder()).data ?? []).filter(item => myDressDesignList.findIndex(i => i.id === item.dressDesign.id) >= 0)
-      this.items = myDesign.map(i => {
-        i.bId = i.dressDesign.id.toString().padStart(4, '0')
-        i.name = i.dressDesign.name
-        i.time = dayjs(i.localDateTime).format('YYYY-MM-DD')
-        i.type = 'MusterBox'
-        i.quantity = i.count || 1
-        i.paymentStatusIcon = this.paymentStatus(i.paymentStatus)[0]
-        i.buttonText = this.paymentStatus(i.paymentStatus)[1]
+      // const myOrder = ((dressOrder()).data ?? []).filter(item => myDressDesignList.findIndex(i => i.id === item.dressDesign.id) >= 0)
 
-        return i
+      const myOrder = (await dressOrder()) ?? []
+      console.log("myOrder", myOrder)
+
+      this.items = myOrder.filter(i=>!i.dressDesign.hideForCustomer).map(item => {
+
+        return {
+          dressDesignId: item.dressDesign.id,
+          bId: item.dressDesign.id,
+          name: item.dressDesign.name,
+          time: dayjs(item.dressDesign.completedAt).format('YYYY-MM-DD'),
+          orderType: item.orderType,
+          quantity: item.count || 1,
+          paymentStatusIcon: this.paymentStatus(item.paymentStatus)[0],
+          buttonText: this.paymentStatus(item.paymentStatus)[1],
+          price: item.price,
+          paymentStatus: item.paymentStatus
+        }
+
       })
+
       this.items.reverse()
-
-
-      const dressOrderList = dressOrder() ?? []
-      console.log("dressOrder", dressOrderList)
-
-      console.log("this.items", this.items)
-
     }
   }
 }

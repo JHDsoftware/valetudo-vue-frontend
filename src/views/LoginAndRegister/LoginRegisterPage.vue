@@ -223,8 +223,8 @@ export default {
           const res = await customerRegister('/customer/register',data, '#/registerComplete')
 
           if (res.code === 200) {
-            // await this.$router.push('/registerComplete')
-            await this.$router.push('/Login')
+            await this.$router.push('/registerComplete')
+            // await this.$router.push('/Login')
           } else {
             this.snackbar = true
             this.snackbarText = "Registrierung erscheit Fehler"
