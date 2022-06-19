@@ -202,10 +202,10 @@
       </v-card>
     </v-dialog>
 
-<!--    <v-dialog  width="30vw">-->
+    <!--    <v-dialog  width="30vw">-->
     <v-dialog v-model="showPasswortChangeComplete" width="30vw">
-      <v-card height="20vh">
-        <v-card-title class="formTitle display-1 mb-3 pt-10" >
+      <v-card height="220px">
+        <v-card-title class="formTitle display-1 mb-3 pt-10">
           Änderung erfolgreich!
         </v-card-title>
 
@@ -214,9 +214,9 @@
         </v-card-subtitle>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <div style="width: 80px; height: 32px" >
 
+          <v-spacer/>
+          <div style="width: 90px">
             <ValetButton
                 button-text="OK"
                 @click="handleConfirm"
@@ -243,7 +243,7 @@ import {customerMe} from "@/api/customerService";
 import {
   customerChangeEmail,
   customerChangePassword,
-  customerEditMe,customerRegister
+  customerEditMe, customerRegister
 } from "../../../api/customerService";
 
 import PersonDataCard from "../../../fragments/PersonDataCard";
@@ -273,9 +273,9 @@ export default {
       snackbar: null,
       snackbarText: null,
       valid: true,
+      email: null,
       password: null,
       confirmEmail: null,
-      email: null,
       hintText: '<span style="font-size: 12px; line-height: 17px; padding-left: 5px"> Bitte mindestens 8 Zahlen oder Zeichen</span>',
       // addressLine2: null,
       dText: {},
@@ -334,9 +334,31 @@ export default {
   },
 
   methods: {
-    handleConfirm(){
+    async handleConfirm() {
       this.showPasswortChangeComplete = false
-      this.$router.push('/Login')
+
+      const data = {
+        email: this.email,
+        password: this.password,
+        firstName: this.dataBody.firstName,
+        lastName: this.dataBody.lastName,
+        city: this.dataBody.city,
+        phone: this.dataBody.phone
+      }
+      if (Object.values(data).every((i) => !!i)) {
+        // data.phone = this.phone
+        const res = await customerRegister('/customer/register', data, '#/Login')
+
+        if (res.code === 200) {
+          // await this.$router.push('/registerComplete')
+          await this.$router.push('/Login')
+        } else {
+          this.snackbar = true
+          this.snackbarText = res.message
+        }
+      }
+
+
     },
 
     async getPersonData() {
@@ -352,20 +374,16 @@ export default {
         city: res.data.city
       }
 
-      // console.log('this.defaultAddress',this.defaultAddress,tempData)
-
       if (!this.dataBody.deliveryAddress) {
         this.dataBody.deliveryAddress = Object.assign(this.defaultAddress, tempData)
       }
 
       if (!this.dataBody.billingAddress) {
         this.dataBody.billingAddress = Object.assign(this.defaultAddress, tempData)
-
       }
 
       this.currentEmail = JSON.parse(JSON.stringify(this.dataBody.userName))
 
-      // console.log("It's Done!")
     },
     handleButtonClick(text) {
       this.dialogBearbeit = true
@@ -380,8 +398,6 @@ export default {
     async dialogSpeichern() {
 
       try {
-        console.log("this.dialogTitle", this.dialogTitle)
-
         switch (this.dialogTitle) {
           case 'Name':
             if (this.dataBody.firstName
@@ -409,21 +425,13 @@ export default {
 
                 const res = await customerChangeEmail({email: this.email})
                 if (res.code === 200) {
-
-
                   this.showPasswortChangeComplete = true
-
-                  const data = {
-                    email: this.email
-                  }
-                  const res = await customerRegister('/customer/changeEmail', data, '#/emailChanged')
-                  sessionStorage.setItem('token', res.data.tokenValue)
+                  // const data = {
+                  //   email: this.email
+                  // }
+                  // await customerRegister('/customer/changeEmail', data, '#/Login')
+                  // sessionStorage.setItem('token', null)
                   // await this.$router.replace('/Login')
-
-
-
-
-                  // this.dialogBearbeit = false
 
                 } else {
                   this.snackbar = true
@@ -450,43 +458,17 @@ export default {
               })
 
               if (resChangePassword.code === 200) {
-
-                // const data = {
-                //   oldPassword: this.currentPassword,
-                //   newPassword: this.newPassword
-                // }
-                // const res = await customerRegister('/customer/changePassword',data, '#/passwordChanged')
-                // sessionStorage.setItem('token', res.data.tokenValue)
-
                 this.showPasswortChangeComplete = true
-                // this.snackbar = true
-                // this.snackbarText = "Passwortänderung erfolgreich!"
-
-
-                console.log("get resChangePassword")
-
-                // this.currentPassword = null
-                // this.confirmNewPassword = null
-                // this.newPassword = null
-                // window.setTimeout(function(){
-                // },10000)
-
-
               } else {
                 this.snackbar = true
                 this.snackbarText = resChangePassword.message
               }
-
               this.dialogBearbeit = false
-
-
             } else {
               this.snackbar = true
               this.snackbarText = "Die beide Password sind nicht gleich. "
             }
             this.snackbar = false
-
-
             break
 
           case 'Lieferaddresse':

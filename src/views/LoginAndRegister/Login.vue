@@ -90,12 +90,12 @@ export default {
       try{
         if (this.loginEmail && this.loginPassword) {
           const res = await customerLogin(this.loginEmail, this.loginPassword)
-          console.log("login ",res)
+          // console.log("login ",res)
           if (res.code === 200) {
             sessionStorage.setItem('token', res.data.tokenValue)
             sessionStorage.setItem('id',res.data.loginId)
             refreshHeader()
-            this.$router.replace('/OrderIndex')
+            await this.$router.replace('/OrderIndex')
           } else {
             this.snackbar = true
             this.snackbarText = "Konto oder Passwort ist falsch"

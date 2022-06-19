@@ -32,7 +32,7 @@
                          :customHeight="customHeight"
                          :useRule="false"
                          v-model="localForm.addressLine2"
-                         />
+    />
 
     <ValetInputTextField title="PLZ*"
                          width-input="266px"
@@ -43,7 +43,7 @@
                          width-input="266px"
                          :customHeight="customHeight"
                          v-model="localForm.stateOrProvice"
-                        />
+    />
 
     <ValetInputTextField title="Stadt*"
                          :customHeight="customHeight"
@@ -84,29 +84,39 @@ export default {
       type: String,
       default: 'Speichern'
     },
-    value:{
+    value: {
       type: Object,
-      default: ()=>{}
+      default: () => {
+      }
     },
     styleInput: {},
     useClose: {
       type: Boolean,
       default: false
     },
-    customHeight:{
+    customHeight: {
       type: String,
       default: ''
     }
 
   },
-  watch:{
-    localForm(val){
-      this.$emit('input',val)
+  data: function () {
+    return {
+      localForm: null
+    };
+  },
+  watch: {
+    localForm: {
+      deep: true,
+      handler(val) {
+        console.log('called', val)
+        this.$emit('input', val)
+      }
     },
-    value:{
+    value: {
       immediate: true,
-      handler(val){
-        this.localForm= val
+      handler(val) {
+        this.localForm = val
       }
     }
   },
@@ -115,7 +125,7 @@ export default {
   //     localForm: Object.assign({}, defaultForm, this.value)
   //   }
   // },
-  methods:{
+  methods: {
     handelClose() {
       this.$emit('closeButton')
       // this.localForm = defaultForm

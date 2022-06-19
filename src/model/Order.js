@@ -86,7 +86,7 @@ export async function updateAddress(dataBodyWithAddress, address, str = 'deliver
 export function firstQuestion(listCount){
 
     const showBaseQuestion = JSON.parse(localStorage.getItem('showBaseQuestion')) ?? true
-    console.log("showBaseQuestion", showBaseQuestion)
+    // console.log("showBaseQuestion", showBaseQuestion)
 
     if (listCount.currentCount === 0) {
         if (showBaseQuestion){

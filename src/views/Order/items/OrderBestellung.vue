@@ -95,19 +95,14 @@ export default {
         await this.$router.replace('/')
       }
 
-      // const myDressDesignList = await getDressDesignList() ?? []
-      // console.log("myDressDesignList", myDressDesignList)
-
-      // const myOrder = ((dressOrder()).data ?? []).filter(item => myDressDesignList.findIndex(i => i.id === item.dressDesign.id) >= 0)
-
       const myOrder = (await dressOrder()) ?? []
-      console.log("myOrder", myOrder)
+      // console.log("myOrder", myOrder)
 
       this.items = myOrder.filter(i=>!i.dressDesign.hideForCustomer).map(item => {
 
         return {
           dressDesignId: item.dressDesign.id,
-          bId: item.dressDesign.id,
+          bId: item.id,
           name: item.dressDesign.name,
           time: dayjs(item.dressDesign.completedAt).format('YYYY-MM-DD'),
           orderType: item.orderType,

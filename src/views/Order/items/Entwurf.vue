@@ -349,7 +349,7 @@ export default {
       this.listCount = res.data
 
       const showBaseQuestion = JSON.parse(localStorage.getItem('showBaseQuestion')) ?? true
-      console.log("showBaseQuestion", showBaseQuestion)
+      // console.log("showBaseQuestion", showBaseQuestion)
 
       if (this.listCount.currentCount === 0) {
         if (showBaseQuestion) {
@@ -426,29 +426,6 @@ export default {
     },
     async loadDressList() {
       this.myDressList = await getDressDesignList() ?? []
-      // const designOrder = await myDesignOrderList()
-
-      // const freeMusterBox = []
-      // if (designOrder.code === 200) {
-      //
-      //   const dataArr = _.uniq(designOrder.data.map(i => {
-      //     return i.dressDesign.id
-      //   })) ?? []
-      //   // console.log("dataArr",dataArr)
-      //   for (let i = 0; i < this.listCount.maxFree; i++) {
-      //     freeMusterBox.push(dataArr[i])
-      //   }
-      // }
-      // // console.log("freeMusterBox", freeMusterBox)
-      //
-      // this.myDressList.map(item => {
-      //   if (freeMusterBox.find(i => i === item.id)) {
-      //     item.enableFreeMusterBox = true
-      //   } else {
-      //     item.enableFreeMusterBox = false
-      //   }
-      // })
-
     },
     cardClick(item) {
       if (item.completedAt) {

@@ -90,7 +90,7 @@ export default {
         this.$router.push(item.to);
     },
     handleLogout() {
-      this.$router.push('/')
+      this.$router.replace('/')
       sessionStorage.setItem('token', null)
     }
   }

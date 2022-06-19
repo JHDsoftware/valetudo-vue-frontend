@@ -84,7 +84,6 @@ export default {
       }
       this.personData = Object.assign(this.personData, res.data)
       this.personData.email = res.data.userName
-      console.log("this.personData",this.personData)
 
     },
     async send() {
@@ -95,7 +94,7 @@ export default {
       }
 
       const res = await contactUsAdd(this.personData)
-      console.log("send", res)
+
 
       if(res.code === 200){
 
@@ -107,11 +106,8 @@ export default {
       else {
         this.snackbar=true,
         this.snackbarText= res.message
-        // this.message.warning("Error, bitte ausloggen und versuchen Sie noch mal.")
       }
     },
-
-
 
   }
 }

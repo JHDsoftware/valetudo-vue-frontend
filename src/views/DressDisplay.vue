@@ -104,7 +104,7 @@ export default {
       return this.filterPartsWithMask(topMask)
     },
     currentDisplayTopVariant () {
-      console.log(this.selectedTopParts)
+      // console.log(this.selectedTopParts)
       if (this.selectedTopParts.length > 0) {
         const def = this.findDefaultPartInImageSet('Bodice', this.selectedTopParts.filter(s => s !== "Ga"))
         console.log(def,'身体')

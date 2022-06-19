@@ -79,6 +79,7 @@
                           style="font-size: 24px; padding-bottom: 8px;"
                           v-model="deliveryAddress"
                           button-text="Speichern und weiter"
+                          @input="updateDeliveryAddress"
                           @click="adressConfirm"/>
 
             </template>
@@ -321,6 +322,7 @@
               :styleInput="{'font-size':'36px', 'display':'flex', 'margin-bottom': '40px', 'margin-top': '40px', 'justify-content': 'center'}"
               title="Lieferadresse ändern"
               v-model="deliveryAddress"
+
               @click="handelClose"
           />
 
@@ -458,7 +460,6 @@ export default {
         phone: '01578963222',
         postCode: '',
         country: 'Germany',
-
         deliveryAddress: {
           id: null,
           firstName: '',
@@ -518,10 +519,15 @@ export default {
 
 
   methods: {
-
+    async updateDeliveryAddress(val) {
+      // console.log('Delivery Address updated', val)
+      this.deliveryAddress = val
+    },
     async getPersonData() {
       const res = await customerMe()
-      if (res.code !== 200) {
+      if (res.code === 500) {
+        await this.$router.replace('/Login')
+      } else if (res.code !== 200) {
         return null
       }
 
@@ -545,7 +551,6 @@ export default {
       }
       this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
 
-      console.log('this.dataBody', this.dataBody)
     },
     handleReturn(i) {
       if (this.anzahlStep > (i + 1)) {
@@ -554,13 +559,8 @@ export default {
     },
     async adressConfirm() {
 
-      const res = Object.entries(this.dataBody.deliveryAddress).filter(i => i[0] !== 'addressLine2')
-      console.log("items",res)
-
-      // console.log('adressConfirm x', res, this.dataBody.deliveryAddress)
+      const res = Object.entries(this.deliveryAddress).filter(j => j[0] !== 'addressLine2')
       const isNoEmpty = res.every(item => isNotBlank(item[1]?.toString().trim()))
-
-      console.log('isNoEmpty x', isNoEmpty, 'res', res)
 
       if (isNoEmpty) {
         this.showEditAdress = false
@@ -581,8 +581,8 @@ export default {
 
         console.log("dataBody", this.dataBody)
         const dataBillingAddr = Object.entries(this.dataBody.billingAddress).filter(i => i[0] !== 'addressLine2' || i[0] !== 'id')
-        const isNoEmpty = dataBillingAddr.every(i => {
-          return !!i[1]
+        const isNoEmpty = dataBillingAddr.every(k => {
+          return !!k[1]
         })
         if (isNoEmpty) {
           await customerEditMe(this.dataBody)
@@ -623,19 +623,19 @@ export default {
     },
 
     async placeAndPaySampleOrder(id) {
-      await placeSampleOrder(id, parseInt(this.amount), this.deliveryAddress, this.billingAddress)
+      const orderId = await placeSampleOrder(id, parseInt(this.amount), this.deliveryAddress, this.billingAddress)
 
       switch (this.payMethodValue) {
         case 0:
-          location.href = (await paySampleOrder(id))
+          location.href = (await paySampleOrder(orderId.id))
           break
         case 1:
-          if ((await paySampleOrderAdvance(id)).code === 200) {
+          if ((await paySampleOrderBilling(orderId.id)).code === 200) {
             await this.$router.replace('/SampleOrderComplete')
           }
           break
         default:
-          if ((await paySampleOrderBilling(id)).code === 200) {
+          if ((await paySampleOrderAdvance(orderId.id)).code === 200) {
             await this.$router.replace('/SampleOrderComplete')
           }
       }
@@ -649,7 +649,6 @@ export default {
         let res = null
         switch (this.payMethodValue) {
           case 0:
-
             this.showPaypal = true
             res = await payNewByPaypal(this.amount)
             if (res) {
@@ -669,16 +668,6 @@ export default {
       this.dialogLiferAdress = true
       this.deliveryAddress = Object.assign({}, this.dataBody.deliveryAddress)
     },
-
-    paymentAuthorized(data) {
-      console.log('data', data)
-    },
-    paymentCompleted(data) {
-      console.log('data', data)
-    },
-    paymentCancelled(data) {
-      console.log('data', data)
-    }
 
   }
 
