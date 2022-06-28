@@ -467,7 +467,7 @@ export default {
 
     },
     jumpTo (url) {
-      window.location.href = url
+      window.open( url)
     },
     async initial () {
       await this.selectPart('B', '1', 1, null, 0)
