@@ -80,7 +80,7 @@ color: #817163;">
 
       </v-sheet>
       <v-card color="#E0DDD6" class="d-flex flex-column">
-        <v-card elevation="8" height="60px">
+        <v-card elevation="0" height="60px" style="border-bottom: 3px solid #817163">
           <div style="width: 100%">
             <v-item-group mandatory v-model="currentTab">
               <div style="display: grid;grid-template-columns: repeat(3,1fr);width: 100%">
@@ -93,6 +93,7 @@ color: #817163;">
             </v-item-group>
           </div>
         </v-card>
+        <v-divider></v-divider>
         <div style="height: calc(100vh - 60px - 64px - 60px);overflow-y: scroll">
           <template v-if="currentTab<2">
             <v-expansion-panels style="margin-top: 2px" accordion mandatory>
@@ -103,7 +104,7 @@ color: #817163;">
                   :key="currentTab+''+item.dressPartCategory.code"
               >
                 <v-expansion-panel-header>
-                  <template>{{ item.dressPartCategory.code }}.{{
+                  <template>{{ item.dressPartCategory.code }}. {{
                       item.dressPartCategory.name
                     }}
                   </template>
