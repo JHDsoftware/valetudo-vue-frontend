@@ -85,7 +85,7 @@
         <div style="margin-top: 70px; margin-left: 98px; margin-right: 30px">
           <div class="d-flex justify-space-between justify-center" style="margin-bottom: 110px">
             <div style="margin-right: 85px">
-              <v-img src="@/assets/picture.png" width="225" height="225"></v-img>
+              <v-img src="@/assets/decoration/4.jpg" width="225" height="225"></v-img>
             </div>
 
             <v-card flat>
@@ -118,7 +118,7 @@
           <div class="d-flex justify-space-between justify-center" style="margin-bottom: 80px">
             <div style="margin-right: 85px">
 
-              <v-img src="@/assets/picture.png" width="225" height="225"></v-img>
+              <v-img src="@/assets/decoration/5.jpg" width="225" height="225"></v-img>
             </div>
 
             <v-card flat>
@@ -139,7 +139,7 @@
           <div class="d-flex justify-space-between justify-center">
             <div style="margin-right: 85px">
 
-              <v-img src="@/assets/picture.png" width="225" height="225"></v-img>
+              <v-img src="@/assets/decoration/5.jpg" width="225" height="225"></v-img>
             </div>
 
             <v-card flat>

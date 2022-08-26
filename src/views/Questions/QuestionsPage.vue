@@ -331,13 +331,13 @@ export default {
       this.$refs.menu.save(date)
     },
     selectImg(item) {
-      let img = require('@/assets/image/frameUI/questionImg1.png')
+      let img = require('@/assets/decoration/1.jpg')
       switch (item) {
         case 2:
-          img = require('@/assets/image/frameUI/questionImg2.png')
+          img = require('@/assets/decoration/2.jpg')
           break
         case 3:
-          img = require('@/assets/image/frameUI/questionImg3.png')
+          img = require('@/assets/decoration/3.jpg')
           break
       }
       return img
